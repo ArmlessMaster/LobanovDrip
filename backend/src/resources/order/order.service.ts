@@ -14,6 +14,9 @@ class OrderService {
         moderator_id: Schema.Types.ObjectId,
         status: string,
         adress: string,
+        phone: string,
+        name: string,
+        email: string
         ): Promise<Order> {
         try {
             const order = await this.order.create({
@@ -21,6 +24,9 @@ class OrderService {
                 moderator_id,
                 status,
                 adress,
+                phone,
+                name,
+                email
             });
 
             return order;

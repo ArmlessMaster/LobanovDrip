@@ -32,13 +32,19 @@ class OrderController implements Controller {
                 user_id,
                 moderator_id,
                 status,
-                adress,} = req.body;
+                adress,
+                phone,
+                name,
+                email} = req.body;
 
             const order = await this.OrderService.create( 
                 user_id,
                 moderator_id,
                 status,
-                adress,);
+                adress,
+                phone,
+                name,
+                email);
 
             res.status(201).json({order});
         } catch (error) {

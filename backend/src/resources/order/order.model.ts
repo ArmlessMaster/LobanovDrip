@@ -17,6 +17,15 @@ const OrderSchema = new Schema(
         adress: {
             type: String,
         },
+        phone: {
+            type: String,
+        },
+        name: {
+            type: String,
+        },
+        email: {
+            type: String,
+        },
     },
     { timestamps: true}
 );

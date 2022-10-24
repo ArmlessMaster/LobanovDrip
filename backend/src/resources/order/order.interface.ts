@@ -6,4 +6,7 @@ export default interface Order extends Document {
     moderator_id: Schema.Types.ObjectId;
     status: string;
     adress: string;
+    phone: string;
+    name: string;
+    email: string;
 }
