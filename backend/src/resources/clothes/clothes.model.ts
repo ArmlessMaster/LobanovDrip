@@ -25,6 +25,19 @@ const ClothesSchema = new Schema(
         price: {
             type: Number,
         },
+        sale: {
+            type: Number,
+            default: 0
+        },
+        assemblage: {
+            type: String,
+        },
+        material: {
+            type: String,
+        },
+        care: {
+            type: String,
+        },
         company: {
             type: String,
         },

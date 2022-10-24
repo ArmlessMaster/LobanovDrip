@@ -1,6 +1,5 @@
 import ClothesModel from '@/resources/clothes/clothes.model';
 import Clothes from '@/resources/clothes/clothes.interface';
-import { Schema} from "mongoose";
 import ClothesCount from '@/utils/interfaces/clothesCount.interface';
 
 class ClothesService {
@@ -18,6 +17,10 @@ class ClothesService {
         type: string,
         price: number,
         company: string,
+        sale: number,
+        assemblage: string,
+        material: string,
+        care: string,
         clothesCount: Array<ClothesCount>,
         ): Promise<Clothes> {
         try {
@@ -30,12 +33,93 @@ class ClothesService {
                 type,
                 price,
                 company,
+                sale,
+                assemblage,
+                material,
+                care,
                 clothesCount,
             });
 
             return clothes;
         } catch (error) {
             throw new Error('Unable to create clothes');
+        }
+    }
+
+    public async delete(
+        id: string
+        ): Promise<Clothes> {
+        try {
+            const clothes = await this.clothes.findOneAndRemove({ _id: id });
+
+            if (!clothes) {
+                throw new Error('Unable to find clothes'); 
+            }
+
+            return clothes;
+        } catch (error) {
+            throw new Error('Unable to delete clothes');
+        }
+    }
+
+    public async index(
+        id: string
+        ): Promise<Clothes> {
+        try {
+            const clothes = await this.clothes.findById(id);
+
+            if (!clothes) {
+                throw new Error('Unable to find clothes'); 
+            }
+
+            return clothes;
+        } catch (error) {
+            throw new Error('Unable to find clothes');
+        }
+    }
+    
+    public async change(
+        id: string,
+        name: string,
+        imagesUrls: Array<string>,
+        gifUrl: string,
+        size: Array<string>,
+        color: Array<string>,
+        type: string,
+        price: number,
+        company: string,
+        sale: number,
+        assemblage: string,
+        material: string,
+        care: string,
+        clothesCount: Array<ClothesCount>,
+        ): Promise<Clothes> {
+        try {
+            const clothes = await this.clothes.findByIdAndUpdate({ _id: id }, {name: name, imagesUrls: imagesUrls, gifUrl: gifUrl, size: size, color: color, type: type, price: price, company: company, sale: sale, assemblage: assemblage, material: material, care: care, clothesCount: clothesCount }, {new: true});
+
+            if (!clothes) {
+                throw new Error('Unable to change clothe'); 
+            }
+
+            return clothes;
+        } catch (error) {
+            throw new Error('Unable to change clothe');
+        }
+    }
+
+    public async findClothes(
+        name: string
+        ): Promise<Clothes | any> {
+        try {
+            const clothes = await this.clothes.find({ name: name });
+            
+            if (!clothes) {
+                throw new Error('Unable to change clothe'); 
+            }
+            
+            return clothes;
+        } catch (error) {
+            throw new Error('Unable to find clothes');
         }
     }
 }

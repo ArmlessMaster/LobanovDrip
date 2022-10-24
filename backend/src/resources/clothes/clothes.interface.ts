@@ -9,6 +9,10 @@ export default interface Clothes extends Document {
     color: Array<string>;
     type: string;
     price: number;
+    sale: number;
+    assemblage: string;
+    material: string;
+    care: string;
     company: string;
     clothesCount: Array<ClothesCount>;
 }

@@ -9,6 +9,10 @@ const create = Joi.object({
     type: Joi.string().required(),
     price: Joi.number().required(),
     company: Joi.string().required(),
+    sale: Joi.number().required(),
+    assemblage: Joi.string().required(),
+    material: Joi.string().required(),
+    care: Joi.string().required(),
     clothesCount: Joi.array().items({
         size: Joi.string().required(),
         count: Joi.number().required(),

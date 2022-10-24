@@ -10,9 +10,10 @@ class AccountService {
     public async regiser(
         email: string, 
         password: string, 
+        isGoogle: boolean
         ): Promise<string | Error> {
         try {
-            const account = await this.account.create({email, password});
+            const account = await this.account.create({email, password, isGoogle});
 
             const accesToken = token.createToken(account);
 
@@ -26,7 +27,7 @@ class AccountService {
      * Attempt to login a account
      */
 
-     public async login(
+    public async login(
         email: string, 
         password: string, 
         ): Promise<string | Error> {
@@ -46,6 +47,9 @@ class AccountService {
             throw new Error('Unable to login account');
         }
     }
+
+
+
 }
 
 export default AccountService;

@@ -7,6 +7,7 @@ export default interface Account extends Document {
     phone: string;
     role: string;
     adress: string;
+    isGoogle: boolean;
 
     isValidPassword(passwod: string): Promise<Error | boolean>;
 }

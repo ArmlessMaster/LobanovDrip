@@ -39,11 +39,12 @@ class AccountController implements Controller {
         next: NextFunction
     ): Promise<Response | void> => {
         try {
-            const {email, password} = req.body;
+            const {email, password, isGoogle} = req.body;
 
             const token = await this.AccountService.regiser(
                 email,
                 password,
+                isGoogle
             );
 
             res.status(201).json({token});
