@@ -44,6 +44,12 @@ const ClothesSchema = new Schema(
         clothesCount: {
             type: Array<ClothesCount>,
         },
+        sex: {
+            type: String,
+        },
+        collection_id: {
+            type: Schema.Types.ObjectId,
+        },
     },
     { timestamps: true}
 );

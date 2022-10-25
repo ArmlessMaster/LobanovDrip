@@ -1,6 +1,7 @@
 import ClothesModel from '@/resources/clothes/clothes.model';
 import Clothes from '@/resources/clothes/clothes.interface';
 import ClothesCount from '@/utils/interfaces/clothesCount.interface';
+import {Schema} from 'mongoose';
 
 class ClothesService {
     private clothes = ClothesModel;
@@ -22,6 +23,8 @@ class ClothesService {
         material: string,
         care: string,
         clothesCount: Array<ClothesCount>,
+        sex: string,
+        collection_id: Schema.Types.ObjectId,
         ): Promise<Clothes> {
         try {
             const clothes = await this.clothes.create({
@@ -38,6 +41,8 @@ class ClothesService {
                 material,
                 care,
                 clothesCount,
+                sex,
+                collection_id,
             });
 
             return clothes;
@@ -66,7 +71,10 @@ class ClothesService {
         id: string
         ): Promise<Clothes> {
         try {
-            const clothes = await this.clothes.findById(id);
+            const clothes = await this.clothes.findById(id).populate({
+                path: 'collection_id',
+                populate: { path: '_id' }
+              });
 
             if (!clothes) {
                 throw new Error('Unable to find clothes'); 
@@ -93,9 +101,27 @@ class ClothesService {
         material: string,
         care: string,
         clothesCount: Array<ClothesCount>,
+        sex: string,
+        collection_id: Schema.Types.ObjectId,
         ): Promise<Clothes> {
         try {
-            const clothes = await this.clothes.findByIdAndUpdate({ _id: id }, {name: name, imagesUrls: imagesUrls, gifUrl: gifUrl, size: size, color: color, type: type, price: price, company: company, sale: sale, assemblage: assemblage, material: material, care: care, clothesCount: clothesCount }, {new: true});
+            const clothes = await this.clothes.findByIdAndUpdate({ _id: id }, {
+                name: name,
+                imagesUrls: imagesUrls, 
+                gifUrl: gifUrl, 
+                size: size, 
+                color: color,
+                type: type, 
+                price: price, 
+                company: company, 
+                sale: sale, 
+                assemblage: assemblage, 
+                material: material, 
+                care: care, 
+                clothesCount: clothesCount, 
+                sex: sex,
+                collection_id: collection_id,
+            }, {new: true});
 
             if (!clothes) {
                 throw new Error('Unable to change clothe'); 
@@ -111,10 +137,13 @@ class ClothesService {
         name: string
         ): Promise<Clothes | any> {
         try {
-            const clothes = await this.clothes.find({ name: name });
+            const clothes = await this.clothes.find({ name: name }).populate({
+                path: 'collection_id',
+                populate: { path: '_id' }
+              });
             
             if (!clothes) {
-                throw new Error('Unable to change clothe'); 
+                throw new Error('Unable to change clothes'); 
             }
             
             return clothes;
@@ -125,3 +154,4 @@ class ClothesService {
 }
 
 export default ClothesService;
+

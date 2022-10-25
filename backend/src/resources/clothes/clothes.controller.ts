@@ -57,7 +57,9 @@ class ClothesController implements Controller {
                 assemblage,
                 material,
                 care,
-                clothesCount,} = req.body;
+                clothesCount,
+                sex,
+                collection_id,} = req.body;
 
             const clothes = await this.ClothesService.create( 
                 name,
@@ -72,7 +74,9 @@ class ClothesController implements Controller {
                 assemblage,
                 material,
                 care,
-                clothesCount,);
+                clothesCount,
+                sex,
+                collection_id,);
 
             res.status(201).json({clothes});
         } catch (error) {
@@ -133,7 +137,9 @@ class ClothesController implements Controller {
                 assemblage,
                 material,
                 care,
-                clothesCount} = req.body;
+                clothesCount,
+                sex,
+                collection_id,} = req.body;
 
             const clothes = await this.ClothesService.change( 
                 id,
@@ -149,11 +155,13 @@ class ClothesController implements Controller {
                 assemblage,
                 material,
                 care,
-                clothesCount);
+                clothesCount,
+                sex,
+                collection_id,);
 
             res.status(201).json({clothes});
         } catch (error) {
-            next(new HttpException(400, 'Cannot change clothe'));
+            next(new HttpException(400, 'Cannot change clothes'));
         }
     }
 
