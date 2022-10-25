@@ -184,3 +184,4 @@ class ClothesController implements Controller {
 }
 
 export default ClothesController;
+
