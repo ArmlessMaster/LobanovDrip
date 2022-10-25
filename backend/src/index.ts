@@ -10,6 +10,8 @@ import ModelingController from '@/resources/modeling/modeling.controller';
 import OrderController from '@/resources/order/order.controller';
 import OrderClothesController from '@/resources/orderClothes/orderClothes.controller';
 import SetController from '@/resources/set/set.controller';
+import CollectionController from '@/resources/collection/collection.controller';
+
 
 validateEnv();
 
