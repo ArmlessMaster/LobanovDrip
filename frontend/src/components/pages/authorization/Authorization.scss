@@ -1,0 +1,46 @@
+
+.Authorization{
+  video{
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+  }
+  .autorization__wrapper{
+    display: flex;
+    .login{
+      width: 50%;
+      height: 100%;
+    }
+    .registration{
+      background-color: #0D0D0D;
+      position: fixed;
+      top: 0;
+      right: 0;
+  
+      width: 50%;
+      height: 100%;
+      z-index: -1;
+    }
+  }
+  .login{
+    margin-top: 12vw;
+    .login-title{
+      font-family: 'VCR OSD Mono';
+      font-style: normal;
+      font-weight: 400;
+      font-size: 96px;
+      line-height: 94px;
+      /* identical to box height */
+      
+      
+      color: #FFFFFF;
+      
+      text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    }
+  }
+}
