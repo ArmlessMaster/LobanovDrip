@@ -13,7 +13,7 @@ class ClothesController implements Controller {
     constructor() {
         this.initialiseRoutes();
     }
-
+ 
     private initialiseRoutes(): void {
         this.router.post(
             `${this.path}/create`,
