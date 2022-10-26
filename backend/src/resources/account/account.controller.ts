@@ -26,6 +26,20 @@ class AccountController implements Controller {
             validationMiddleware(validate.login),
             this.login
         );
+        this.router.post(
+            `${this.path}/changePassword`,
+            validationMiddleware(validate.changePassword),
+            this.changePassword
+        );
+        this.router.post(
+            `${this.path}/update/:id`,
+            validationMiddleware(validate.update),
+            this.update
+        );
+        this.router.delete(
+            `${this.path}/delete/:id`,
+            this.delete
+        );
         this.router.get(
             `${this.path}`,
             authenticated,
@@ -50,6 +64,7 @@ class AccountController implements Controller {
             res.status(201).json({token});
         } catch (error: any) {
             next(new HttpException(400, error.message));
+            
         }
     };
 
@@ -64,6 +79,74 @@ class AccountController implements Controller {
             const token = await this.AccountService.login(email, password);
 
             res.status(200).json({ token });
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
+        }
+    };
+
+    private changePassword = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<Response | void> => {
+        try {
+            const {email, password} = req.body;
+
+            await this.AccountService.changePassword(
+                email,
+                password,
+            );
+
+            res.status(201).json("Password is changed");
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
+        }
+    };
+
+    private update = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<Response | void> => {
+        try {
+            const id = req.params.id;
+
+            const {    email,
+                password,
+                name,
+                phone,
+                role,
+                adress,} = req.body;
+
+            await this.AccountService.update(
+                id,
+                email,
+                password,
+                name,
+                phone,
+                role,
+                adress,
+            );
+
+            res.status(201).json("Account is updated");
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
+        }
+    };
+
+    private delete = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<Response | void> => {
+        try {
+            const id = req.params.id;
+
+            await this.AccountService.delete(
+                id
+            );
+
+            res.status(201).json("Account is deleted");
         } catch (error: any) {
             next(new HttpException(400, error.message));
         }

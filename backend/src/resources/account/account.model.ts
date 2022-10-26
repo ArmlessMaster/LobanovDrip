@@ -47,6 +47,14 @@ AccountSchema.pre<Account>('save', async function (next) {
     next();
 });
 
+AccountSchema.pre<Account>('findOneAndUpdate', async function (this) {
+    const update: any = {...this.getUpdate()};
+    if (update.password){
+        update.password = await bcrypt.hash(update.password, 10);
+        this.setUpdate(update);
+    }
+  })
+
 AccountSchema.methods.isValidPassword = async function (
     password: string
 ): Promise<Error | boolean> {

@@ -9,5 +9,7 @@ export default interface Account extends Document {
     adress: string;
     isGoogle: boolean;
 
+    getUpdate(): Promise<Error | Object>;
+    setUpdate(obj: Object): Promise<Error | boolean>;
     isValidPassword(passwod: string): Promise<Error | boolean>;
 }

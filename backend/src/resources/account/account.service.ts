@@ -48,7 +48,45 @@ class AccountService {
         }
     }
 
+    public async changePassword(
+        email: string, 
+        password: string, 
+        ): Promise<void | Error> {
+        try {
+             await this.account.findOneAndUpdate({email}, {password});    
+   
+        } catch (error) {
+            throw new Error('Unable to change password');
+        }
+    }
 
+    public async update(
+        id: string,
+        email: string,
+        password: string,
+        name: string,
+        phone: string,
+        role: string,
+        adress: string,
+        ): Promise<void | Error> {
+        try {
+             await this.account.findOneAndUpdate({_id: id}, {email, password, name, phone, role, adress});    
+   
+        } catch (error) {
+            throw new Error('Unable to update account');
+        }
+    }
+
+    public async delete( 
+        id: string
+        ): Promise<void | Error> {
+            try {
+                 await this.account.deleteOne({ _id: id });   
+       
+            } catch (error) {
+                throw new Error('Unable to delete account');
+            }
+    }
 
 }
 
