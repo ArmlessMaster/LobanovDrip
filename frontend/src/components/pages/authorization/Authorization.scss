@@ -1,5 +1,6 @@
 
 .Authorization{
+  font-family: 'VCR OSD Mono';
   video{
     position: fixed;
     top: 0;
@@ -15,8 +16,45 @@
     .login{
       width: 50%;
       height: 100%;
+      margin-top: 12vw;
+
+
+      .login-title{
+        font-size: 5vw;
+        line-height: 4.896vw;
+        text-align: center;   
+        color: #FFFFFF;    
+        text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+      }
+      .login__wraper-btn{
+          text-align: center;
+      }
+      .input-flex{
+        margin-top: 2vw;
+        display: flex;
+        justify-content: center;
+        div + div{
+          margin-left: 1.5vw;
+        }
+      }
+      .input-btn-wrapper{
+        margin-top: 2vw;
+      }
+      .input-btn-wrapper + .input-btn-wrapper{
+        margin-top: 0.6vw;
+      }
+      .forgot__wrapper{
+        display: flex;
+        justify-content: right;
+        a{
+          margin-top: 0.5vw;
+          margin-right: 4vw;
+          color: white;
+          font-size: 0.8vw;
+        }
+      }
     }
-    .registration{
+    .registration-bg{
       background-color: #0D0D0D;
       position: fixed;
       top: 0;
@@ -25,22 +63,36 @@
       width: 50%;
       height: 100%;
       z-index: -1;
-    }
-  }
-  .login{
-    margin-top: 12vw;
-    .login-title{
-      font-family: 'VCR OSD Mono';
-      font-style: normal;
-      font-weight: 400;
-      font-size: 96px;
-      line-height: 94px;
-      /* identical to box height */
-      
-      
-      color: #FFFFFF;
-      
-      text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+      .registration{
+        margin-top: 12vw;
+        .registration-title{
+          font-size: 5vw;
+          line-height: 4.896vw;
+          text-align: center;   
+          color: #FFFFFF;    
+          text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        }
+
+        .input-btn-wrapper{
+          margin-top: 6vw;
+          display: flex;
+          justify-content: center;
+        }
+        .input__menu{
+          margin-top: 1vw;
+          text-align: center; 
+        }
+        .registration__rules{
+          margin-top: 0.8vw;
+          color: white;
+          text-align: center; 
+          font-size: 0.9vw;
+          a{
+            color: white;
+          }
+        }
+      }
+
     }
   }
 }

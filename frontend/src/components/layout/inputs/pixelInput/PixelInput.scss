@@ -1,0 +1,18 @@
+.pixelInput-wrapper{
+  .pixelInput{
+    color: white;
+    font-size: 1.667vw;
+    width: 20.260vw;
+    height: 2.760vw;
+    background: #1F1F1F;
+    box-shadow: 0px 0.208vw 0.208vw rgba(0, 0, 0, 0.25);
+    border: none;
+    outline: none;
+    text-align: left;
+    
+  }
+  .pixelInput::placeholder{
+    text-align: center;
+    color: rgb(187, 187, 187);
+  }
+}

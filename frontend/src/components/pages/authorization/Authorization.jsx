@@ -1,11 +1,14 @@
 import "./Authorization.scss";
 import React from "react";
 import BackgroundVideo from "../../../images/video/bg_dots.mp4";
+import {PixelBtn, PixelInput} from "../../layout/index"
+import { motion } from "framer-motion"
+
 
 export const Authorization = () => {
- 
-  return (
 
+  
+  return (
 
     <section className='Authorization'>
       <video autoPlay loop muted>
@@ -19,19 +22,44 @@ export const Authorization = () => {
           <div className="login__wraper-btn">
             <form action="">
               <div className="input-flex">
-                <input type="text" />
-                <input type="text" />
+                <PixelInput type="text"  text="EMAIL" />
+                <PixelInput type="text" text="PASSWORD" />
+              </div>
+              <div className="forgot__wrapper">
+                <a href="">I forgot passwords</a>
               </div>
               <div className="input-btn-wrapper">
-                <button className="login-btn">Enter</button>
+                <PixelBtn text="ENTER"/>
               </div>
               <div className="input-btn-wrapper">
-                W<button className="login__google-btn">Google</button>
+                <PixelBtn  isBlue ="true" text="Login-in with Google"/>
               </div>
             </form>
           </div>
         </div>
-        <div className="registration">1</div>
+        <div className="registration-bg">
+          <div className="registration">
+            <div className="registration-title">
+            IS THIS YOUR FIRST VISIT
+            </div>
+            <div className="input-btn-wrapper">
+              <PixelBtn text="CREATE AN ACCOUNT"/>
+            </div>
+            <motion.div className="input__menu">
+                <PixelInput type="text"  text="EMAIL" />
+                <PixelInput type="text" text="PASSWORD" />
+                <PixelInput type="text"  text="EMAIL" />
+                <PixelInput type="text" text="PASSWORD" />
+                <PixelBtn text="ENTER"/>
+              </motion.div>
+
+            <div className="registration__rules">
+              Read the <a href="#">Privacy Policy</a>, <a href="#">Rules
+              <p>and Site Selection Guidelines</p></a>
+            </div>
+          </div>
+        </div>
+
       </div> 
     </section>
   )

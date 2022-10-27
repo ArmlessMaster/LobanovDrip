@@ -23,6 +23,23 @@
     li + li{
       margin-left: 4vw;
     }
+    li{      
+      position: relative;
+    }
+    li::after{
+      content: "";
+      height: 0.2vw;
+      width: 0;
+      position: absolute;
+      background-color: #E34D4D;
+      bottom: -0.9vw;
+      left: 0;
+      font-size: 0.4vw;
+      transition: 0.3s ease;
+    }
+    li:hover:after{
+      width: 100%;
+    }
   }
   .header__btns{
     display: flex;
