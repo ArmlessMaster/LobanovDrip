@@ -1,10 +1,11 @@
 import "./Authorization.scss";
 import React from "react";
-import BackgroundVideo from "../../../images/background-video/bg_dots.mp4";
+import BackgroundVideo from "../../../images/video/bg_dots.mp4";
 
 export const Authorization = () => {
  
   return (
+
 
     <section className='Authorization'>
       <video autoPlay loop muted>
