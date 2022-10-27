@@ -1,2 +1,6 @@
 node_modules/
 .expo/
+android/
+ios/
+.expo-shared/
+.idea/
