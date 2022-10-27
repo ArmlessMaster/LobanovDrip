@@ -3,6 +3,9 @@
 /.pnp
 .pnp.js
 
+/video
+*.mp4
+
 # testing
 /coverage
 

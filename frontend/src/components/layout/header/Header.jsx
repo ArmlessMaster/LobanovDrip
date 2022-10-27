@@ -12,7 +12,7 @@ export const Header = () => {
         <li>SHOP</li>
         <li>OPTION</li>
         <li>MY DESIGN</li>
-        <li>MY SETS</li>
+        <li>MY SETS</li>214
       </ul>
       <div className="header__search">
         <form>
