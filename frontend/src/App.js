@@ -9,8 +9,7 @@ import { Authorization } from "./components/pages/authorization/Authorization";
 function App() {
   return (
     <div className="App">
-      <Header/>
-      <Footer/>
+      <Header/> 
       <Authorization/>
             {<div className='Main-Wrapper'></div>}
     </div>

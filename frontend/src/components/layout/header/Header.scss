@@ -1,6 +1,6 @@
 .header{
   width: 100%;
-  height: 1.5vw;
+  height: 2.8vw;
   background-color: black;
   justify-content: space-between;
   font-family: 'Roboto';
@@ -8,6 +8,7 @@
   font-weight: 500;
   line-height: 2.917vw;
   display: flex;
+  z-index: 44;
   .header__logo{
     padding-left: 2vw;
     flex: 2;
@@ -42,10 +43,12 @@
     }
   }
   .header__btns{
+
     display: flex;
     flex: 1;
   }
   .header__search{
+    
     form{
       
       input{
