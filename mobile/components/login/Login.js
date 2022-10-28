@@ -9,10 +9,11 @@ import Mark from '../.././assets/images/login/xMark.svg';
 import DecorLogin from '../.././assets/images/login/Login Decor Thing.svg';
 import Registration from "../registration/Registration";
 import Footer from "../footer"
+import LogAndReg from "../logAndReg"
 
 export default function Login({ navigation }) {
     const pressHandler = () => {
-        navigation.navigate('Registration')
+
     }
 
     return (

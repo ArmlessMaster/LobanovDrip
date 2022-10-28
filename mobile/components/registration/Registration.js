@@ -11,7 +11,7 @@ import DecorBottom from '../../assets/images/Decor Thing.svg';
 import Footer from "../footer";
 
 
-export default function Registration() {
+export default function Registration({ navigation }) {
 
     function first() {
         return (

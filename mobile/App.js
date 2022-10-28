@@ -1,11 +1,11 @@
 import React, { useEffect, useCallback } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import {Text, View, StyleSheet, StatusBar} from 'react-native';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import Registration from "./components/registration/Registration";
 import Login from "./components/login/Login";
 import LoginAndRegistration from "./components/logAndReg"
-
+import Navigation from "./navigation/navigation";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -33,7 +33,9 @@ export default function App() {
           return null;
       }
 
-      return (
+    StatusBar.setBarStyle('light-content', true);
+
+    return (
           <View style={styles.container} onLayout={onLayoutRootView}>
               <LoginAndRegistration/>
           </View>

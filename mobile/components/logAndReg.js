@@ -36,7 +36,7 @@ const screens = {
     }
 }
 
-export default function TabViewExample() {
+export default function TabViewExample(indexScreen) {
     const layout = useWindowDimensions();
 
     const [index, setIndex] = React.useState(0);
