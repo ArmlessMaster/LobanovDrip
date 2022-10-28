@@ -25,6 +25,8 @@ class CollectionService {
             throw new Error('Unable to create collection');
         }
     }
+
+
 }
 
 export default CollectionService;

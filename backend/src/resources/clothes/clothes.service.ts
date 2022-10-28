@@ -51,14 +51,19 @@ class ClothesService {
         }
     }
 
+
+    /**
+     * Attempt to delete clothes
+     */
+
     public async delete(
         id: string
         ): Promise<Clothes> {
         try {
-            const clothes = await this.clothes.findOneAndRemove({ _id: id });
+            const clothes = await this.clothes.findOneAndDelete({ _id: id });
 
             if (!clothes) {
-                throw new Error('Unable to find clothes'); 
+                throw new Error('Unable to delete clothes with that id'); 
             }
 
             return clothes;
@@ -67,7 +72,11 @@ class ClothesService {
         }
     }
 
-    public async index(
+    /**
+     * Attempt to find clothes by id
+     */
+
+    public async findById(
         id: string
         ): Promise<Clothes> {
         try {
@@ -77,7 +86,7 @@ class ClothesService {
               });
 
             if (!clothes) {
-                throw new Error('Unable to find clothes'); 
+                throw new Error('Unable to find clothes with that id'); 
             }
 
             return clothes;
@@ -86,7 +95,11 @@ class ClothesService {
         }
     }
     
-    public async change(
+    /**
+     * Attempt to update clothes
+     */
+
+    public async update(
         id: string,
         name: string,
         imagesUrls: Array<string>,
@@ -124,16 +137,20 @@ class ClothesService {
             }, {new: true});
 
             if (!clothes) {
-                throw new Error('Unable to change clothe'); 
+                throw new Error('Unable to update clothes with thad id'); 
             }
 
             return clothes;
         } catch (error) {
-            throw new Error('Unable to change clothe');
+            throw new Error('Unable to change clothes');
         }
     }
 
-    public async findClothes(
+    /**
+     * Attempt to find clothes by name
+     */
+
+    public async findByName(
         name: string
         ): Promise<Clothes | any> {
         try {
@@ -143,7 +160,7 @@ class ClothesService {
               });
             
             if (!clothes) {
-                throw new Error('Unable to change clothes'); 
+                throw new Error('Unable to find clothes with that name'); 
             }
             
             return clothes;

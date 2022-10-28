@@ -13,7 +13,7 @@ class ClothesController implements Controller {
     constructor() {
         this.initialiseRoutes();
     }
- 
+
     private initialiseRoutes(): void {
         this.router.post(
             `${this.path}/create`,
@@ -25,16 +25,16 @@ class ClothesController implements Controller {
             this.delete
         )
         this.router.get(
-            `${this.path}/:id`,
-            this.index
+            `${this.path}/findById/:name`,
+            this.findById
         )
         this.router.post(
-            `${this.path}/change/:id`,
-            this.change
+            `${this.path}/update/:id`,
+            this.update
         )
         this.router.get(
-            `${this.path}/find/:name`,
-            this.findClothes
+            `${this.path}/findByName/:name`,
+            this.findByName
         )
     }
 
@@ -100,7 +100,7 @@ class ClothesController implements Controller {
         }
     }
 
-    private index = async  (
+    private findById = async  (
         req: Request,
         res: Response,
         next: NextFunction,
@@ -108,7 +108,7 @@ class ClothesController implements Controller {
         try {
             const id: string = req.params.id;
 
-            const clothes = await this.ClothesService.index(id);
+            const clothes = await this.ClothesService.findById(id);
 
             res.status(201).json({clothes});
         } catch (error) {
@@ -116,7 +116,7 @@ class ClothesController implements Controller {
         }
     }
 
-    private change = async  (
+    private update = async  (
         req: Request,
         res: Response,
         next: NextFunction,
@@ -141,7 +141,7 @@ class ClothesController implements Controller {
                 sex,
                 collection_id,} = req.body;
 
-            const clothes = await this.ClothesService.change( 
+            const clothes = await this.ClothesService.update( 
                 id,
                 name,
                 imagesUrls,
@@ -165,7 +165,7 @@ class ClothesController implements Controller {
         }
     }
 
-    private findClothes = async  (
+    private findByName = async  (
         req: Request,
         res: Response,
         next: NextFunction,
@@ -173,7 +173,7 @@ class ClothesController implements Controller {
         try {
             const name: string = req.params.name as string;
 
-            const clothes = await this.ClothesService.findClothes(name);
+            const clothes = await this.ClothesService.findByName(name);
 
             res.status(201).json({clothes});
         } catch (error) {

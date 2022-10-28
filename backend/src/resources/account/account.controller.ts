@@ -53,12 +53,12 @@ class AccountController implements Controller {
         next: NextFunction
     ): Promise<Response | void> => {
         try {
-            const {email, password, isGoogle} = req.body;
-
-            const token = await this.AccountService.regiser(
+            const {email, password, name} = req.body;
+ 
+            const token = await this.AccountService.register(
                 email,
                 password,
-                isGoogle
+                name
             );
 
             res.status(201).json({token});
@@ -74,12 +74,14 @@ class AccountController implements Controller {
         next: NextFunction
     ): Promise<Response | void> => {
         try {
+ 
             const { email, password } = req.body;
-       
+
             const token = await this.AccountService.login(email, password);
 
             res.status(200).json({ token });
         } catch (error: any) {
+
             next(new HttpException(400, error.message));
         }
     };
@@ -92,12 +94,12 @@ class AccountController implements Controller {
         try {
             const {email, password} = req.body;
 
-            await this.AccountService.changePassword(
+            const new_password = await this.AccountService.changePassword(
                 email,
                 password,
             );
 
-            res.status(201).json("Password is changed");
+            res.status(201).json({new_password});
         } catch (error: any) {
             next(new HttpException(400, error.message));
         }
@@ -118,7 +120,7 @@ class AccountController implements Controller {
                 role,
                 adress,} = req.body;
 
-            await this.AccountService.update(
+            const account = await this.AccountService.update(
                 id,
                 email,
                 password,
@@ -128,7 +130,7 @@ class AccountController implements Controller {
                 adress,
             );
 
-            res.status(201).json("Account is updated");
+            res.status(201).json({account});
         } catch (error: any) {
             next(new HttpException(400, error.message));
         }
@@ -142,11 +144,11 @@ class AccountController implements Controller {
         try {
             const id = req.params.id;
 
-            await this.AccountService.delete(
+            const account = await this.AccountService.delete(
                 id
             );
 
-            res.status(201).json("Account is deleted");
+            res.status(201).json({account, accountIsDeleted: true});
         } catch (error: any) {
             next(new HttpException(400, error.message));
         }

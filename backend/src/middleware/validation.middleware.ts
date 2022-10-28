@@ -13,11 +13,12 @@ function validationMiddleware(schema: Joi.Schema): RequestHandler {
             stripUnknown: true
         };
 
-        try {
+        try { 
             const value = await schema.validateAsync(
                 req.body, 
                 validationOptions
             );
+
             req.body = value;
             next();
         } catch (e: any) {

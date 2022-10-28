@@ -1,5 +1,6 @@
 import AccountModel from '@/resources/account/account.model';
-import token from '@/utils/token'
+import token from '@/utils/token';
+import Account from '@/resources/account/account.interface'
 
 class AccountService {
     private account = AccountModel;
@@ -7,13 +8,20 @@ class AccountService {
     /**
      * Register a new account
      */
-    public async regiser(
+    public async register(
         email: string, 
         password: string, 
-        isGoogle: boolean
+        name: string, 
         ): Promise<string | Error> {
         try {
-            const account = await this.account.create({email, password, isGoogle});
+
+            const accountExists= await this.account.findOne({email});
+
+            if (accountExists) {
+                throw new Error('Account already exists'); 
+            }
+
+            const account = await this.account.create({email, password, name });
 
             const accesToken = token.createToken(account);
 
@@ -33,13 +41,13 @@ class AccountService {
         ): Promise<string | Error> {
         try {
             const account = await this.account.findOne({email});
-
             if (!account) {
-                throw new Error('Unable to find account with that Email Address'); 
+                throw new Error('Unable to find account with that email address'); 
             }
             
             if (await account.isValidPassword(password)) {
-                return token.createToken(account);
+                const accesToken = token.createToken(account);
+                return accesToken;
             } else {
                 throw new Error('Wrong credentials given');
             }
@@ -48,17 +56,30 @@ class AccountService {
         }
     }
 
+    /**
+    * Attempt to change password
+    */
+
     public async changePassword(
         email: string, 
         password: string, 
-        ): Promise<void | Error> {
+        ): Promise<string | Error> {
         try {
-             await this.account.findOneAndUpdate({email}, {password});    
-   
+            const account = await this.account.findOneAndUpdate({email}, {password}, {new: true});    
+
+            if (!account) {
+                throw new Error('Unable to change password with that email address'); 
+            }
+
+            return account.password;
         } catch (error) {
             throw new Error('Unable to change password');
         }
     }
+
+    /**
+    * Attempt to update account
+    */
 
     public async update(
         id: string,
@@ -68,21 +89,36 @@ class AccountService {
         phone: string,
         role: string,
         adress: string,
-        ): Promise<void | Error> {
+        ): Promise<Account | Error> {
         try {
-             await this.account.findOneAndUpdate({_id: id}, {email, password, name, phone, role, adress});    
-   
+             const account = await this.account.findOneAndUpdate({_id: id}, {email, password, name, phone, role, adress}, {new: true});  
+
+             if (!account) {
+                throw new Error('Unable to update account with that id'); 
+            }
+
+            return account;
         } catch (error) {
             throw new Error('Unable to update account');
         }
     }
 
+    /**
+    * Attempt to delete account
+    */
+
     public async delete( 
         id: string
-        ): Promise<void | Error> {
+        ): Promise<Account | Error> {
             try {
-                 await this.account.deleteOne({ _id: id });   
+                const account = await this.account.findOneAndDelete({ _id: id });   
        
+                if (!account) {
+                    throw new Error('Unable to delete account with that id'); 
+                }
+    
+                return account;
+
             } catch (error) {
                 throw new Error('Unable to delete account');
             }

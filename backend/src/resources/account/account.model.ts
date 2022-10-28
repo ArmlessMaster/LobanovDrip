@@ -27,10 +27,7 @@ const AccountSchema = new Schema(
         adress: {
             type: String,
         },
-        isGoogle: {
-            type: Boolean,
-            default: false
-        },
+
     },
     { timestamps: true}
 );

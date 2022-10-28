@@ -7,7 +7,7 @@ export default interface Account extends Document {
     phone: string;
     role: string;
     adress: string;
-    isGoogle: boolean;
+
 
     getUpdate(): Promise<Error | Object>;
     setUpdate(obj: Object): Promise<Error | boolean>;

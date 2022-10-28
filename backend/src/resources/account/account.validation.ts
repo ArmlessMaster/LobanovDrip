@@ -6,13 +6,14 @@ const register = Joi.object({
 
     password: Joi.string().min(6).required(),
 
-    isGoogle: Joi.boolean().required()
+    name: Joi.string(),
 });
 
 const login = Joi.object({
     email: Joi.string().email().required(),
 
     password: Joi.string().required(),
+
 });
 
 const changePassword = Joi.object({
