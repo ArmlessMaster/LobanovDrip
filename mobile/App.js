@@ -3,6 +3,9 @@ import { Text, View, StyleSheet } from 'react-native';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import Registration from "./components/registration/Registration";
+import Login from "./components/login/Login";
+import LoginAndRegistration from "./components/logAndReg"
+
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -32,7 +35,7 @@ export default function App() {
 
       return (
           <View style={styles.container} onLayout={onLayoutRootView}>
-              <Registration/>
+              <LoginAndRegistration/>
           </View>
       );
 }

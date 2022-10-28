@@ -8,6 +8,7 @@ import Arrow from '../../assets/images/Arrow 4.svg';
 import DecorJP from '../../assets/images/Decor Jpn.svg';
 import Decor from '../../assets/images/Registration Decor Thing.svg';
 import DecorBottom from '../../assets/images/Decor Thing.svg';
+import Footer from "../footer";
 
 
 export default function Registration() {
@@ -84,7 +85,7 @@ export default function Registration() {
                     ) : second()
                 }
             </View>
-            <View style={{flex: 1, backgroundColor: 'black'}}></View>
+            <Footer/>
         </View>
     );
 
