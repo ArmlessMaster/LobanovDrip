@@ -15,11 +15,12 @@ const login = Joi.object({
 });
 
 const changePassword = Joi.object({
-    email: Joi.string().email().required(),
+    id: Joi.string().hex().length(24).required(),
     password: Joi.string().required(),
 });
 
 const update = Joi.object({
+    id: Joi.string().hex().length(24).required(),
     email: Joi.string().email(),
     password: Joi.string(),
     name: Joi.string(),

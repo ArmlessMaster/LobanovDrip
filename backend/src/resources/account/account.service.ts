@@ -92,7 +92,7 @@ class AccountService {
      */
 
     public async update(
-        id: string,
+        id: Schema.Types.ObjectId,
         email: string,
         password: string,
         name: string,
@@ -121,7 +121,7 @@ class AccountService {
      * Attempt to delete account
      */
 
-    public async delete(id: string): Promise<Account | Error> {
+    public async delete(id: Schema.Types.ObjectId): Promise<Account | Error> {
         try {
             const account = await this.account.findByIdAndDelete(id);
 
