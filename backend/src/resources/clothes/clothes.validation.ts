@@ -9,7 +9,6 @@ const create = Joi.object({
     price: Joi.number().required(),
     company: Joi.string().required(),
     sale: Joi.number().required(),
-    assemblage: Joi.string().required(),
     material: Joi.string().required(),
     care: Joi.string().required(),
     clothesCount: Joi.array()
@@ -34,7 +33,6 @@ const update = Joi.object({
     price: Joi.number(),
     company: Joi.string(),
     sale: Joi.number(),
-    assemblage: Joi.string(),
     material: Joi.string(),
     care: Joi.string(),
     clothesCount: Joi.array().items({

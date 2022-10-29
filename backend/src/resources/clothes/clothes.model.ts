@@ -29,9 +29,6 @@ const ClothesSchema = new Schema(
             type: Number,
             default: 0,
         },
-        assemblage: {
-            type: String,
-        },
         material: {
             type: String,
         },

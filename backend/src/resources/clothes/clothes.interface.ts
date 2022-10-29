@@ -11,7 +11,6 @@ export default interface Clothes extends Document {
     type: string;
     price: number;
     sale: number;
-    assemblage: string;
     material: string;
     care: string;
     company: string;
