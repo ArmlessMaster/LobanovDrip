@@ -5,7 +5,6 @@ import LeftArrow from '../.././assets/images/login/Arrow 4.svg';
 import Mark from '../.././assets/images/login/xMark.svg';
 import DecorLogin from '../.././assets/images/login/Login Decor Thing.svg';
 import Registration from "../registration/Registration";
-import Footer from "../footer"
 
 export default function Login({navigation}) {
     const pressHandler = () => {
@@ -57,7 +56,6 @@ export default function Login({navigation}) {
                     </Text>
                 </Pressable>
             </View>
-            <Footer/>
         </View>
     );
 }

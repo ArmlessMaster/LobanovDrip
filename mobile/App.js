@@ -6,6 +6,7 @@ import Registration from "./components/registration/Registration";
 import Login from "./components/login/Login";
 import LoginAndRegistration from "./components/logAndReg"
 import Search from "./components/search/Search";
+import Footer from "./components/footer";
 
 
 export default function App() {
@@ -37,7 +38,10 @@ export default function App() {
 
       return (
           <View style={styles.container} onLayout={onLayoutRootView}>
-              <LoginAndRegistration/>
+              <View style={{flex: 12.5}}><LoginAndRegistration/></View>
+              <View style={{flex: 1}}>
+                  <Footer/>
+              </View>
           </View>
       );
 }

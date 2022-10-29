@@ -11,9 +11,7 @@ import {
 } from "react-native";
 import React from 'react';
 import Arrow from "../../assets/images/rightArrow.svg";
-import Footer from "../footer";
 import Loupe from "../../assets/images/search 1.svg";
-import {Line} from "react-native-svg";
 
 export default function Search() {
 
@@ -71,19 +69,11 @@ export default function Search() {
     return (
         <View style={{flex: 1}}>
             <View style={{backgroundColor: '#323232', flex: 0.5}}></View>
-            <View style={{
-                flex: 1,
-                backgroundColor: '#323232',
-                justifyContent: 'flex-end',
-                alignItems: 'center',
-                flexDirection: 'row'
-            }}>
+            <View style={{flex: 1, backgroundColor: '#323232', justifyContent: 'flex-end',
+                alignItems: 'center', flexDirection: 'row'}}>
                 <Loupe style={{flex: 1, left: '50%'}}></Loupe>
-                <TextInput style={styles.searchInput} placeholder="Search..." placeholderTextColor='white'>
-                </TextInput>
-                <Pressable style={{right: '20%'}}>
-                    <Arrow/>
-                </Pressable>
+                <TextInput style={styles.searchInput} placeholder="Search..." placeholderTextColor='white'></TextInput>
+                <Pressable style={{right: '20%'}}><Arrow/></Pressable>
             </View>
             <View style={{borderWidth: 0.75, borderColor: 'white', bottom: '1%', width: '80%', alignSelf: 'center'}}/>
             <View style={{flex: 1}}></View>
@@ -102,7 +92,6 @@ export default function Search() {
                     </View>
                 )} keyExtractor={item => item.id} numColumns='2'/>
             </SafeAreaView>
-            <Footer/>
         </View>
     )
 }
