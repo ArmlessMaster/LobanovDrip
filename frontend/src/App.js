@@ -5,14 +5,38 @@ import { BrowserRouter } from "react-router-dom";
 import { Header } from "./components/layout/header/Header";
 import { Footer } from "./components/layout/footer/Footer";
 import { Authorization } from "./components/pages/authorization/Authorization";
+import { useAuth } from "./hooks/auth.hook";
+import { AuthContext } from "./context/AuthContext";
+import {Loader} from "./components/layout/loader/Loader"
 
-function App() {
+
+const App = () => {
+
+  const { token, login, logout, ready } = useAuth();
+  const isAuthenticated = !!token;
+  const routes = useRoutes(isAuthenticated);
+
+
+  if (!ready) {
+    return <Loader />
+  }
+
   return (
-    <div className="App">
-      <Header/> 
-      <Authorization/>
-            {<div className='Main-Wrapper'></div>}
-    </div>
+    <>
+      <AuthContext.Provider
+        value={{
+          token,
+          login,
+          logout,
+          isAuthenticated,
+        }}
+      >
+        <BrowserRouter>
+          <Header />
+          <div className="Main-Wrapper">{routes}</div>
+        </BrowserRouter>
+      </AuthContext.Provider>
+    </>
   );
 }
 

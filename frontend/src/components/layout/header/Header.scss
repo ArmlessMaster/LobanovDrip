@@ -1,101 +1,188 @@
 .header{
-  width: 100%;
-  height: 2.8vw;
-  background-color: black;
-  justify-content: space-between;
   font-family: 'Roboto';
-  color: white;
-  font-weight: 500;
-  line-height: 2.917vw;
-  display: flex;
-  z-index: 44;
-  .header__logo{
-    padding-left: 2vw;
-    flex: 2;
-    font-size: 1.875vw;
+  
+  .header__menu-drop{
     font-weight: 700;
-  }
-  .header__menu{
-    justify-content: center;
-    display: flex;
-    font-size: 1.042vw;
-    flex: 5;
-
-    li + li{
-      margin-left: 4vw;
-    }
-    li{      
-      position: relative;
-    }
-    li::after{
-      content: "";
-      height: 0.2vw;
-      width: 0;
+    font-size: 1.3vw;
+    color: white;
+    .header__menu-drop__item{
+      z-index: 2;
       position: absolute;
-      background-color: #E34D4D;
-      bottom: -0.9vw;
-      left: 0;
-      font-size: 0.4vw;
-      transition: 0.3s ease;
-    }
-    li:hover:after{
-      width: 100%;
-    }
-  }
-  .header__btns{
-
-    display: flex;
-    flex: 1;
-  }
-  .header__search{
-    
-    form{
-      
-      input{
-        padding: 0;
-        background-color: transparent;
-        border: none;
-        border-bottom: 0.1vw solid white;
-        outline:none;
-        color: white;
-        font-size: 1vw;
-      }
-      input::placeholder{
-        color: white;
-      }
-    }
-  }
-  .header__btns{
-    display: flex;
-    justify-content: right;
-    margin-top: 0.5vw;
-    margin-right: 1vw;
-    position: relative;
-    .header__btns-wrapper{
-      margin-left: 0.5vw;
-      height: 1.5vw;
-      width: 1.5vw;
-      svg{
+      background-color: #313131;
+      .header__menu-drop__item-flex{
+        width: 100%;
         position: absolute;
+        display: flex;
+        bottom: 22%;
+        justify-content: space-around;
+        div{
+
+          svg{
+            width: 8vw;
+            height: 100%;
+            fill: rgb(63, 63, 63);
+          }
+        }
+      }
+      .header__menu-drop__item-center{
+        height: 100%;
+        width: 100%;
+        div{
+          position: absolute;
+          left: 15%;
+          top: 50%;
+        }
+        div+div{
+          left: 68.5%;
+        }
+      }
+    }
+    .header__menu-drop__item.first{
+      width: 17%;
+      height: 16vw;
+      left: 30%;
+      ul{
+        padding-top: 13%;
+      }
+      li{
+        padding-top: 0.8vw;
+        padding-left: 1vw;
+        list-style-type: none;
+      }
+    }
+    .decor{
+      position: fixed;
+      height: 100%;
+      width: 100%;
+      .decor__item{
+        color: #5a5a5a;
+        position: absolute;
+        top: 2.7vw;
+        right: 1vw;
+      }
+      .decor__line{
+        z-index: 3;
+        content: "";
+        background-color: #3f3f3f;
+        position: absolute;
+        width: 0.1vw;
+        height: 80%;
+        top: 2.7vw;
+        right: 50%;
+      }
+    }
+    .header__menu-drop__item.second{
+      width: 25%;
+      height: 16vw;
+      left: 35%;
+    }
+  }
+
+  .header__wrapper{
+    position: absolute;
+    z-index: 3;
+    width: 100%;
+    height: 2.8vw;
+    background-color: black;
+    justify-content: space-between;
+
+    color: white;
+    font-weight: 500;
+    line-height: 2.917vw;
+    display: flex;
+    z-index: 4;
+    .header__logo{
+      padding-left: 2vw;
+      flex: 2;
+      font-size: 1.875vw;
+      font-weight: 700;
+    }
+    .header__menu{
+      justify-content: center;
+      display: flex;
+      font-size: 1.042vw;
+      flex: 5;
+
+      li + li{
+        margin-left: 4vw;
+      }
+      li{      
+        position: relative;
+        button{
+          color: white;
+          background-color: transparent;
+        }
+      }
+      li::after{
+        content: "";
+        height: 0.1vw;
+        width: 0;
+        position: absolute;
+        background-color: #E34D4D;
+        bottom: 0.3vw;
+        left: 0;
+        font-size: 0.4vw;
+        transition: 0.3s ease;
+      }
+      li:hover:after{
+        width: 100%;
+      }
+    }
+    .header__btns{
+  
+      display: flex;
+      flex: 1;
+    }
+    .header__search{
+      
+      form{
+        
+        input{
+          padding: 0;
+          background-color: transparent;
+          border: none;
+          border-bottom: 0.1vw solid white;
+          outline:none;
+          color: white;
+          font-size: 1vw;
+        }
+        input::placeholder{
+          color: white;
+        }
+      }
+    }
+    .header__btns{
+      display: flex;
+      justify-content: right;
+      margin-top: 0.5vw;
+      margin-right: 1vw;
+      position: relative;
+      .header__btns-wrapper{
+        margin-left: 0.5vw;
         height: 1.5vw;
         width: 1.5vw;
+        svg{
+          position: absolute;
+          height: 1.5vw;
+          width: 1.5vw;
+        }
+        position: relative;
       }
-      position: relative;
-    }
-    .account-btn::after{
-      content: "Account";
-      color: white;
-      position: absolute;
-      top: 0.5vw;
-      font-size: 0.4vw;
-    }
-    .cart-btn::after{
-      content: "Cart";
-      color: white;
-      position: absolute;
-      top: 0.5vw;
-      right: 25%;
-      font-size: 0.4vw;
+      .account-btn::after{
+        content: "Account";
+        color: white;
+        position: absolute;
+        top: 0.5vw;
+        font-size: 0.4vw;
+      }
+      .cart-btn::after{
+        content: "Cart";
+        color: white;
+        position: absolute;
+        top: 0.5vw;
+        right: 25%;
+        font-size: 0.4vw;
+      }
     }
   }
 }

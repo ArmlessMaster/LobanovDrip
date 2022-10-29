@@ -1,4 +1,5 @@
 
+
 .Authorization{
   overflow-x: hidden;
   font-family: 'VCR OSD Mono';
@@ -29,7 +30,7 @@
 
       .login{
 
-        margin-top: 12vw;
+        margin-top: 15vw;
   
   
         .login-title{
@@ -69,7 +70,8 @@
       }
 
       .input-btn-wrapper_outside{
-        width: 80%;
+        position: fixed;
+        width: 40%;
         text-align: center;
       }
     }

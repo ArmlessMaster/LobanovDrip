@@ -2,14 +2,34 @@ import "./PixelInput.scss";
 import React from "react";
 import { motion } from "framer-motion"
 
-const PixelInput = (props) => {  
+const PixelInput = ({type, 
+  placeholder, 
+  disabled, 
+  animate, 
+  variants,
+  id,
+  name, 
+  value,
+  onChange}) => {  
  
   return (
-    <motion.div className="pixelInput-wrapper" variants={props.variants} transition={{ duration: 0.1 }} animate={props.animate}>
-      <input className="pixelInput" placeholder={props.text} disabled={props.disabled}/>
+    <motion.div className="pixelInput-wrapper" 
+      variants={variants} 
+      transition={{ duration: 0.1 }} 
+      animate={animate}>
+        <input className="pixelInput" 
+          type={type}
+          placeholder={placeholder} 
+          disabled={disabled}
+          id={id}
+          name={name}
+          value={value}
+          onChange={onChange}
+          />
     </motion.div>
 
   )
 }
+
 
 export default PixelInput;

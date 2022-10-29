@@ -2,10 +2,25 @@ import "./PixelBtn.scss";
 import React from "react";
 import { motion } from "framer-motion"
 
-const PixelBtn = (props) => {  
+const PixelBtn = ({
+  disabled, 
+  onClick, 
+  isBlue, 
+  variants, 
+  animate, 
+  text,  }) => {  
  
   return (
-    <motion.button disabled={props.disabled} type="button" onClick={props.onClick} className={"PixelBtn " + (props.isBlue ? "Blue" : "Red")} variants={props.variants} transition={{ duration: 0.1 }} animate={props.animate}> {props.text} </motion.button>
+    <motion.button 
+      disabled={disabled} 
+      onClick={onClick}
+      type="button" 
+      className={"PixelBtn " + (isBlue ? "Blue" : "Red")} 
+      variants={variants} 
+      transition={{ duration: 0.1 }} 
+      animate={animate}> 
+            {text} 
+    </motion.button>
   )
 }
 

@@ -4,8 +4,8 @@ const RegisterSvg = (props) => {
  
   return (
     <svg width="26" height="377" viewBox="0 0 26 377" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <line x1="12" y1="112" x2="12" y2="26" stroke="white" stroke-width="2"/>
-      <line x1="14" y1="255" x2="14" y2="341" stroke="white" stroke-width="2"/>
+      <line x1="12" y1="112" x2="12" y2="26" stroke="white" strokeWidth="2"/>
+      <line x1="14" y1="255" x2="14" y2="341" stroke="white" strokeWidth="2"/>
       <circle cx="13" cy="359" r="2" fill="#D9D9D9"/>
       <circle cx="13" cy="367" r="2" fill="#D9D9D9"/>
       <circle cx="13" cy="375" r="2" fill="#D9D9D9"/>
