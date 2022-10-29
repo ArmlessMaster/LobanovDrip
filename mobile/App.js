@@ -5,16 +5,18 @@ import * as SplashScreen from 'expo-splash-screen';
 import Registration from "./components/registration/Registration";
 import Login from "./components/login/Login";
 import LoginAndRegistration from "./components/logAndReg"
+import Search from "./components/search/Search";
 
 
 export default function App() {
-  const [fontsLoaded] = useFonts({
-          'vsr-osd-mono': require('./assets/fonts/VCR_OSD_MONO_1.001.ttf'),
-          'inter-medium': require('./assets/fonts/Inter-Medium.ttf'),
-          'roboto-light-i': require('./assets/fonts/Roboto-LightItalic.ttf'),
-          'roboto-regular': require('./assets/fonts/Roboto-Regular.ttf'),
-          'VCR_OSD_MONO': require('./assets/fonts/VCR_OSD_MONO_1.001.ttf'),
-      });
+    const [fontsLoaded] = useFonts({
+        'vsr-osd-mono': require('./assets/fonts/VCR_OSD_MONO_1.001.ttf'),
+        'inter-medium': require('./assets/fonts/Inter-Medium.ttf'),
+        'roboto-light-i': require('./assets/fonts/Roboto-LightItalic.ttf'),
+        'roboto-regular': require('./assets/fonts/Roboto-Regular.ttf'),
+        'VCR_OSD_MONO': require('./assets/fonts/VCR_OSD_MONO_1.001.ttf'),
+        'inter-regular': require('./assets/fonts/Inter-Regular.otf')
+    });
 
       useEffect(() => {
           async function prepare() {
