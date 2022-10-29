@@ -1,6 +1,6 @@
-import { Schema, model } from "mongoose";
+import { Schema, model } from 'mongoose';
 import bcrypt from 'bcrypt';
-import Account from '@/resources/account/account.interface'
+import Account from '@/resources/account/account.interface';
 
 const AccountSchema = new Schema(
     {
@@ -27,9 +27,8 @@ const AccountSchema = new Schema(
         adress: {
             type: String,
         },
-
     },
-    { timestamps: true}
+    { timestamps: true }
 );
 
 AccountSchema.pre<Account>('save', async function (next) {
@@ -45,17 +44,17 @@ AccountSchema.pre<Account>('save', async function (next) {
 });
 
 AccountSchema.pre<Account>('findOneAndUpdate', async function (this) {
-    const update: any = {...this.getUpdate()};
-    if (update.password){
+    const update: any = { ...this.getUpdate() };
+    if (update.password) {
         update.password = await bcrypt.hash(update.password, 10);
         this.setUpdate(update);
     }
-  })
+});
 
 AccountSchema.methods.isValidPassword = async function (
     password: string
 ): Promise<Error | boolean> {
     return await bcrypt.compare(password, this.password);
-}
+};
 
 export default model<Account>('Accounts', AccountSchema);

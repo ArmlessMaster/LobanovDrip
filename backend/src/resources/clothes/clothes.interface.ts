@@ -1,6 +1,6 @@
-import {Document} from 'mongoose';
+import { Document } from 'mongoose';
 import ClothesCount from '@/utils/interfaces/clothesCount.interface';
-import {Schema} from 'mongoose';
+import { Schema } from 'mongoose';
 
 export default interface Clothes extends Document {
     name: string;
@@ -15,7 +15,7 @@ export default interface Clothes extends Document {
     material: string;
     care: string;
     company: string;
-    sex: string,
-    collection_id: Schema.Types.ObjectId,
+    sex: string;
+    collection_id: Schema.Types.ObjectId;
     clothesCount: Array<ClothesCount>;
 }

@@ -1,5 +1,5 @@
-import { Schema, model } from "mongoose";
-import Modeling from '@/resources/modeling/modeling.interface'
+import { Schema, model } from 'mongoose';
+import Modeling from '@/resources/modeling/modeling.interface';
 import Image from '@/utils/interfaces/image.interface';
 
 const ModelingSchema = new Schema(
@@ -15,13 +15,13 @@ const ModelingSchema = new Schema(
         },
         user_id: {
             type: Schema.Types.ObjectId,
-            ref: 'Accounts'
+            ref: 'Accounts',
         },
         images: {
             type: Array<Image>,
         },
     },
-    { timestamps: true}
+    { timestamps: true }
 );
 
 export default model<Modeling>('Modeling', ModelingSchema);

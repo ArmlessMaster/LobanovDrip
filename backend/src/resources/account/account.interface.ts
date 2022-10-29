@@ -1,4 +1,4 @@
-import {Document} from 'mongoose';
+import { Document } from 'mongoose';
 
 export default interface Account extends Document {
     email: string;
@@ -7,7 +7,6 @@ export default interface Account extends Document {
     phone: string;
     role: string;
     adress: string;
-
 
     getUpdate(): Promise<Error | Object>;
     setUpdate(obj: Object): Promise<Error | boolean>;

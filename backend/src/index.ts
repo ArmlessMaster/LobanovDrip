@@ -12,7 +12,6 @@ import OrderClothesController from '@/resources/orderClothes/orderClothes.contro
 import SetController from '@/resources/set/set.controller';
 import CollectionController from '@/resources/collection/collection.controller';
 
-
 validateEnv();
 
 const app = new App(
@@ -24,7 +23,8 @@ const app = new App(
         new ModelingController(),
         new OrderController(),
         new OrderClothesController(),
-        new SetController()
+        new SetController(),
+        new CollectionController(),
     ],
     Number(process.env.PORT)
 );

@@ -1,4 +1,4 @@
-import express, {Application } from 'express';
+import express, { Application } from 'express';
 import mongoose from 'mongoose';
 import compression from 'compression';
 import cors from 'cors';
@@ -7,8 +7,6 @@ import Controller from '@/utils/interfaces/controller.interface';
 import ErrorMiddleware from '@/middleware/error.middleware';
 import helmet from 'helmet';
 
-
-
 class App {
     public express: Application;
     public port: number;
@@ -16,7 +14,6 @@ class App {
     constructor(controllers: Controller[], port: number) {
         this.express = express();
         this.port = port;
-
 
         this.initialiseDatabaseConnection();
         this.initialiseMiddleware();
@@ -29,7 +26,7 @@ class App {
         this.express.use(cors());
         this.express.use(morgan('dev'));
         this.express.use(express.json());
-        this.express.use(express.urlencoded({extended: false}));
+        this.express.use(express.urlencoded({ extended: false }));
         this.express.use(compression());
     }
 
@@ -44,7 +41,7 @@ class App {
     }
 
     private initialiseDatabaseConnection(): void {
-        const {MONGO_USER, MONGO_PASSWORD, MONGO_PATH} = process.env;
+        const { MONGO_USER, MONGO_PASSWORD, MONGO_PATH } = process.env;
         mongoose.connect(
             `mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}${MONGO_PATH}`
         );

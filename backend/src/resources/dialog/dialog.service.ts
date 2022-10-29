@@ -1,6 +1,6 @@
 import DialogModel from '@/resources/dialog/dialog.model';
 import Dialog from '@/resources/dialog/dialog.interface';
-import { Schema} from "mongoose";
+import { Schema } from 'mongoose';
 
 class DialogService {
     private dialog = DialogModel;
@@ -11,8 +11,8 @@ class DialogService {
     public async create(
         user_id: Schema.Types.ObjectId,
         moderator_id: Schema.Types.ObjectId,
-        lastMessage_id: Schema.Types.ObjectId,
-        ): Promise<Dialog> {
+        lastMessage_id: Schema.Types.ObjectId
+    ): Promise<Dialog> {
         try {
             const dialog = await this.dialog.create({
                 user_id,

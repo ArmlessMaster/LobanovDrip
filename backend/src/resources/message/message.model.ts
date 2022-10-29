@@ -1,5 +1,5 @@
-import { Schema, model } from "mongoose";
-import Message from '@/resources/message/message.interface'
+import { Schema, model } from 'mongoose';
+import Message from '@/resources/message/message.interface';
 
 const MessageSchema = new Schema(
     {
@@ -11,14 +11,14 @@ const MessageSchema = new Schema(
         },
         dialog: {
             type: Schema.Types.ObjectId,
-            ref: 'Dialogs'
+            ref: 'Dialogs',
         },
         author: {
             type: Schema.Types.ObjectId,
-            ref: 'Accounts'
+            ref: 'Accounts',
         },
     },
-    { timestamps: true}
+    { timestamps: true }
 );
 
 export default model<Message>('Messages', MessageSchema);

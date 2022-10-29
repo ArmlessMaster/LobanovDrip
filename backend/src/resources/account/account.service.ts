@@ -1,6 +1,7 @@
 import AccountModel from '@/resources/account/account.model';
 import token from '@/utils/token';
-import Account from '@/resources/account/account.interface'
+import Account from '@/resources/account/account.interface';
+import { Schema } from 'mongoose';
 
 class AccountService {
     private account = AccountModel;
@@ -9,19 +10,22 @@ class AccountService {
      * Register a new account
      */
     public async register(
-        email: string, 
-        password: string, 
-        name: string, 
-        ): Promise<string | Error> {
+        email: string,
+        password: string,
+        name: string
+    ): Promise<string | Error> {
         try {
-
-            const accountExists= await this.account.findOne({email});
+            const accountExists = await this.account.findOne({ email });
 
             if (accountExists) {
-                throw new Error('Account already exists'); 
+                throw new Error('Account already exists');
             }
 
-            const account = await this.account.create({email, password, name });
+            const account = await this.account.create({
+                email,
+                password,
+                name,
+            });
 
             const accesToken = token.createToken(account);
 
@@ -36,15 +40,17 @@ class AccountService {
      */
 
     public async login(
-        email: string, 
-        password: string, 
-        ): Promise<string | Error> {
+        email: string,
+        password: string
+    ): Promise<string | Error> {
         try {
-            const account = await this.account.findOne({email});
+            const account = await this.account.findOne({ email });
             if (!account) {
-                throw new Error('Unable to find account with that email address'); 
+                throw new Error(
+                    'Unable to find account with that email address'
+                );
             }
-            
+
             if (await account.isValidPassword(password)) {
                 const accesToken = token.createToken(account);
                 return accesToken;
@@ -57,18 +63,22 @@ class AccountService {
     }
 
     /**
-    * Attempt to change password
-    */
+     * Attempt to change password
+     */
 
     public async changePassword(
-        email: string, 
-        password: string, 
-        ): Promise<string | Error> {
+        id: Schema.Types.ObjectId,
+        password: string
+    ): Promise<string | Error> {
         try {
-            const account = await this.account.findOneAndUpdate({email}, {password}, {new: true});    
+            const account = await this.account.findByIdAndUpdate(
+                id,
+                { password },
+                { new: true }
+            );
 
             if (!account) {
-                throw new Error('Unable to change password with that email address'); 
+                throw new Error('Unable to change password with that id');
             }
 
             return account.password;
@@ -78,8 +88,8 @@ class AccountService {
     }
 
     /**
-    * Attempt to update account
-    */
+     * Attempt to update account
+     */
 
     public async update(
         id: string,
@@ -88,13 +98,17 @@ class AccountService {
         name: string,
         phone: string,
         role: string,
-        adress: string,
-        ): Promise<Account | Error> {
+        adress: string
+    ): Promise<Account | Error> {
         try {
-             const account = await this.account.findOneAndUpdate({_id: id}, {email, password, name, phone, role, adress}, {new: true});  
+            const account = await this.account.findByIdAndUpdate(
+                id,
+                { email, password, name, phone, role, adress },
+                { new: true }
+            );
 
-             if (!account) {
-                throw new Error('Unable to update account with that id'); 
+            if (!account) {
+                throw new Error('Unable to update account with that id');
             }
 
             return account;
@@ -104,26 +118,22 @@ class AccountService {
     }
 
     /**
-    * Attempt to delete account
-    */
+     * Attempt to delete account
+     */
 
-    public async delete( 
-        id: string
-        ): Promise<Account | Error> {
-            try {
-                const account = await this.account.findOneAndDelete({ _id: id });   
-       
-                if (!account) {
-                    throw new Error('Unable to delete account with that id'); 
-                }
-    
-                return account;
+    public async delete(id: string): Promise<Account | Error> {
+        try {
+            const account = await this.account.findByIdAndDelete(id);
 
-            } catch (error) {
-                throw new Error('Unable to delete account');
+            if (!account) {
+                throw new Error('Unable to delete account with that id');
             }
-    }
 
+            return account;
+        } catch (error) {
+            throw new Error('Unable to delete account');
+        }
+    }
 }
 
 export default AccountService;

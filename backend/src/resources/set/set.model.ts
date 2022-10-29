@@ -1,5 +1,5 @@
-import { Schema, model } from "mongoose";
-import Set from '@/resources/set/set.interface'
+import { Schema, model } from 'mongoose';
+import Set from '@/resources/set/set.interface';
 
 const SetSchema = new Schema(
     {
@@ -8,14 +8,16 @@ const SetSchema = new Schema(
         },
         user_id: {
             type: Schema.Types.ObjectId,
-            ref: 'Accounts'
+            ref: 'Accounts',
         },
-        clothes_id: [{
-            type: Array<Schema.Types.ObjectId>,
-            ref: 'Clothes'
-        }],
+        clothes_id: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'Clothes',
+            },
+        ],
     },
-    { timestamps: true}
+    { timestamps: true }
 );
 
 export default model<Set>('Sets', SetSchema);

@@ -1,4 +1,4 @@
-import {Router, Request, Response, NextFunction} from 'express';
+import { Router, Request, Response, NextFunction } from 'express';
 import Controller from '@/utils/interfaces/controller.interface';
 import HttpException from '@/utils/exceptions/http.exception';
 import validationMiddleware from '@/middleware/validation.middleware';
@@ -19,32 +19,29 @@ class RecordController implements Controller {
             `${this.path}/create`,
             validationMiddleware(validate.create),
             this.create
-        )
+        );
     }
 
-    private create = async  (
+    private create = async (
         req: Request,
         res: Response,
-        next: NextFunction,
+        next: NextFunction
     ): Promise<Response | void> => {
         try {
-            const { 
+            const { text, readed, dialog, author } = req.body;
+
+            const message = await this.MessageService.create(
                 text,
                 readed,
                 dialog,
-                author,} = req.body;
+                author
+            );
 
-            const message = await this.MessageService.create( 
-                text,
-                readed,
-                dialog,
-                author,);
-
-            res.status(201).json({message});
+            res.status(201).json({ message });
         } catch (error) {
             next(new HttpException(400, 'Cannot create message'));
         }
-    }
+    };
 }
 
 export default RecordController;

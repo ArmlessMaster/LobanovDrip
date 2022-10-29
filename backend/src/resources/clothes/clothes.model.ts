@@ -1,5 +1,5 @@
-import { Schema, model } from "mongoose";
-import Clothes from '@/resources/clothes/clothes.interface'
+import { Schema, model } from 'mongoose';
+import Clothes from '@/resources/clothes/clothes.interface';
 import ClothesCount from '@/utils/interfaces/clothesCount.interface';
 
 const ClothesSchema = new Schema(
@@ -27,7 +27,7 @@ const ClothesSchema = new Schema(
         },
         sale: {
             type: Number,
-            default: 0
+            default: 0,
         },
         assemblage: {
             type: String,
@@ -49,9 +49,10 @@ const ClothesSchema = new Schema(
         },
         collection_id: {
             type: Schema.Types.ObjectId,
+            ref: 'Collections',
         },
     },
-    { timestamps: true}
+    { timestamps: true }
 );
 
 export default model<Clothes>('Clothes', ClothesSchema);

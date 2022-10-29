@@ -1,20 +1,19 @@
-import { Schema, model } from "mongoose";
-import Collection from '@/resources/collection/collection.interface'
+import { Schema, model } from 'mongoose';
+import Collection from '@/resources/collection/collection.interface';
 
 const CollectionSchema = new Schema(
     {
         name: {
             type: String,
         },
-        image: {
+        imageUrl: {
             type: String,
         },
         description: {
             type: String,
         },
-
     },
-    { timestamps: true}
+    { timestamps: true }
 );
 
-export default model<Collection>('Collection', CollectionSchema);
+export default model<Collection>('Collections', CollectionSchema);

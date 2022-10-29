@@ -1,15 +1,15 @@
-import { Schema, model } from "mongoose";
-import OrderClothes from '@/resources/orderClothes/orderClothes.interface'
+import { Schema, model } from 'mongoose';
+import OrderClothes from '@/resources/orderClothes/orderClothes.interface';
 
 const OrderClothesSchema = new Schema(
     {
-        clothe_id: {
+        clothes_id: {
             type: Schema.Types.ObjectId,
-            ref: 'Clothes'
+            ref: 'Clothes',
         },
         order_id: {
             type: Schema.Types.ObjectId,
-            ref: 'Orders'
+            ref: 'Orders',
         },
         count: {
             type: Number,
@@ -21,7 +21,7 @@ const OrderClothesSchema = new Schema(
             type: String,
         },
     },
-    { timestamps: true}
+    { timestamps: true }
 );
 
 export default model<OrderClothes>('OrderClothes', OrderClothesSchema);

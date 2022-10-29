@@ -7,5 +7,4 @@ const create = Joi.object({
     author: Joi.string().hex().length(24).required(),
 });
 
-
-export default {create};
+export default { create };

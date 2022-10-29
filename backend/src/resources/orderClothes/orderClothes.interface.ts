@@ -1,10 +1,10 @@
-import {Document} from 'mongoose';
-import {Schema} from 'mongoose';
+import { Document } from 'mongoose';
+import { Schema } from 'mongoose';
 
 export default interface OrderClothes extends Document {
-    clothe_id: Schema.Types.ObjectId;
+    clothes_id: Schema.Types.ObjectId;
     order_id: Schema.Types.ObjectId;
     count: number;
-    size: string
+    size: string;
     color: string;
 }

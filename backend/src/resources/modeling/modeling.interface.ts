@@ -1,5 +1,5 @@
-import {Document} from 'mongoose';
-import {Schema} from 'mongoose';
+import { Document } from 'mongoose';
+import { Schema } from 'mongoose';
 import Image from '@/utils/interfaces/image.interface';
 
 export default interface Modeling extends Document {

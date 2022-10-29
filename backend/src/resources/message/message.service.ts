@@ -1,6 +1,6 @@
 import MessageModel from '@/resources/message/message.model';
 import Message from '@/resources/message/message.interface';
-import { Schema} from "mongoose";
+import { Schema } from 'mongoose';
 
 class MessageService {
     private message = MessageModel;
@@ -12,8 +12,8 @@ class MessageService {
         text: string,
         readed: boolean,
         dialog: Schema.Types.ObjectId,
-        author: Schema.Types.ObjectId,
-        ): Promise<Message> {
+        author: Schema.Types.ObjectId
+    ): Promise<Message> {
         try {
             const message = await this.message.create({
                 text,

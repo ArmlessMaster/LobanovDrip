@@ -6,5 +6,4 @@ const create = Joi.object({
     lastMessage_id: Joi.string().hex().length(24).required(),
 });
 
-
-export default {create};
+export default { create };

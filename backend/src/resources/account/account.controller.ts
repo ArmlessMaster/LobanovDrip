@@ -1,4 +1,4 @@
-import {Router, Request, Response, NextFunction} from 'express';
+import { Router, Request, Response, NextFunction } from 'express';
 import Controller from '@/utils/interfaces/controller.interface';
 import HttpException from '@/utils/exceptions/http.exception';
 import validationMiddleware from '@/middleware/validation.middleware';
@@ -29,22 +29,22 @@ class AccountController implements Controller {
         this.router.post(
             `${this.path}/changePassword`,
             validationMiddleware(validate.changePassword),
+            authenticated,
             this.changePassword
         );
         this.router.post(
-            `${this.path}/update/:id`,
+            `${this.path}/update`,
             validationMiddleware(validate.update),
+            authenticated,
             this.update
         );
         this.router.delete(
-            `${this.path}/delete/:id`,
+            `${this.path}/delete`,
+            validationMiddleware(validate.deleteAccount),
+            authenticated,
             this.delete
         );
-        this.router.get(
-            `${this.path}`,
-            authenticated,
-            this.getAccount
-        );
+        this.router.get(`${this.path}`, authenticated, this.getAccount);
     }
 
     private register = async (
@@ -53,18 +53,17 @@ class AccountController implements Controller {
         next: NextFunction
     ): Promise<Response | void> => {
         try {
-            const {email, password, name} = req.body;
- 
+            const { email, password, name } = req.body;
+
             const token = await this.AccountService.register(
                 email,
                 password,
                 name
             );
 
-            res.status(201).json({token});
+            res.status(201).json({ token });
         } catch (error: any) {
             next(new HttpException(400, error.message));
-            
         }
     };
 
@@ -74,14 +73,12 @@ class AccountController implements Controller {
         next: NextFunction
     ): Promise<Response | void> => {
         try {
- 
             const { email, password } = req.body;
 
             const token = await this.AccountService.login(email, password);
 
             res.status(200).json({ token });
         } catch (error: any) {
-
             next(new HttpException(400, error.message));
         }
     };
@@ -92,14 +89,14 @@ class AccountController implements Controller {
         next: NextFunction
     ): Promise<Response | void> => {
         try {
-            const {email, password} = req.body;
+            const { id, password } = req.body;
 
             const new_password = await this.AccountService.changePassword(
-                email,
-                password,
+                id,
+                password
             );
 
-            res.status(201).json({new_password});
+            res.status(201).json({ new_password });
         } catch (error: any) {
             next(new HttpException(400, error.message));
         }
@@ -111,14 +108,7 @@ class AccountController implements Controller {
         next: NextFunction
     ): Promise<Response | void> => {
         try {
-            const id = req.params.id;
-
-            const {    email,
-                password,
-                name,
-                phone,
-                role,
-                adress,} = req.body;
+            const { id, email, password, name, phone, role, adress } = req.body;
 
             const account = await this.AccountService.update(
                 id,
@@ -127,10 +117,10 @@ class AccountController implements Controller {
                 name,
                 phone,
                 role,
-                adress,
+                adress
             );
 
-            res.status(201).json({account});
+            res.status(201).json({ account });
         } catch (error: any) {
             next(new HttpException(400, error.message));
         }
@@ -142,13 +132,11 @@ class AccountController implements Controller {
         next: NextFunction
     ): Promise<Response | void> => {
         try {
-            const id = req.params.id;
+            const { id } = req.body;
 
-            const account = await this.AccountService.delete(
-                id
-            );
+            const account = await this.AccountService.delete(id);
 
-            res.status(201).json({account, accountIsDeleted: true});
+            res.status(201).json({ account });
         } catch (error: any) {
             next(new HttpException(400, error.message));
         }

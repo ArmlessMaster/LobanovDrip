@@ -1,5 +1,5 @@
-import {Document} from 'mongoose';
-import {Schema} from 'mongoose';
+import { Document } from 'mongoose';
+import { Schema } from 'mongoose';
 
 export default interface Message extends Document {
     text: string;
