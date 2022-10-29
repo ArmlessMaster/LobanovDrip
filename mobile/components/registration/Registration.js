@@ -8,7 +8,6 @@ import Arrow from '../../assets/images/Arrow 4.svg';
 import DecorJP from '../../assets/images/Decor Jpn.svg';
 import Decor from '../../assets/images/Registration Decor Thing.svg';
 import DecorBottom from '../../assets/images/Decor Thing.svg';
-import Footer from "../footer";
 
 
 export default function Registration({ navigation }) {
@@ -84,7 +83,6 @@ export default function Registration({ navigation }) {
                     ) : second()
                 }
             </View>
-            <Footer/>
         </View>
     );
 

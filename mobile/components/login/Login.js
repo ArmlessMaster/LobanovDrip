@@ -4,7 +4,11 @@ import React, {useRef} from 'react';
 import LeftArrow from '../.././assets/images/login/Arrow 4.svg';
 import Mark from '../.././assets/images/login/xMark.svg';
 import DecorLogin from '../.././assets/images/login/Login Decor Thing.svg';
+<<<<<<< HEAD
 import Footer from "../footer"
+=======
+import Registration from "../registration/Registration";
+>>>>>>> 61d7bb92b1b0e9b77725ad056d50f202ce43d5bc
 
 
 export default function Login({navigation}) {
@@ -57,7 +61,6 @@ export default function Login({navigation}) {
                     </Text>
                 </Pressable>
             </View>
-            <Footer/>
         </View>
     );
 }

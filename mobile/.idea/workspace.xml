@@ -2,9 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d87e1953-3d81-4945-9f59-5607751f5385" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/App.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/components/login/Login.js" beforeDir="false" afterPath="$PROJECT_DIR$/components/login/Login.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/registration/Registration.js" beforeDir="false" afterPath="$PROJECT_DIR$/components/registration/Registration.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/search/Search.js" beforeDir="false" afterPath="$PROJECT_DIR$/components/search/Search.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,7 +27,9 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="2GgVXctlMpeRprl3YPF6UUoaoND" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -35,7 +39,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/Users/anger/WebstormProjects/LobanovDrip/LobanovDrip/mobile/assets",
+    "last_opened_file_path": "C:/Users/anger/WebstormProjects/LobanovDrip/LobanovDrip/mobile/assets/images",
     "nodejs_package_manager_path": "npm",
     "ts.external.directory.path": "C:\\Program Files\\JetBrains\\WebStorm 2022.2.2\\plugins\\JavaScriptLanguage\\jsLanguageServicesImpl\\external",
     "vue.rearranger.settings.migration": "true"
@@ -43,9 +47,11 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\anger\WebstormProjects\LobanovDrip\LobanovDrip\mobile\assets\images" />
       <recent name="C:\Users\anger\WebstormProjects\LobanovDrip\LobanovDrip\mobile\assets" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\anger\WebstormProjects\LobanovDrip\LobanovDrip\mobile\assets\fonts" />
       <recent name="C:\Users\anger\WebstormProjects\LobanovDrip\LobanovDrip\mobile\assets\images" />
     </key>
   </component>
@@ -60,7 +66,7 @@
       <workItem from="1666810255959" duration="997000" />
       <workItem from="1666812325880" duration="909000" />
       <workItem from="1666862258271" duration="24036000" />
-      <workItem from="1666899159219" duration="7150000" />
+      <workItem from="1666899159219" duration="34932000" />
     </task>
     <servers />
   </component>
