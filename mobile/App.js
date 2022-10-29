@@ -5,7 +5,9 @@ import * as SplashScreen from 'expo-splash-screen';
 import Registration from "./components/registration/Registration";
 import Login from "./components/login/Login";
 import LoginAndRegistration from "./components/logAndReg"
-import Navigation from "./navigation/navigation";
+// import Navigation from "./navigation/navigation";
+import Filter from "./components/filter/Filter"
+import {FilterButtonGroup} from "./components/filter/FilterButtonGroup";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -37,7 +39,8 @@ export default function App() {
 
     return (
           <View style={styles.container} onLayout={onLayoutRootView}>
-              <LoginAndRegistration/>
+              {/*<LoginAndRegistration/>*/}
+              <Filter/>
           </View>
       );
 }

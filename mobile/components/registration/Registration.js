@@ -65,10 +65,9 @@ export default function Registration({ navigation }) {
                 <Pressable style={{flex: 1}}>
                     <Christ style={{left: '20%'}}></Christ>
                 </Pressable>
-                <View style={{flex: 1}}></View>
                 <Pressable style={{flex: 1, flexDirection: 'row'}}>
-                    <Arrow style={{flex: 1, right: '3%', top: '2%'}}></Arrow>
-                    <Text style={styles.loginText}>LOGIN-IN</Text>
+                    <Arrow style={{flex: 1, right: '15%', top: '1%'}}></Arrow>
+                    <Text style={styles.loginText}>SWIPE TO LOGIN-IN</Text>
                 </Pressable>
             </View>
             <View style={{flex: 11}}>

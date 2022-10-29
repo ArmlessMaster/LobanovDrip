@@ -1,26 +1,22 @@
-import {StatusBar} from 'expo-status-bar';
-import {Image, Pressable, StyleSheet, Text, View, Button, TextInput} from 'react-native';
+import { Pressable, StyleSheet, Text, View, TextInput} from 'react-native';
 import {Video} from 'expo-av';
-import React, {useEffect, useCallback} from 'react';
-import {useFonts} from 'expo-font';
-import * as SplashScreen from 'expo-splash-screen';
+import React, {useRef} from 'react';
 import LeftArrow from '../.././assets/images/login/Arrow 4.svg';
 import Mark from '../.././assets/images/login/xMark.svg';
 import DecorLogin from '../.././assets/images/login/Login Decor Thing.svg';
-import Registration from "../registration/Registration";
 import Footer from "../footer"
-import LogAndReg from "../logAndReg"
 
-export default function Login({ navigation }) {
+
+export default function Login({navigation}) {
     const pressHandler = () => {
 
     }
 
     return (
-        <View style={styles.container} >
+        <View style={{flex: 1}}>
             <Video
                 source={require('../.././assets/video/background.mp4')}
-                style={styles.video}
+                style={{position: 'absolute', width: '100%', height: '100%'}}
                 resizeMode="cover"
                 shouldPlay
                 isLooping
@@ -29,21 +25,24 @@ export default function Login({ navigation }) {
 
             </View>
             <View style={{flex: 1, justifyContent: 'center'}}>
-                <Pressable onPress={pressHandler}>
+                <View>
                     <Text style={styles.signIn}>
-                        SIGN-IN
+                        SWIPE TO SIGN-IN
                     </Text>
                     <LeftArrow style={styles.arrow}/>
-                </Pressable>
+                </View>
                 <Mark style={styles.xMark}/>
             </View>
             <DecorLogin style={styles.loginThing}/>
             <View style={styles.main}>
-                <Text style={styles.mainText}>FOR MEMBERS</Text>
-                <TextInput style={styles.emailInput} placeholder="E-MAIL" placeholderTextColor='white'>
-                </TextInput>
-                <TextInput style={styles.passwordInput} placeholder="PASSWORD" placeholderTextColor='white'>
-                </TextInput>
+                <View style={{flex: 1, alignItems: 'center'}}>
+                    <Text style={styles.mainText}>FOR MEMBERS</Text>
+                    <TextInput style={styles.emailInput} placeholder="E-MAIL" placeholderTextColor='white'>
+                    </TextInput>
+                    <TextInput style={styles.emailInput} secureTextEntry={true} placeholder="PASSWORD"
+                               placeholderTextColor='white'>
+                    </TextInput>
+                </View>
                 <Text style={styles.forgotPassword}>
                     I forgot password
                 </Text>
@@ -64,35 +63,30 @@ export default function Login({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
     xMark: {
         left: '3%',
         position: 'absolute',
         borderBottomColor: 'black',
         elevation: 5,
         shadowColor: '#000',
-        shadowOffset: { width: 2, height: 2 },
+        shadowOffset: {width: 2, height: 2},
         shadowOpacity: 1,
         shadowRadius: 2,
     },
     signIn: {
-        left: '70%',
+        left: '45%',
         color: 'white',
         fontFamily: 'VCR_OSD_MONO',
-        fontSize: '18px',
+        fontSize: 18,
         shadowColor: '#000',
-        shadowOffset: { width: 2, height: 2 },
+        shadowOffset: {width: 2, height: 2},
         shadowOpacity: 1,
     },
     arrow: {
-        position:"absolute",
+        position: "absolute",
         top: '20%',
         left: '90%',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 1,
+        opacity: 1
     },
     main: {
         flex: 11,
@@ -100,18 +94,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center'
     },
-    video: {
-        position: 'absolute',
-        width: '100%',
-        height: '100%'
-    },
-
     mainText: {
+        flex: 2,
         top: '15%',
-        position: "absolute",
         color: 'white',
         fontStyle: 'normal',
-        fontSize: '56px',
+        fontSize: 56,
         fontFamily: 'VCR_OSD_MONO',
         textShadowColor: 'rgba(0, 0, 0, 0.75)',
         textShadowOffset: {width: 2, height: 2.3},
@@ -119,17 +107,18 @@ const styles = StyleSheet.create({
     },
 
     forgotPassword: {
-        fontSize: '16px',
+        flex: 1,
+        fontSize: 16,
         fontStyle: 'normal',
-        lineHeight: '18px',
+        lineHeight: 18,
         color: 'white',
-        bottom: '1%',
+        top: '2%',
         textDecorationLine: 'underline',
         fontFamily: 'VCR_OSD_MONO'
     },
 
     enterButton: {
-        top: '4%',
+        bottom: '33%',
         color: '#DB2525',
         width: 175,
         height: 44,
@@ -142,7 +131,7 @@ const styles = StyleSheet.create({
         color: '#DB2525',
         width: 175,
         height: 35,
-        top: '6%',
+        bottom: '30%',
         alignItems: 'center',
         backgroundColor: '#3124D0',
         justifyContent: 'center',
@@ -151,10 +140,10 @@ const styles = StyleSheet.create({
     buttonText: {
         color: 'white',
         fontStyle: 'normal',
-        fontSize: '20px',
+        fontSize: 20,
         fontWeight: '400',
         fontFamily: 'VCR_OSD_MONO',
-        lineHeight: '47px',
+        lineHeight: 47,
         textShadowColor: 'rgba(0, 0, 0, 0.75)',
         textShadowOffset: {width: -1, height: 1},
         textShadowRadius: 40,
@@ -166,7 +155,7 @@ const styles = StyleSheet.create({
         position: "absolute",
         color: 'white',
         fontStyle: 'normal',
-        fontSize: '14px',
+        fontSize: 14,
         textShadowColor: 'rgba(0, 0, 0, 0.75)',
         textShadowOffset: {width: -1, height: 1},
         textShadowRadius: 40,
@@ -182,32 +171,15 @@ const styles = StyleSheet.create({
         textShadowColor: 'rgba(0, 0, 0, 0.75)',
         textShadowOffset: {width: -1, height: 1},
         textShadowRadius: 10,
-        bottom: '7%',
         backgroundColor: '#1F1F1F',
-        width: '60%',
         color: 'white',
         fontStyle: 'normal',
-        fontSize: '20px',
+        fontSize: 20,
         fontWeight: '400',
         fontFamily: 'VCR_OSD_MONO',
-        lineHeight: '47px',
-        textAlign: 'center'
-
-    },
-    passwordInput: {
-        textShadowColor: 'rgba(0, 0, 0, 0.75)',
-        textShadowOffset: {width: -1, height: 1},
-        textShadowRadius: 10,
-        backgroundColor: '#1F1F1F',
-        width: '60%',
-        bottom: '4%',
-        fontFamily: 'VCR_OSD_MONO',
-        color: 'white',
-        fontStyle: 'normal',
-        fontSize: '20px',
-        fontWeight: '400',
-        lineHeight: '47px',
-        textAlign: 'center'
+        marginVertical: '3%',
+        textAlign: 'center',
+        height: '15%',
+        width: 250
     }
-
 });
