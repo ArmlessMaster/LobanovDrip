@@ -1,19 +1,15 @@
 import "./Store.scss";
-import {React, useState, useContext} from "react";
+import {React} from "react";
+import { ItemModule } from "../../layout/index";
 import { motion } from "framer-motion"
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader  
-import { Carousel, renderArrowPrev, renderArrowNext } from 'react-responsive-carousel';  
-import { AuthContext } from "../../../context/AuthContext";
-import { useHttp } from "../../../hooks/http.hook";
-import { Link } from "react-router-dom";
-import {test} from "../../../images"
+import { Carousel } from 'react-responsive-carousel';  
+import {test, test1, test2, test3} from "../../../images"
+
 
 
 
 export const Store = () => {
-
-  
-  const [isOpen, setIsOpen] = useState(false);
 
   return (
 
@@ -36,6 +32,19 @@ export const Store = () => {
       </div>
       <div className="store-item-carusel">
         <div className="store__label">LOBANOV<span>EXCLUSIVE</span></div>
+      </div>
+      <div className="store-item-grid">
+        <div className="store__label">LOBANOV<span>NEW THINGS</span></div>
+        <div className="store-item-flex_center">
+          <div className="store-item-grid_wrapper">
+            <ItemModule class="high" text="Hoodie Evangelion black oversized" sizes="XS S M XL" price="880$" img={test1} />
+            <ItemModule class="high" text="Hoodie Evangelion black oversized" sizes="XS S M XL" price="880$" img={test1} />
+            <ItemModule class="high" text="Hoodie Evangelion black oversized" sizes="XS S M XL" price="880$" img={test1} />
+            <ItemModule class="high" text="Hoodie Evangelion black oversized" sizes="XS S M XL" price="880$" img={test1} />
+            <ItemModule class="high" text="Hoodie Evangelion black oversized" sizes="XS S M XL" price="880$" img={test1} />
+          </div>
+        </div>
+
       </div>
     </section>
   )

@@ -14,6 +14,34 @@
     font-size: 64px;
     line-height: 75px;
     .store__label{
+          font-weight: 700;
+      padding-bottom: 2vw;
+      text-align: center;
+      span{
+        margin-left: 0.2vw;
+        padding-left: 0.4vw;
+        padding-right: 0.4vw;
+        background-color: #E34D4D;;
+      }
+    }
+  }
+  .store-item-grid{
+    margin-top: 2vw;
+
+    font-size: 64px;
+    line-height: 75px;
+    .store-item-flex_center{
+
+      .store-item-grid_wrapper{
+        width: 90%;
+        display: grid;
+        margin-left: auto;
+        margin-right: auto;
+        grid-template-columns: 33% 33% 33%;
+      }
+    }
+    .store__label{
+      font-weight: 700;
       padding-bottom: 2vw;
       text-align: center;
       span{
