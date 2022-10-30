@@ -52,12 +52,95 @@ class ClothesController implements Controller {
         );
         this.router.delete(
             `${this.path}/image/delete`,
-            validationMiddleware(validate.urlValidation),
+            validationMiddleware(validate.urlIdValidation),
             authenticated,
             this.deleteImage
         );
         this.router.get(`${this.path}`, this.getAll);
+        this.router.get(`${this.path}/sales`, this.findBySales);
+        this.router.get(
+            `${this.path}/findByType`,
+            validationMiddleware(validate.typeValidation),
+            this.findByType
+        );
+        this.router.get(
+            `${this.path}/findBySex`,
+            validationMiddleware(validate.sexValidation),
+            this.findBySex
+        );
+        this.router.get(
+            `${this.path}/filter`,
+            validationMiddleware(validate.filterValidaion),
+            this.filter
+        );
     }
+
+    private filter = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<Response | void> => {
+        try {
+            const { type, from_price, to_price, size } = req.body;
+
+            const clothes = await this.ClothesService.filter(
+                type,
+                from_price,
+                to_price,
+                size
+            );
+
+            res.status(201).json({ clothes });
+        } catch (error) {
+            next(new HttpException(400, 'Cannot found filter clothes'));
+        }
+    };
+
+    private findBySex = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<Response | void> => {
+        try {
+            const { sex } = req.body;
+
+            const clothes = await this.ClothesService.findBySex(sex);
+
+            res.status(201).json({ clothes });
+        } catch (error) {
+            next(new HttpException(400, 'Cannot found clothes'));
+        }
+    };
+
+    private findByType = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<Response | void> => {
+        try {
+            const { type } = req.body;
+
+            const clothes = await this.ClothesService.findByType(type);
+
+            res.status(201).json({ clothes });
+        } catch (error) {
+            next(new HttpException(400, 'Cannot found clothes'));
+        }
+    };
+
+    private findBySales = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<Response | void> => {
+        try {
+            const clothes = await this.ClothesService.findBySales();
+
+            res.status(201).json({ clothes });
+        } catch (error) {
+            next(new HttpException(400, 'Cannot found clothes'));
+        }
+    };
 
     private getAll = async (
         req: Request,
@@ -143,8 +226,8 @@ class ClothesController implements Controller {
             } = req.body;
 
             const imagesUrls1: Array<string> = [];
-  
-            const gifUrl1: string = "";
+
+            const gifUrl1: string = '';
 
             const clothes = await this.ClothesService.update(
                 id,
@@ -193,11 +276,11 @@ class ClothesController implements Controller {
         next: NextFunction
     ): Promise<Response | void> => {
         try {
-            const { url } = req.body;
+            const { id, url } = req.body;
 
-            await this.ClothesService.deleteImage(url);
+            const clothes = await this.ClothesService.deleteImage(id, url);
 
-            res.status(201).json({ message: `Image deleted` });
+            res.status(201).json({ clothes });
         } catch (error) {
             next(
                 new HttpException(

@@ -9,6 +9,9 @@ const CollectionSchema = new Schema(
         imageUrl: {
             type: String,
         },
+        gifUrl: {
+            type: String,
+        },
         description: {
             type: String,
         },

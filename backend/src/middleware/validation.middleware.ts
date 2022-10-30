@@ -26,15 +26,18 @@ function validationMiddleware(schema: Joi.Schema): RequestHandler {
                 clothesData = JSON.parse(req.body.clothesData);
                 clothesData['images'] = req.files;
             }
-            if (req.body.collectionData) {
-     
-                collectionData = JSON.parse(req.body.collectionData);
-                collectionData['image'] = req.file;
 
+            if (req.body.collectionData) {
+                collectionData = JSON.parse(req.body.collectionData);
+                collectionData['images'] = req.files;
             }
 
             const value = await schema.validateAsync(
-                req.body.clothesData ? clothesData : req.body.collectionData ? collectionData : req.body,
+                req.body.clothesData
+                    ? clothesData
+                    : req.body.collectionData
+                    ? collectionData
+                    : req.body,
                 validationOptions
             );
 

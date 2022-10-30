@@ -22,14 +22,14 @@ class CollectionController implements Controller {
     private initialiseRoutes(): void {
         this.router.post(
             `${this.path}/create`,
-            upload.single('pic'),
+            upload.array('pic'),
             validationMiddleware(validate.create),
             authenticated,
             this.create
         );
         this.router.post(
             `${this.path}/update`,
-            upload.single('pic'),
+            upload.array('pic'),
             validationMiddleware(validate.update),
             authenticated,
             this.update
@@ -53,7 +53,7 @@ class CollectionController implements Controller {
         );
         this.router.delete(
             `${this.path}/image/delete`,
-            validationMiddleware(validate.urlValidation),
+            validationMiddleware(validate.urlIdValidation),
             authenticated,
             this.deleteImage
         );
@@ -80,11 +80,11 @@ class CollectionController implements Controller {
         next: NextFunction
     ): Promise<Response | void> => {
         try {
-            const { name, image, description } = req.body;
+            const { name, images, description } = req.body;
 
             const collection = await this.CollectionService.create(
                 name,
-                image,
+                images,
                 description
             );
 
@@ -100,15 +100,12 @@ class CollectionController implements Controller {
         next: NextFunction
     ): Promise<Response | void> => {
         try {
-            const { id, name, imageUrl, image, description } = req.body;
-
-            const imageUrl1: string = '';
+            const { id, name, images, description } = req.body;
 
             const collection = await this.CollectionService.update(
                 id,
                 name,
-                image,
-                imageUrl ? imageUrl : imageUrl1,
+                images,
                 description
             );
 
@@ -140,11 +137,14 @@ class CollectionController implements Controller {
         next: NextFunction
     ): Promise<Response | void> => {
         try {
-            const { url } = req.body;
+            const { id, url } = req.body;
 
-            await this.CollectionService.deleteImage(url);
+            const collection = await this.CollectionService.deleteImage(
+                id,
+                url
+            );
 
-            res.status(201).json({ message: `Image deleted` });
+            res.status(201).json({ collection });
         } catch (error) {
             next(
                 new HttpException(

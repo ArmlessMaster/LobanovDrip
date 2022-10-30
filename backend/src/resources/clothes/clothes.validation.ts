@@ -18,14 +18,14 @@ const create = Joi.object({
         })
         .required(),
     sex: Joi.string().required(),
-    collection_id: Joi.string().hex().length(24).required(),
+    collection_id: Joi.string().hex().length(24),
 });
 
 const update = Joi.object({
     id: Joi.string().hex().length(24).required(),
     name: Joi.string(),
-    imagesUrls: Joi.array().items(Joi.string()),
-    gifUrl: Joi.string(),
+    imagesUrls: Joi.array().items(Joi.string()).required(),
+    gifUrl: Joi.string().required(),
     images: Joi.array(),
     size: Joi.array().items(Joi.string()),
     color: Joi.array().items(Joi.string()),
@@ -51,8 +51,33 @@ const nameValidation = Joi.object({
     name: Joi.string().required(),
 });
 
-const urlValidation = Joi.object({
-    name: Joi.string().uri().required(),
+const urlIdValidation = Joi.object({
+    id: Joi.string().hex().length(24).required(),
+    url: Joi.string().uri().required(),
 });
 
-export default { create, update, idValidaion, nameValidation, urlValidation };
+const typeValidation = Joi.object({
+    type: Joi.string().required(),
+});
+
+const sexValidation = Joi.object({
+    sex: Joi.string().required(),
+});
+
+const filterValidaion = Joi.object({
+    type: Joi.string().required(),
+    from_price: Joi.number(),
+    to_price: Joi.number(),
+    size: Joi.array().items(Joi.string()),
+});
+
+export default {
+    create,
+    update,
+    idValidaion,
+    nameValidation,
+    urlIdValidation,
+    typeValidation,
+    sexValidation,
+    filterValidaion,
+};

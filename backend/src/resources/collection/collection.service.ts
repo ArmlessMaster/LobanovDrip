@@ -26,34 +26,45 @@ class CollectionService {
      */
     public async create(
         name: string,
-        image: Express.Multer.File,
+        images: Express.Multer.File[],
         description: string
     ): Promise<Collection> {
         try {
             const imagesUrls: Array<string> = [];
+            const gifUrls: Array<string> = [];
 
-            const randomName: string = '☂' + this.randGen() + '☁';
-            const imageRef = ref(storage, randomName);
-            const metatype = {
-                contentType: image?.mimetype,
-                name: randomName,
-            };
-            await uploadBytes(imageRef, image?.buffer, metatype)
-                .then((snapshot: object) => {
-                    console.log('uploaded!');
+            await Promise.all(
+                images.map(async (file: Express.Multer.File) => {
+                    const randomName: string = '☂' + this.randGen() + '☁';
+                    const imageRef = ref(storage, randomName);
+                    const metatype = {
+                        contentType: file?.mimetype,
+                        name: randomName,
+                    };
+                    await uploadBytes(imageRef, file?.buffer, metatype)
+                        .then((snapshot: object) => {
+                            //console.log('uploaded!');
+                        })
+                        .catch((error: Error) => console.log(error.message));
+                    await getDownloadURL(ref(storage, randomName)).then(
+                        (url: string) => {
+                            if (file?.mimetype === 'image/gif') {
+                                gifUrls.push(url);
+                            } else {
+                                imagesUrls.push(url);
+                            }
+                        }
+                    );
                 })
-                .catch((error: Error) => console.log(error.message));
-            await getDownloadURL(ref(storage, randomName)).then(
-                (url: string) => {
-                    imagesUrls.push(url);
-                }
             );
 
             const imageUrl = imagesUrls.join();
+            const gifUrl = gifUrls.join();
 
             const collection = await this.collection.create({
                 name,
                 imageUrl,
+                gifUrl,
                 description,
             });
 
@@ -69,34 +80,53 @@ class CollectionService {
     public async update(
         id: Schema.Types.ObjectId,
         name: string,
-        image: Express.Multer.File,
-        imageUrl: string,
+        images: Express.Multer.File[],
         description: string
     ): Promise<Collection> {
         try {
-            const randomName: string = '☂' + this.randGen() + '☁';
-            const imageRef = ref(storage, randomName);
-            const metatype = {
-                contentType: image.mimetype,
-                name: randomName,
-            };
-            await uploadBytes(imageRef, image.buffer, metatype)
-                .then((snapshot: object) => {
-                    console.log('uploaded!');
+            const imagesUrls: Array<string> = [];
+            const gifUrls: Array<string> = [];
+
+            await Promise.all(
+                images.map(async (file: Express.Multer.File) => {
+                    const randomName: string = '☂' + this.randGen() + '☁';
+                    const imageRef = ref(storage, randomName);
+                    const metatype = {
+                        contentType: file?.mimetype,
+                        name: randomName,
+                    };
+                    await uploadBytes(imageRef, file?.buffer, metatype)
+                        .then((snapshot: object) => {
+                            //console.log('uploaded!');
+                        })
+                        .catch((error: Error) => console.log(error.message));
+                    await getDownloadURL(ref(storage, randomName)).then(
+                        (url: string) => {
+                            if (file?.mimetype === 'image/gif') {
+                                gifUrls.push(url);
+                            } else {
+                                imagesUrls.push(url);
+                            }
+                        }
+                    );
                 })
-                .catch((error: Error) => console.log(error.message));
-            await getDownloadURL(ref(storage, randomName)).then(
-                (url: string) => {
-                    imageUrl = url;
-                }
             );
+
+            const update = {
+                name: name,
+                description: description,
+            } as Collection;
+
+            if (imagesUrls.length === 1) {
+                update['imageUrl'] = imagesUrls.join();
+            }
+            if (gifUrls.length === 1) {
+                update['gifUrl'] = gifUrls.join();
+            }
+
             const collection = await this.collection.findByIdAndUpdate(
                 id,
-                {
-                    name,
-                    imageUrl,
-                    description,
-                },
+                update,
                 { new: true }
             );
 
@@ -150,7 +180,10 @@ class CollectionService {
      * Attempt to delete image by url
      */
 
-    public async deleteImage(url: string): Promise<string> {
+    public async deleteImage(
+        id: Schema.Types.ObjectId,
+        url: string
+    ): Promise<Collection> {
         try {
             const deletePic =
                 '☂' + url.split('%E2%98%82')[1].split('%E2%98%81')[0] + '☁';
@@ -162,7 +195,22 @@ class CollectionService {
                 .catch((error: Error) => {
                     throw new Error(error.message);
                 });
-            return result;
+            let collection = (await this.collection.findById(id)) as Collection;
+            if (collection.imageUrl === url) {
+                collection = (await this.collection.findByIdAndUpdate(
+                    id,
+                    { imageUrl: '' },
+                    { new: true }
+                )) as Collection;
+            } else {
+                collection = (await this.collection.findByIdAndUpdate(
+                    id,
+                    { gifUrl: '' },
+                    { new: true }
+                )) as Collection;
+            }
+
+            return collection;
         } catch (error) {
             throw new Error('Unable to find image');
         }
