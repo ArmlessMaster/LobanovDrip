@@ -7,7 +7,7 @@ import { AuthContext } from "../../../context/AuthContext";
 import { useHttp } from "../../../hooks/http.hook";
 import { Link } from "react-router-dom";
 import {NotificationContainer, NotificationManager} from 'react-notifications';
-import './zalupa.scss';
+import './test.scss';
 
 const variantsInputs = {
   open: { opacity: 1, y: "-8vw" },
@@ -36,19 +36,6 @@ const decorAnimation = {
   closed: {  right: "2%"},
   
 }
-
-// const textAnimation = {
-//   open: { opacity: "1"},
-//   closed: { 
-//      opacity: "1",
-//       transition: {
-//   delay: 0.5,
-//   staggerChildren: 0.08,
-// }},
-  
-// }
-
-
 
 
 export const Authorization = () => {
@@ -133,7 +120,6 @@ const registerHandler = async () => {
       <div className="autorization__wrapper">
 
         <div className="login-wrapper">
-        
           <div className="login">
             <motion.div className="login-title"
               animate={isOpen ? "open" : "closed"}

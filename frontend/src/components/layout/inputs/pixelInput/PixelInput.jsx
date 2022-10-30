@@ -10,14 +10,15 @@ const PixelInput = ({type,
   id,
   name, 
   value,
-  onChange}) => {  
+  onChange,
+  className}) => {  
  
   return (
-    <motion.div className="pixelInput-wrapper" 
+    <motion.div className="pixelInput-wrapper"
       variants={variants} 
       transition={{ duration: 0.1 }} 
       animate={animate}>
-        <input className="pixelInput" 
+        <input className={"pixelInput " + className}
           type={type}
           placeholder={placeholder} 
           disabled={disabled}
