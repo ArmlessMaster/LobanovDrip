@@ -14,33 +14,15 @@ function validationMiddleware(schema: Joi.Schema): RequestHandler {
         };
 
         try {
-            // const value = await schema.validateAsync(
-            //     req.body,
-            //     validationOptions
-            // );
-
-            // ?
-            let clothesData;
-            let collectionData;
-            if (req.body.clothesData) {
-                clothesData = JSON.parse(req.body.clothesData);
-                clothesData['images'] = req.files;
+            let data;
+            if (req.body.data) {
+                data = JSON.parse(req.body.data);
+                data['images'] = req.files;
             }
-
-            if (req.body.collectionData) {
-                collectionData = JSON.parse(req.body.collectionData);
-                collectionData['images'] = req.files;
-            }
-
             const value = await schema.validateAsync(
-                req.body.clothesData
-                    ? clothesData
-                    : req.body.collectionData
-                    ? collectionData
-                    : req.body,
+                data,
                 validationOptions
             );
-
             req.body = value;
             next();
         } catch (e: any) {
