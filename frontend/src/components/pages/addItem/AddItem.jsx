@@ -1,44 +1,112 @@
 import "./AddItem.scss";
-import { React, useState, useContext } from "react";
+import { React, useState, useContext, useEffect, useCallback } from "react";
 import { BackgroundVideo } from "../../../images";
 import { PixelBtn, PixelInput, Uploader } from "../../layout/index";
 import { useHttp } from "../../../hooks/http.hook";
 import { AuthContext } from "../../../context/AuthContext";
+import Select from 'react-select';
+import makeAnimated from 'react-select/animated';
 
 export const AddItem = () => {
+  const animatedComponents = makeAnimated();
+  const colourOptions = [
+    { value: 'black', label: 'Black'},
+    { value: 'White', label: 'White'},
+    { value: 'Red', label: 'Red'},
+    { value: 'Blue', label: 'Blue'},
+    { value: 'Grey', label: 'Grey'},
+    { value: 'Green', label: 'Green'},
+    { value: 'Yellow', label: 'Yellow'},
+  ];
+
+
   const auth = useContext(AuthContext);
-  const [previewGif, setPreviewGif] = useState();
-  const { loading, requestWithFiles } = useHttp();
+
+  const { loading, requestWithFiles, request } = useHttp();
+
+
+
+
   const [preview, setPreview] = useState([]);
   const [images, setImages] = useState([]);
+
+  const [previewGif, setPreviewGif] = useState();
   const [gif, setGif] = useState();
 
+
+  const [previewCollection, setPreviewCollection] = useState(null);
+  const [imagesCollection, setImagesCollection] = useState(null);
+
+  const [previewGifCollection, setPreviewGifCollection] = useState(null);
+  const [gifCollection, setGifCollection] = useState(null);
+
+  const [Collection, setCollection] = useState(null)
+
   const [clothesData, setClothesData] = useState({
-    name: "Name",
-    type: "123",
-    price: 10,
-    material: "Material",
-    care: "care",
-    size: ["XS"],
-    color: ["VovavoV ababa"],
-    sex: "sex",
-    collection_id: "635d8e2ed56ec8e913c016eb",
+    name: "",
+    type: "",
+    price: 0,
+    material: "",
+    care: "",
+    size: ["xs", "s", "m", "l", "xl", "xxl", "un"],
+    color: [],
+    sex: "",
+    collection_id: "",
     sale: 0,
-    company: "company",
-    clothesCount: [{ size: "XS", count: 12 }],
+    company: "",
+    clothesCount: [{
+      size: "xs",
+      count: 0
+    }],
   });
 
+  const [collectionData, setCollectionsData] = useState({
+    name: "",
+    description: ""
+  });
+
+  
+
   const changeHandlerItem = (event) => {
-    setClothesData({ ...clothesData, [event.target.name]: event.target.value });
+    
+    setClothesData({ ...clothesData, [event.target.name]: event.target.value});
   };
+
+  const changeHandlerItemCollection = (event) => {
+    
+    setCollectionsData({ ...collectionData, [event.target.name]: event.target.value});
+  };
+
+  
   const createItemCloth = async () => {
     try {
       //setImages((prevState) => [...prevState, gif]);
-      await requestWithFiles(
+      await request(
         "/api/clothes/create",
         "POST",
         { ...clothesData },
         images,
+        { Authorization: `Bearer ${auth.token}` }
+      );
+
+      // NotificationManager.success('Authorization success', 'Glad to see you!');
+    } catch (e) {
+      // NotificationManager.error('Error Authorization', 'Wrong login or password!');
+    }
+  };
+
+  const createItemCollection = async () => {
+    try {
+      const imagesArray = [];
+      
+      imagesArray.push(imagesCollection);
+      imagesArray.push(gifCollection);
+
+      await request(
+        "/api/collection/create",
+        "POST",
+        { ...collectionData },
+        imagesArray,
         { Authorization: `Bearer ${auth.token}` }
       );
       // NotificationManager.success('Authorization success', 'Glad to see you!');
@@ -46,6 +114,7 @@ export const AddItem = () => {
       // NotificationManager.error('Error Authorization', 'Wrong login or password!');
     }
   };
+
 
   const getBase64 = (file) =>
     new Promise((resolve, reject) => {
@@ -55,7 +124,12 @@ export const AddItem = () => {
       reader.onload = () => resolve(reader.result);
 
       reader.onerror = (error) => reject(error);
-    });
+  });
+
+
+
+
+
 
   const handleChange = async (e) => {
     for (let i = 0; i < e.target.files.length; i++) {
@@ -71,15 +145,44 @@ export const AddItem = () => {
   };
 
   const handleChangeGif = async (e) => {
-    for (let i = 0; i < e.target.files.length; i++) {
-      const newImage = e.target.files[i];
+      const newImage = e.target.files[0];
       newImage["id"] = Math.random();
       let file_preview = await getBase64(newImage);
       setPreviewGif(file_preview);
       setGif(newImage);
-    }
   };
 
+
+  const handleChangeCollection = async (e) => {
+    const newImage = e.target.files[0];
+    newImage["id"] = Math.random();
+    let file_preview = await getBase64(newImage);
+    setPreviewCollection(file_preview);
+    setImagesCollection(newImage);
+  };
+
+  const handleChangeCollectionGif = async (e) => {
+  
+      const newImage = e.target.files[0];
+      newImage["id"] = Math.random();
+      let file_preview = await getBase64(newImage);
+      setPreviewGifCollection(file_preview);
+      setGifCollection(newImage);
+  };
+
+  const ababa = []
+  const fetchCollections = useCallback(async () => {
+    try {
+        const fetched = await request('/api/collection', 'GET', null);
+          setCollection(fetched);
+      } catch (e) {
+      }
+    }, [request]);
+  
+    useEffect(() => {
+      fetchCollections();
+    }, [fetchCollections]);
+  console.log(Collection);
   return (
     <section className="AddItem">
       <video autoPlay loop muted>
@@ -108,12 +211,20 @@ export const AddItem = () => {
           </div>
 
           <div className="input-flex">
-            <PixelInput
-              id="colors"
+            <Select
+              defaultValue={[colourOptions[2], colourOptions[3]]}
+              isMulti
               name="colors"
-              type="text"
-              placeholder="Colors"
-            />
+              options={colourOptions}
+              className="my-react-select-container"
+              classNamePrefix="my-react-select"
+              components={animatedComponents}/>
+            <Select
+              name="collection"
+              options={colourOptions}
+              className="my-react-select-container"
+              classNamePrefix="my-react-select"
+              components={animatedComponents}/>
           </div>
 
           <div className="input-flex">
@@ -142,24 +253,14 @@ export const AddItem = () => {
               value={clothesData.sex}
               onChange={changeHandlerItem}
               type="text"
-              placeholder="Sex"
-            />
-          </div>
-          <div className="input-flex">
-            <PixelInput
-              id="collection_id"
-              name="collection_id"
-              type="text"
-              placeholder="Collection id"
-            />
+              placeholder="Sex"/>
             <PixelInput
               id="sale"
               name="sale"
               value={clothesData.sale}
               onChange={changeHandlerItem}
               type="text"
-              placeholder="Sale"
-            />
+              placeholder="Sale"/>
           </div>
           <div className="input-flex">
             <PixelInput
@@ -168,8 +269,7 @@ export const AddItem = () => {
               value={clothesData.company}
               onChange={changeHandlerItem}
               type="text"
-              placeholder="Company"
-            />
+              placeholder="Company"/>
           </div>
           <div className="input-flex">
             <PixelInput
@@ -177,8 +277,7 @@ export const AddItem = () => {
               name="xs"
               type="text"
               placeholder="XS"
-              className="little"
-            />
+              className="little"/>
             <PixelInput
               id="s"
               name="s"
@@ -212,6 +311,13 @@ export const AddItem = () => {
               name="xxl"
               type="text"
               placeholder="XXL"
+              className="little"
+            />
+            <PixelInput
+              id="un"
+              name="un"
+              type="text"
+              placeholder="UN"
               className="little"
             />
           </div>
@@ -283,86 +389,68 @@ export const AddItem = () => {
           </div>
         </div>
         <div className="input__menu-clothes">
+          
           <div className="input-flex">
-            <PixelInput id="name" name="name" type="text" placeholder="Name" />
-            <PixelInput
-              id="price"
-              name="price"
-              type="text"
-              placeholder="Price"
-            />
+            <PixelInput id="name" name="name" type="text" placeholder="Name" 
+             value={collectionData.name}
+             onChange={changeHandlerItemCollection}/>
+          </div>
+          <div className="input-flex">
+            <PixelInput id="description" name="description" type="text" placeholder="Description" 
+                         value={collectionData.description}
+                         onChange={changeHandlerItemCollection}/>
           </div>
 
-          <div className="input-flex">
-            <PixelInput
-              id="colors"
-              name="colors"
-              type="text"
-              placeholder="Colors"
-            />
-          </div>
+          <div className="images__add">
+          <div className="images__add-form">
+              <Uploader handleChange={handleChangeCollection} />
+              <div className="create-left-grid">
+                {previewCollection && (
+                  <div className="imgs-wrapper">
+                    <img src={previewCollection} alt="" className="" />
+                    <div className="button-create-wrapper">
+                      <button
+                        className="button-create-delete"
+                        onClick={() => {
+                          setPreviewCollection(null);
+                          setImagesCollection(null)
+                        }}>
+                        X
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className="images__add-form">
+              <Uploader handleChange={handleChangeCollectionGif} />
+              <div className="create-left-grid">
+                {previewGifCollection && (
+                  <div className="imgs-wrapper">
+                    <img src={previewGifCollection} alt="" className="" />
+                    <div className="button-create-wrapper">
+                      <button
+                        className="button-create-delete"
+                        onClick={() => {
+                          setPreviewGifCollection(null);
+                          setGifCollection(null);
+                        }}>
+                        X
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>         
+          </div>              
+               
+
+
 
           <div className="input-flex">
-            <PixelInput
-              id="material"
-              name="material"
-              type="text"
-              placeholder="Material"
-            />
-            <PixelInput
-              id="care"
-              name="care"
-              type="text"
-              placeholder="Clothing Care"
-            />
-          </div>
-          <div className="input-flex">
-            <PixelInput
-              id="xs"
-              name="xs"
-              type="text"
-              placeholder="XS"
-              className="little"
-            />
-            <PixelInput
-              id="s"
-              name="s"
-              type="text"
-              placeholder="S"
-              className="little"
-            />
-            <PixelInput
-              id="m"
-              name="m"
-              type="text"
-              placeholder="M"
-              className="little"
-            />
-            <PixelInput
-              id="l"
-              name="l"
-              type="text"
-              placeholder="L"
-              className="little"
-            />
-            <PixelInput
-              id="xl"
-              name="xl"
-              type="text"
-              placeholder="XL"
-              className="little"
-            />
-            <PixelInput
-              id="xxl"
-              name="xxl"
-              type="text"
-              placeholder="XXL"
-              className="little"
-            />
-          </div>
-
-          <div className="input-flex">
-            <PixelBtn text="ENTER" />
+            <PixelBtn text="ENTER"              
+            disabled={loading}
+            onClick={createItemCollection} />
           </div>
         </div>
       </div>
