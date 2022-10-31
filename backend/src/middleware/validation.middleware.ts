@@ -19,6 +19,9 @@ function validationMiddleware(schema: Joi.Schema): RequestHandler {
                 data = JSON.parse(req.body.data);
                 data['images'] = req.files;
             }
+            else{
+                data = req.body;
+            }
             const value = await schema.validateAsync(
                 data,
                 validationOptions
