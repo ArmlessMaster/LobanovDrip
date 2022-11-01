@@ -28,7 +28,7 @@ class AccountController implements Controller {
         );
         this.router.post(
             `${this.path}/changePassword`,
-            validationMiddleware(validate.changePassword),
+            validationMiddleware(validate.idPassword),
             authenticated,
             this.changePassword
         );
@@ -40,7 +40,7 @@ class AccountController implements Controller {
         );
         this.router.delete(
             `${this.path}/delete`,
-            validationMiddleware(validate.deleteAccount),
+            validationMiddleware(validate.id),
             authenticated,
             this.delete
         );

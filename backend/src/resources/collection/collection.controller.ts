@@ -36,24 +36,24 @@ class CollectionController implements Controller {
         );
         this.router.delete(
             `${this.path}/delete`,
-            validationMiddleware(validate.idValidaion),
+            validationMiddleware(validate.id),
             authenticated,
             this.delete
         );
         this.router.get(
             `${this.path}/findById`,
-            validationMiddleware(validate.idValidaion),
+            validationMiddleware(validate.id),
             authenticated,
             this.findById
         );
         this.router.get(
             `${this.path}/findByName`,
-            validationMiddleware(validate.nameValidation),
+            validationMiddleware(validate.name),
             this.findByName
         );
         this.router.delete(
             `${this.path}/image/delete`,
-            validationMiddleware(validate.urlIdValidation),
+            validationMiddleware(validate.urlId),
             authenticated,
             this.deleteImage
         );

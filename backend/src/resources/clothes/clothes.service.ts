@@ -321,10 +321,14 @@ class ClothesService {
     /**
      * Attempt to find clothes by type
      */
-    public async findByType(type: string): Promise<Clothes | any> {
+    public async findByType(
+        type: string,
+        limit: number
+    ): Promise<Clothes | any> {
         try {
             const clothes = await this.clothes
                 .find({ type: type }, null, { sort: { createdAt: -1 } })
+                .limit(limit)
                 .populate({
                     path: 'collection_id',
                     populate: { path: '_id' },

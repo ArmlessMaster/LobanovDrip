@@ -13,17 +13,17 @@ const update = Joi.object({
     description: Joi.string(),
 });
 
-const idValidaion = Joi.object({
+const id = Joi.object({
     id: Joi.string().hex().length(24).required(),
 });
 
-const nameValidation = Joi.object({
+const name = Joi.object({
     name: Joi.string().required(),
 });
 
-const urlIdValidation = Joi.object({
+const urlId = Joi.object({
     id: Joi.string().hex().length(24).required(),
     url: Joi.string().uri().required(),
 });
 
-export default { create, idValidaion, nameValidation, urlIdValidation, update };
+export default { create, id, name, urlId, update };

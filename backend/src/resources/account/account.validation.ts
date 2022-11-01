@@ -14,7 +14,7 @@ const login = Joi.object({
     password: Joi.string().required(),
 });
 
-const changePassword = Joi.object({
+const idPassword = Joi.object({
     id: Joi.string().hex().length(24).required(),
     password: Joi.string().required(),
 });
@@ -29,8 +29,8 @@ const update = Joi.object({
     adress: Joi.string(),
 });
 
-const deleteAccount = Joi.object({
+const id = Joi.object({
     id: Joi.string().hex().length(24).required(),
 });
 
-export default { register, login, changePassword, update, deleteAccount };
+export default { register, login, idPassword, update, id };

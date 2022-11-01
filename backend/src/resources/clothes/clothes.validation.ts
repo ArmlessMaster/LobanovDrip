@@ -43,28 +43,29 @@ const update = Joi.object({
     collection_id: Joi.string().hex().length(24),
 });
 
-const idValidaion = Joi.object({
+const id = Joi.object({
     id: Joi.string().hex().length(24).required(),
 });
 
-const nameValidation = Joi.object({
+const name = Joi.object({
     name: Joi.string().required(),
 });
 
-const urlIdValidation = Joi.object({
+const urlId = Joi.object({
     id: Joi.string().hex().length(24).required(),
     url: Joi.string().uri().required(),
 });
 
-const typeValidation = Joi.object({
+const typeLimit = Joi.object({
     type: Joi.string().required(),
+    limit: Joi.number()
 });
 
-const sexValidation = Joi.object({
+const sex = Joi.object({
     sex: Joi.string().required(),
 });
 
-const filterValidaion = Joi.object({
+const filter = Joi.object({
     type: Joi.string().required(),
     from_price: Joi.number(),
     to_price: Joi.number(),
@@ -74,10 +75,10 @@ const filterValidaion = Joi.object({
 export default {
     create,
     update,
-    idValidaion,
-    nameValidation,
-    urlIdValidation,
-    typeValidation,
-    sexValidation,
-    filterValidaion,
+    id,
+    name,
+    urlId,
+    typeLimit,
+    sex,
+    filter,
 };

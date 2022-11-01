@@ -28,13 +28,13 @@ class ClothesController implements Controller {
         );
         this.router.delete(
             `${this.path}/delete`,
-            validationMiddleware(validate.idValidaion),
+            validationMiddleware(validate.id),
             authenticated,
             this.delete
         );
         this.router.get(
             `${this.path}/findById`,
-            validationMiddleware(validate.idValidaion),
+            validationMiddleware(validate.id),
             authenticated,
             this.findById
         );
@@ -47,12 +47,12 @@ class ClothesController implements Controller {
         );
         this.router.get(
             `${this.path}/findByName`,
-            validationMiddleware(validate.nameValidation),
+            validationMiddleware(validate.name),
             this.findByName
         );
         this.router.delete(
             `${this.path}/image/delete`,
-            validationMiddleware(validate.urlIdValidation),
+            validationMiddleware(validate.urlId),
             authenticated,
             this.deleteImage
         );
@@ -60,17 +60,17 @@ class ClothesController implements Controller {
         this.router.get(`${this.path}/sales`, this.findBySales);
         this.router.get(
             `${this.path}/findByType`,
-            validationMiddleware(validate.typeValidation),
+            validationMiddleware(validate.typeLimit),
             this.findByType
         );
         this.router.get(
             `${this.path}/findBySex`,
-            validationMiddleware(validate.sexValidation),
+            validationMiddleware(validate.sex),
             this.findBySex
         );
         this.router.get(
             `${this.path}/filter`,
-            validationMiddleware(validate.filterValidaion),
+            validationMiddleware(validate.filter),
             this.filter
         );
     }
@@ -118,9 +118,9 @@ class ClothesController implements Controller {
         next: NextFunction
     ): Promise<Response | void> => {
         try {
-            const { type } = req.body;
+            const { type, limit = 0 } = req.body;
 
-            const clothes = await this.ClothesService.findByType(type);
+            const clothes = await this.ClothesService.findByType(type, limit);
 
             res.status(201).json({ clothes });
         } catch (error) {
