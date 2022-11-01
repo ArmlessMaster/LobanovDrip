@@ -20,11 +20,30 @@ class OrderController implements Controller {
         this.router.post(
             `${this.path}/create`,
             validationMiddleware(validate.create),
+            authenticated,
             this.create
         );
-        this.router.delete(`${this.path}/delete`, authenticated, this.delete);
-        this.router.post(`${this.path}/update`, authenticated, this.update);
-        this.router.get(`${this.path}/findById`, this.findById);
+        this.router.put(
+            `${this.path}/update`,
+            validationMiddleware(validate.update),
+            authenticated,
+            this.update
+        );
+        this.router.delete(
+            `${this.path}/delete`,
+            validationMiddleware(validate.delete0),
+            authenticated,
+            this.delete
+        );
+        this.router.get(
+            `${this.path}`,
+            this.get
+        );
+        this.router.get(
+            `${this.path}/find`,
+            validationMiddleware(validate.find),
+            this.find
+        );
     }
 
     private create = async (
@@ -65,11 +84,11 @@ class OrderController implements Controller {
         next: NextFunction
     ): Promise<Response | void> => {
         try {
-            const { id } = req.body;
+            const { _id } = req.body;
 
-            const order = await this.OrderService.delete(id);
+            const order = await this.OrderService.delete(_id);
 
-            res.status(201).json({ order });
+            res.status(200).json({ order });
         } catch (error) {
             next(new HttpException(400, 'Cannot delete order'));
         }
@@ -82,7 +101,7 @@ class OrderController implements Controller {
     ): Promise<Response | void> => {
         try {
             const {
-                id,
+                _id,
                 user_id,
                 moderator_id,
                 status,
@@ -93,7 +112,7 @@ class OrderController implements Controller {
             } = req.body;
 
             const order = await this.OrderService.update(
-                id,
+                _id,
                 user_id,
                 moderator_id,
                 status,
@@ -103,25 +122,39 @@ class OrderController implements Controller {
                 email
             );
 
-            res.status(201).json({ order });
+            res.status(200).json({ order });
         } catch (error) {
             next(new HttpException(400, 'Cannot change order'));
         }
     };
 
-    private findById = async (
+    private get = async (
         req: Request,
         res: Response,
         next: NextFunction
     ): Promise<Response | void> => {
         try {
-            const { id } = req.body;
+            const orders = await this.OrderService.get();
 
-            const order = await this.OrderService.findById(id);
-
-            res.status(200).json({ order });
+            res.status(200).json({ orders });
         } catch (error) {
-            next(new HttpException(400, 'Cannot get order'));
+            next(new HttpException(400, 'Cannot found orders'));
+        }
+    };
+
+    private find = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<Response | void> => {
+        try {
+            const props = req.body;
+
+            const orders = await this.OrderService.find(props);
+
+            res.status(200).json({ orders });
+        } catch (error) {
+            next(new HttpException(400, 'Cannot get orders'));
         }
     };
 }

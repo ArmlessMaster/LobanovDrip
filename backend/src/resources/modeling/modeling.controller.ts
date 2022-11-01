@@ -23,9 +23,27 @@ class ModelingController implements Controller {
             authenticated,
             this.create
         );
-        this.router.delete(`${this.path}/delete`, authenticated, this.delete);
-        this.router.post(`${this.path}/update`, authenticated, this.update);
-        this.router.get(`${this.path}/findById`, this.findById);
+        this.router.put(
+            `${this.path}/update`,
+            validationMiddleware(validate.update),
+            authenticated,
+            this.update
+        );
+        this.router.delete(
+            `${this.path}/delete`,
+            validationMiddleware(validate.delete0),
+            authenticated,
+            this.delete
+        );
+        this.router.get(
+            `${this.path}`,
+            this.get
+        );
+        this.router.get(
+            `${this.path}/find`,
+            validationMiddleware(validate.find),
+            this.find
+        );
     }
 
     private create = async (
@@ -56,11 +74,11 @@ class ModelingController implements Controller {
         next: NextFunction
     ): Promise<Response | void> => {
         try {
-            const { id } = req.body;
+            const { _id } = req.body;
 
-            const modeling = await this.ModelingService.delete(id);
+            const modeling = await this.ModelingService.delete(_id);
 
-            res.status(201).json({ modeling });
+            res.status(200).json({ modeling });
         } catch (error) {
             next(new HttpException(400, 'Cannot delete model'));
         }
@@ -72,10 +90,10 @@ class ModelingController implements Controller {
         next: NextFunction
     ): Promise<Response | void> => {
         try {
-            const { id, name, size, color, user_id, images } = req.body;
+            const { _id, name, size, color, user_id, images } = req.body;
 
             const collection = await this.ModelingService.update(
-                id,
+                _id,
                 name,
                 size,
                 color,
@@ -83,21 +101,35 @@ class ModelingController implements Controller {
                 images
             );
 
-            res.status(201).json({ collection });
+            res.status(200).json({ collection });
         } catch (error) {
             next(new HttpException(400, 'Cannot change model'));
         }
     };
 
-    private findById = async (
+    private get = async (
         req: Request,
         res: Response,
         next: NextFunction
     ): Promise<Response | void> => {
         try {
-            const { id } = req.body;
+            const modeling = await this.ModelingService.get();
 
-            const modeling = await this.ModelingService.findById(id);
+            res.status(200).json({ modeling });
+        } catch (error) {
+            next(new HttpException(400, 'Cannot found modeling'));
+        }
+    };
+
+    private find = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<Response | void> => {
+        try {
+            const props = req.body;
+
+            const modeling = await this.ModelingService.find(props);
 
             res.status(200).json({ modeling });
         } catch (error) {

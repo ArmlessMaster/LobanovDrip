@@ -2,6 +2,7 @@ import ClothesModel from '@/resources/clothes/clothes.model';
 import Clothes from '@/resources/clothes/clothes.interface';
 import ClothesCount from '@/utils/interfaces/clothesCount.interface';
 import { Schema } from 'mongoose';
+import Props from '@/utils/types/props.type';
 const {
     ref,
     uploadBytes,
@@ -28,7 +29,6 @@ class ClothesService {
     public async create(
         name: string,
         images: Express.Multer.File[],
-        size: Array<string>,
         color: Array<string>,
         type: string,
         price: number,
@@ -39,7 +39,7 @@ class ClothesService {
         clothesCount: Array<ClothesCount>,
         sex: string,
         collection_id: Schema.Types.ObjectId
-    ): Promise<Clothes> {
+    ): Promise<Clothes | Error> {
         try {
             const imagesUrls: Array<string> = [];
             let gifUrls: Array<string> = [];
@@ -74,7 +74,6 @@ class ClothesService {
                 name,
                 imagesUrls,
                 gifUrl,
-                size,
                 color,
                 type,
                 price,
@@ -98,12 +97,11 @@ class ClothesService {
      */
 
     public async update(
-        id: Schema.Types.ObjectId,
+        _id: Schema.Types.ObjectId,
         name: string,
         imagesUrls: Array<string>,
         gifUrl: string,
         images: Express.Multer.File[],
-        size: Array<string>,
         color: Array<string>,
         type: string,
         price: number,
@@ -114,7 +112,7 @@ class ClothesService {
         clothesCount: Array<ClothesCount>,
         sex: string,
         collection_id: Schema.Types.ObjectId
-    ): Promise<Clothes> {
+    ): Promise<Clothes | Error> {
         try {
             await Promise.all(
                 images.map(async (file: Express.Multer.File) => {
@@ -142,12 +140,11 @@ class ClothesService {
             );
             const clothes = await this.clothes
                 .findByIdAndUpdate(
-                    id,
+                    _id,
                     {
                         name: name,
                         imagesUrls: imagesUrls,
                         gifUrl: gifUrl,
-                        size: size,
                         color: color,
                         type: type,
                         price: price,
@@ -180,9 +177,9 @@ class ClothesService {
      * Attempt to delete clothes
      */
 
-    public async delete(id: Schema.Types.ObjectId): Promise<Clothes> {
+    public async delete(_id: Schema.Types.ObjectId): Promise<Clothes | Error> {
         try {
-            const clothes = await this.clothes.findByIdAndDelete(id).populate({
+            const clothes = await this.clothes.findByIdAndDelete(_id).populate({
                 path: 'collection_id',
                 populate: { path: '_id' },
             });
@@ -198,52 +195,13 @@ class ClothesService {
     }
 
     /**
-     * Attempt to find clothes by id
-     */
-
-    public async findById(id: Schema.Types.ObjectId): Promise<Clothes> {
-        try {
-            const clothes = await this.clothes.findById(id).populate({
-                path: 'collection_id',
-                populate: { path: '_id' },
-            });
-
-            if (!clothes) {
-                throw new Error('Unable to find clothes with that id');
-            }
-
-            return clothes;
-        } catch (error) {
-            throw new Error('Unable to find clothes');
-        }
-    }
-
-    /**
-     * Attempt to find clothes by name
-     */
-
-    public async findByName(name: string): Promise<Clothes | any> {
-        try {
-            const clothes = await this.clothes.find({ name: name }).populate({
-                path: 'collection_id',
-                populate: { path: '_id' },
-            });
-
-            if (!clothes) {
-                throw new Error('Unable to find clothes with that name');
-            }
-
-            return clothes;
-        } catch (error) {
-            throw new Error('Unable to find clothes');
-        }
-    }
-
-    /**
      * Attempt to delete image by url
      */
 
-    public async deleteImage(id: string, url: string): Promise<Clothes> {
+    public async deleteImage(
+        _id: string,
+        url: string
+    ): Promise<Clothes | Error> {
         try {
             const deletePic =
                 '☂' + url.split('%E2%98%82')[1].split('%E2%98%81')[0] + '☁';
@@ -256,16 +214,16 @@ class ClothesService {
                     throw new Error(error.message);
                 });
 
-            let clothes = (await this.clothes.findById(id)) as Clothes;
+            let clothes = (await this.clothes.findById(_id)) as Clothes;
             if (clothes.imagesUrls.includes(url)) {
                 clothes = (await this.clothes.findByIdAndUpdate(
-                    id,
+                    _id,
                     { $pullAll: { imagesUrls: [url] } },
                     { new: true }
                 )) as Clothes;
             } else {
                 clothes = (await this.clothes.findByIdAndUpdate(
-                    id,
+                    _id,
                     { gifUrl: '' },
                     { new: true }
                 )) as Clothes;
@@ -279,12 +237,14 @@ class ClothesService {
     /**
      * Attempt to find all clothes
      */
-    public async getAll(): Promise<Clothes | any> {
+    public async get(): Promise<Clothes | Array<Clothes> | Error> {
         try {
-            const clothes = await this.clothes.find({}).populate({
-                path: 'collection_id',
-                populate: { path: '_id' },
-            });
+            const clothes = await this.clothes
+                .find({}, null, { sort: { createdAt: -1 } })
+                .populate({
+                    path: 'collection_id',
+                    populate: { path: '_id' },
+                });
 
             if (!clothes) {
                 throw new Error('Unable to find clothes');
@@ -297,84 +257,39 @@ class ClothesService {
     }
 
     /**
-     * Attempt to find clothes with sales
+     * Attempt to find clothes
      */
-    public async findBySales(): Promise<Clothes | any> {
+
+    public async find(props: Props): Promise<Clothes | Array<Clothes> | Error> {
         try {
+            if (!props.limit) {
+                props.limit = 0;
+            }
             const clothes = await this.clothes
-                .find({ sale: { $gte: 1 } }, null, { sort: { createdAt: -1 } })
+                .find(props, null, { sort: { createdAt: -1 } })
+                .limit(props.limit)
                 .populate({
                     path: 'collection_id',
                     populate: { path: '_id' },
                 });
-
             if (!clothes) {
-                throw new Error('Unable to find clothes with sales');
+                throw new Error('Unable to find clothes');
             }
 
             return clothes;
         } catch (error) {
-            throw new Error('Unable to find clothes with sales');
+            throw new Error('Unable to find clothes');
         }
     }
 
     /**
-     * Attempt to find clothes by type
+     * Attempt to filter clothes
      */
-    public async findByType(
-        type: string,
-        limit: number
-    ): Promise<Clothes | any> {
-        try {
-            const clothes = await this.clothes
-                .find({ type: type }, null, { sort: { createdAt: -1 } })
-                .limit(limit)
-                .populate({
-                    path: 'collection_id',
-                    populate: { path: '_id' },
-                });
-
-            if (!clothes) {
-                throw new Error('Unable to find clothes by type');
-            }
-
-            return clothes;
-        } catch (error) {
-            throw new Error('Unable to find clothes by type');
-        }
-    }
-
-    /**
-     * Attempt to find clothes by sex
-     */
-    public async findBySex(sex: string): Promise<Clothes | any> {
-        try {
-            const clothes = await this.clothes
-                .find({ sex: sex }, null, { sort: { createdAt: -1 } })
-                .populate({
-                    path: 'collection_id',
-                    populate: { path: '_id' },
-                });
-
-            if (!clothes) {
-                throw new Error('Unable to find clothes by sex');
-            }
-
-            return clothes;
-        } catch (error) {
-            throw new Error('Unable to find clothes by sex');
-        }
-    }
-
-    /**
-     * Attempt to find clothes by filter
-     */
-
     public async filter(
         type: string,
         from_price: number,
         to_price: number,
-        size: Array<String>
+        size: Array<string>
     ): Promise<Clothes | any> {
         try {
             let clothes = null;
@@ -386,9 +301,102 @@ class ClothesService {
                             type: type,
                             $and: [
                                 { price: { $gte: from_price, $lt: to_price } },
-                                { size: { $in: size } },
+                                {
+                                    clothesCount: {
+                                        $elemMatch: {
+                                            size: { $in: size },
+                                            count: { $gt: 0 },
+                                        },
+                                    },
+                                },
                             ],
                         },
+                        null,
+                        { sort: { createdAt: -1 } }
+                    )
+                    .populate({
+                        path: 'collection_id',
+                        populate: { path: '_id' },
+                    });
+            } else if (from_price && to_price) {
+                clothes = await this.clothes
+                    .find(
+                        {
+                            type: type,
+                            $and: [
+                                { price: { $gte: from_price, $lt: to_price } },
+                            ],
+                        },
+                        null,
+                        { sort: { createdAt: -1 } }
+                    )
+                    .populate({
+                        path: 'collection_id',
+                        populate: { path: '_id' },
+                    });
+            } else if (size && to_price) {
+                clothes = await this.clothes
+                    .find(
+                        {
+                            type: type,
+                            $and: [
+                                { price: { $lt: to_price } },
+                                {
+                                    clothesCount: {
+                                        $elemMatch: {
+                                            size: { $in: size },
+                                            count: { $gt: 0 },
+                                        },
+                                    },
+                                },
+                            ],
+                        },
+                        null,
+                        { sort: { createdAt: -1 } }
+                    )
+                    .populate({
+                        path: 'collection_id',
+                        populate: { path: '_id' },
+                    });
+            } else if (from_price && size) {
+                clothes = await this.clothes
+                    .find(
+                        {
+                            type: type,
+                            $and: [
+                                { price: { $gte: from_price } },
+                                {
+                                    clothesCount: {
+                                        $elemMatch: {
+                                            size: { $in: size },
+                                            count: { $gt: 0 },
+                                        },
+                                    },
+                                },
+                            ],
+                        },
+                        null,
+                        { sort: { createdAt: -1 } }
+                    )
+                    .populate({
+                        path: 'collection_id',
+                        populate: { path: '_id' },
+                    });
+            } else if (to_price) {
+                clothes = await this.clothes
+                    .find(
+                        { type: type, $and: [{ price: { $lt: to_price } }] },
+                        null,
+                        { sort: { createdAt: -1 } }
+                    )
+                    .populate({
+                        path: 'collection_id',
+                        populate: { path: '_id' },
+                    });
+            } else if (from_price) {
+                clothes = await this.clothes
+                    .find(
+                        { type: type, $and: [{ price: { $gte: from_price } }] },
                         null,
                         { sort: { createdAt: -1 } }
                     )
@@ -399,7 +407,19 @@ class ClothesService {
             } else if (size) {
                 clothes = await this.clothes
                     .find(
-                        { type: type, $and: [{ size: { $in: size } }] },
+                        {
+                            type: type,
+                            $and: [
+                                {
+                                    clothesCount: {
+                                        $elemMatch: {
+                                            size: { $in: size },
+                                            count: { $gt: 0 },
+                                        },
+                                    },
+                                },
+                            ],
+                        },
                         null,
                         { sort: { createdAt: -1 } }
                     )
@@ -412,9 +432,6 @@ class ClothesService {
                     .find(
                         {
                             type: type,
-                            $and: [
-                                { price: { $gte: from_price, $lt: to_price } },
-                            ],
                         },
                         null,
                         { sort: { createdAt: -1 } }
@@ -432,6 +449,28 @@ class ClothesService {
             return clothes;
         } catch (error) {
             throw new Error('Unable to find clothes by sample');
+        }
+    }
+
+    /**
+     * Attempt to find clothes with sales
+     */
+    public async findBySales(): Promise<Clothes | Array<Clothes> | Error> {
+        try {
+            const clothes = await this.clothes
+                .find({ sale: { $gte: 1 } }, null, { sort: { createdAt: -1 } })
+                .populate({
+                    path: 'collection_id',
+                    populate: { path: '_id' },
+                });
+
+            if (!clothes) {
+                throw new Error('Unable to find clothes with sales');
+            }
+
+            return clothes;
+        } catch (error) {
+            throw new Error('Unable to find clothes with sales');
         }
     }
 }

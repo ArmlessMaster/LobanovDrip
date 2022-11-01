@@ -7,23 +7,27 @@ const create = Joi.object({
 });
 
 const update = Joi.object({
-    id: Joi.string().hex().length(24).required(),
+    _id: Joi.string().hex().length(24).required(),
     images: Joi.array(),
     name: Joi.string(),
     description: Joi.string(),
 });
 
-const id = Joi.object({
-    id: Joi.string().hex().length(24).required(),
+const delete0 = Joi.object({
+    _id: Joi.string().hex().length(24).required(),
 });
 
-const name = Joi.object({
-    name: Joi.string().required(),
-});
-
-const urlId = Joi.object({
-    id: Joi.string().hex().length(24).required(),
+const imageDelete = Joi.object({
+    _id: Joi.string().hex().length(24).required(),
     url: Joi.string().uri().required(),
 });
 
-export default { create, id, name, urlId, update };
+const find = Joi.object({
+    _id: Joi.string().hex().length(24),
+    imageUrl: Joi.string().uri(),
+    gifUrl: Joi.string().uri(),
+    name: Joi.string(),
+    description: Joi.string(),
+});
+
+export default { create, update, delete0, imageDelete, find };

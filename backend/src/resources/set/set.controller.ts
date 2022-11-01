@@ -23,9 +23,27 @@ class SetController implements Controller {
             authenticated,
             this.create
         );
-        this.router.delete(`${this.path}/delete`, authenticated, this.delete);
-        this.router.post(`${this.path}/update`, authenticated, this.update);
-        this.router.get(`${this.path}/findById`, this.findById);
+        this.router.put(
+            `${this.path}/update`,
+            validationMiddleware(validate.update),
+            authenticated,
+            this.update
+        );
+        this.router.delete(
+            `${this.path}/delete`,
+            validationMiddleware(validate.delete0),
+            authenticated,
+            this.delete
+        );
+        this.router.get(
+            `${this.path}`,
+            this.get
+        );
+        this.router.get(
+            `${this.path}/find`,
+            validationMiddleware(validate.find),
+            this.find
+        );
     }
 
     private create = async (
@@ -50,11 +68,11 @@ class SetController implements Controller {
         next: NextFunction
     ): Promise<Response | void> => {
         try {
-            const { id } = req.body;
+            const { _id } = req.body;
 
-            const set = await this.SetService.delete(id);
+            const set = await this.SetService.delete(_id);
 
-            res.status(201).json({ set });
+            res.status(200).json({ set });
         } catch (error) {
             next(new HttpException(400, 'Cannot delete set'));
         }
@@ -66,32 +84,46 @@ class SetController implements Controller {
         next: NextFunction
     ): Promise<Response | void> => {
         try {
-            const { id, name, user_id, clothes_id } = req.body;
+            const { _id, name, user_id, clothes_id } = req.body;
 
             const set = await this.SetService.update(
-                id,
+                _id,
                 name,
                 user_id,
                 clothes_id
             );
 
-            res.status(201).json({ set });
+            res.status(200).json({ set });
         } catch (error) {
             next(new HttpException(400, 'Cannot change set'));
         }
     };
 
-    private findById = async (
+    private get = async (
         req: Request,
         res: Response,
         next: NextFunction
     ): Promise<Response | void> => {
         try {
-            const { id } = req.body;
+            const sets = await this.SetService.get();
 
-            const set = await this.SetService.findById(id);
+            res.status(200).json({ sets });
+        } catch (error) {
+            next(new HttpException(400, 'Cannot found collections'));
+        }
+    };
 
-            res.status(200).json({ set });
+    private find = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<Response | void> => {
+        try {
+            const props = req.body;
+
+            const sets = await this.SetService.find(props);
+
+            res.status(200).json({ sets });
         } catch (error) {
             next(new HttpException(400, 'Cannot get sets'));
         }

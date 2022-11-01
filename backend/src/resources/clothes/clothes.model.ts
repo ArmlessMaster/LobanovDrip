@@ -13,9 +13,6 @@ const ClothesSchema = new Schema(
         gifUrl: {
             type: String,
         },
-        size: {
-            type: Array<string>,
-        },
         color: {
             type: Array<string>,
         },

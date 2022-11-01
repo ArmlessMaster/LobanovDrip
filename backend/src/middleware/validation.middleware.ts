@@ -22,10 +22,16 @@ function validationMiddleware(schema: Joi.Schema): RequestHandler {
             else {
                 data = req.body;
             }
+            if (!(Object.keys(req.query).length === 0)){  
+                data = req.query
+            }
+            if (!(Object.keys(req.params).length === 0)){
+                data = req.params
+            }
             const value = await schema.validateAsync(
                 data,
                 validationOptions
-            );
+            );     
             req.body = value;
             next();
         } catch (e: any) {

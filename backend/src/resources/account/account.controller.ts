@@ -26,13 +26,7 @@ class AccountController implements Controller {
             validationMiddleware(validate.login),
             this.login
         );
-        this.router.post(
-            `${this.path}/changePassword`,
-            validationMiddleware(validate.idPassword),
-            authenticated,
-            this.changePassword
-        );
-        this.router.post(
+        this.router.put(
             `${this.path}/update`,
             validationMiddleware(validate.update),
             authenticated,
@@ -40,7 +34,7 @@ class AccountController implements Controller {
         );
         this.router.delete(
             `${this.path}/delete`,
-            validationMiddleware(validate.id),
+            validationMiddleware(validate.delete0),
             authenticated,
             this.delete
         );
@@ -83,35 +77,17 @@ class AccountController implements Controller {
         }
     };
 
-    private changePassword = async (
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<Response | void> => {
-        try {
-            const { id, password } = req.body;
-
-            const new_password = await this.AccountService.changePassword(
-                id,
-                password
-            );
-
-            res.status(201).json({ new_password });
-        } catch (error: any) {
-            next(new HttpException(400, error.message));
-        }
-    };
-
     private update = async (
         req: Request,
         res: Response,
         next: NextFunction
     ): Promise<Response | void> => {
         try {
-            const { id, email, password, name, phone, role, adress } = req.body;
+            const { _id, email, password, name, phone, role, adress } =
+                req.body;
 
             const account = await this.AccountService.update(
-                id,
+                _id,
                 email,
                 password,
                 name,
@@ -120,7 +96,7 @@ class AccountController implements Controller {
                 adress
             );
 
-            res.status(201).json({ account });
+            res.status(200).json({ account });
         } catch (error: any) {
             next(new HttpException(400, error.message));
         }
@@ -132,11 +108,11 @@ class AccountController implements Controller {
         next: NextFunction
     ): Promise<Response | void> => {
         try {
-            const { id } = req.body;
+            const { _id } = req.body;
 
-            const account = await this.AccountService.delete(id);
+            const account = await this.AccountService.delete(_id);
 
-            res.status(201).json({ account });
+            res.status(200).json({ account });
         } catch (error: any) {
             next(new HttpException(400, error.message));
         }

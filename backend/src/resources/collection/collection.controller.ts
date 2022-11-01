@@ -4,7 +4,6 @@ import HttpException from '@/utils/exceptions/http.exception';
 import validationMiddleware from '@/middleware/validation.middleware';
 import validate from '@/resources/collection/collection.validation';
 import CollectionService from '@/resources/collection/collection.service';
-import CollectionModel from '@/resources/collection/collection.model';
 import authenticated from '@/middleware/authenticated.middleware';
 const multer = require('multer');
 const memoStorage = multer.memoryStorage();
@@ -27,7 +26,7 @@ class CollectionController implements Controller {
             authenticated,
             this.create
         );
-        this.router.post(
+        this.router.put(
             `${this.path}/update`,
             upload.array('pic'),
             validationMiddleware(validate.update),
@@ -36,43 +35,26 @@ class CollectionController implements Controller {
         );
         this.router.delete(
             `${this.path}/delete`,
-            validationMiddleware(validate.id),
+            validationMiddleware(validate.delete0),
             authenticated,
             this.delete
         );
-        this.router.get(
-            `${this.path}/findById`,
-            validationMiddleware(validate.id),
-            authenticated,
-            this.findById
-        );
-        this.router.get(
-            `${this.path}/findByName`,
-            validationMiddleware(validate.name),
-            this.findByName
-        );
         this.router.delete(
             `${this.path}/image/delete`,
-            validationMiddleware(validate.urlId),
+            validationMiddleware(validate.imageDelete),
             authenticated,
             this.deleteImage
         );
-        this.router.get(`${this.path}`, this.getAll);
+        this.router.get(
+            `${this.path}`,
+            this.get
+        );
+        this.router.get(
+            `${this.path}/find`,
+            validationMiddleware(validate.find),
+            this.find
+        );
     }
-
-    private getAll = async (
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<Response | void> => {
-        try {
-            const collections = await this.CollectionService.getAll();
-
-            res.status(201).json({ collections });
-        } catch (error) {
-            next(new HttpException(400, 'Cannot found collections'));
-        }
-    };
 
     private create = async (
         req: Request,
@@ -100,16 +82,16 @@ class CollectionController implements Controller {
         next: NextFunction
     ): Promise<Response | void> => {
         try {
-            const { id, name, images, description } = req.body;
+            const { _id, name, images, description } = req.body;
 
             const collection = await this.CollectionService.update(
-                id,
+                _id,
                 name,
                 images,
                 description
             );
 
-            res.status(201).json({ collection });
+            res.status(200).json({ collection });
         } catch (error) {
             next(new HttpException(400, 'Cannot update collection'));
         }
@@ -121,11 +103,11 @@ class CollectionController implements Controller {
         next: NextFunction
     ): Promise<Response | void> => {
         try {
-            const { id } = req.body;
+            const { _id } = req.body;
 
-            const collection = await this.CollectionService.delete(id);
+            const collection = await this.CollectionService.delete(_id);
 
-            res.status(201).json({ collection });
+            res.status(200).json({ collection });
         } catch (error) {
             next(new HttpException(400, 'Cannot delete clothes'));
         }
@@ -137,14 +119,14 @@ class CollectionController implements Controller {
         next: NextFunction
     ): Promise<Response | void> => {
         try {
-            const { id, url } = req.body;
+            const { _id, url } = req.body;
 
             const collection = await this.CollectionService.deleteImage(
-                id,
+                _id,
                 url
             );
 
-            res.status(201).json({ collection });
+            res.status(200).json({ collection });
         } catch (error) {
             next(
                 new HttpException(
@@ -155,33 +137,30 @@ class CollectionController implements Controller {
         }
     };
 
-    private findById = async (
+    private get = async (
         req: Request,
         res: Response,
         next: NextFunction
     ): Promise<Response | void> => {
         try {
-            const { id } = req.body;
+            const collections = await this.CollectionService.get();
 
-            const collection = await this.CollectionService.findById(id);
-
-            res.status(201).json({ collection });
+            res.status(200).json({ collections });
         } catch (error) {
-            next(new HttpException(400, 'Cannot found clothes'));
+            next(new HttpException(400, 'Cannot found collections'));
         }
     };
 
-    private findByName = async (
+    private find = async (
         req: Request,
         res: Response,
         next: NextFunction
     ): Promise<Response | void> => {
         try {
-            const { name } = req.body;
+            const props = req.body;
+            const collections = await this.CollectionService.find(props);
 
-            const collection = await this.CollectionService.findByName(name);
-
-            res.status(201).json({ collection });
+            res.status(200).json({ collections });
         } catch (error) {
             next(new HttpException(400, 'Cannot found clothes'));
         }

@@ -8,4 +8,26 @@ const create = Joi.object({
     color: Joi.string().required(),
 });
 
-export default { create };
+const update = Joi.object({
+    _id: Joi.string().hex().length(24).required(),
+    clothes_id: Joi.string().hex().length(24),
+    order_id: Joi.string().hex().length(24),
+    count: Joi.number(),
+    size: Joi.string(),
+    color: Joi.string(),
+});
+
+const delete0 = Joi.object({
+    _id: Joi.string().hex().length(24).required(),
+});
+
+const find = Joi.object({
+    _id: Joi.string().hex().length(24),
+    clothes_id: Joi.string().hex().length(24),
+    order_id: Joi.string().hex().length(24),
+    count: Joi.number(),
+    size: Joi.string(),
+    color: Joi.string(),
+});
+
+export default { create, update, delete0, find};

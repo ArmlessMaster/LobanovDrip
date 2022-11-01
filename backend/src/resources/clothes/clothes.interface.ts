@@ -6,7 +6,6 @@ export default interface Clothes extends Document {
     name: string;
     imagesUrls: Array<string>;
     gifUrl: string;
-    size: Array<string>;
     color: Array<string>;
     type: string;
     price: number;

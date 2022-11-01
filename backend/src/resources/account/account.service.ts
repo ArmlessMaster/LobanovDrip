@@ -63,36 +63,11 @@ class AccountService {
     }
 
     /**
-     * Attempt to change password
-     */
-
-    public async changePassword(
-        id: Schema.Types.ObjectId,
-        password: string
-    ): Promise<string | Error> {
-        try {
-            const account = await this.account.findByIdAndUpdate(
-                id,
-                { password },
-                { new: true }
-            );
-
-            if (!account) {
-                throw new Error('Unable to change password with that id');
-            }
-
-            return account.password;
-        } catch (error) {
-            throw new Error('Unable to change password');
-        }
-    }
-
-    /**
      * Attempt to update account
      */
 
     public async update(
-        id: Schema.Types.ObjectId,
+        _id: Schema.Types.ObjectId,
         email: string,
         password: string,
         name: string,
@@ -102,7 +77,7 @@ class AccountService {
     ): Promise<Account | Error> {
         try {
             const account = await this.account.findByIdAndUpdate(
-                id,
+                _id,
                 { email, password, name, phone, role, adress },
                 { new: true }
             );
@@ -121,9 +96,9 @@ class AccountService {
      * Attempt to delete account
      */
 
-    public async delete(id: Schema.Types.ObjectId): Promise<Account | Error> {
+    public async delete(_id: Schema.Types.ObjectId): Promise<Account | Error> {
         try {
-            const account = await this.account.findByIdAndDelete(id);
+            const account = await this.account.findByIdAndDelete(_id);
 
             if (!account) {
                 throw new Error('Unable to delete account with that id');

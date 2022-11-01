@@ -37,10 +37,10 @@ class OrderService {
     /**
      * Attempt to delete order by id
      */
-    public async delete(id: Schema.Types.ObjectId): Promise<Order> {
+    public async delete(_id: Schema.Types.ObjectId): Promise<Order> {
         try {
             const order = await this.order
-                .findOneAndDelete({ _id: id })
+                .findOneAndDelete({ _id })
                 .populate({
                     path: 'user_id',
                     populate: { path: '_id' },
@@ -64,7 +64,7 @@ class OrderService {
      * Attempt to update order by id
      */
     public async update(
-        id: Schema.Types.ObjectId,
+        _id: Schema.Types.ObjectId,
         user_id: Schema.Types.ObjectId,
         moderator_id: Schema.Types.ObjectId,
         status: string,
@@ -76,7 +76,7 @@ class OrderService {
         try {
             const order = await this.order
                 .findByIdAndUpdate(
-                    { _id: id },
+                    { _id },
                     {
                         user_id: user_id,
                         moderator_id: moderator_id,
@@ -107,13 +107,33 @@ class OrderService {
         }
     }
 
+    
     /**
-     * Attempt to find order by id
+     * Attempt to find all orders
      */
-    public async findById(id: Schema.Types.ObjectId): Promise<Order> {
+     public async get(): Promise<Order | Array<Order> | Error> {
         try {
-            const order = await this.order
-                .findById(id)
+            const orders = await this.order.find({}, null, {
+                sort: { createdAt: -1 },
+            });
+
+            if (!orders) {
+                throw new Error('Unable to find orders');
+            }
+
+            return orders;
+        } catch (error) {
+            throw new Error('Unable to find orders');
+        }
+    }
+
+    /**
+     * Attempt to find order 
+     */
+    public async find(props: Object): Promise<Order | Array<Order> | Order> {
+        try {
+            const orders = await this.order
+                .find(props)
                 .populate({
                     path: 'user_id',
                     populate: { path: '_id' },
@@ -123,11 +143,11 @@ class OrderService {
                     populate: { path: '_id' },
                 });
 
-            if (!order) {
-                throw new Error('Unable to find order with that id');
+            if (!orders) {
+                throw new Error('Unable to find orders');
             }
 
-            return order;
+            return orders;
         } catch (error) {
             throw new Error('Unable to find order');
         }

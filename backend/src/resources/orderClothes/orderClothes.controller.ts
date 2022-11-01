@@ -23,9 +23,27 @@ class OrderClothesController implements Controller {
             authenticated,
             this.create
         );
-        this.router.delete(`${this.path}/delete`, authenticated, this.delete);
-        this.router.post(`${this.path}/update`, authenticated, this.update);
-        this.router.get(`${this.path}/findById`, this.findById);
+        this.router.put(
+            `${this.path}/update`,
+            validationMiddleware(validate.update),
+            authenticated,
+            this.update
+        );
+        this.router.delete(
+            `${this.path}/delete`,
+            validationMiddleware(validate.delete0),
+            authenticated,
+            this.delete
+        );
+        this.router.get(
+            `${this.path}`,
+            this.get
+        );
+        this.router.get(
+            `${this.path}/find`,
+            validationMiddleware(validate.find),
+            this.find
+        );
     }
 
     private create = async (
@@ -56,11 +74,11 @@ class OrderClothesController implements Controller {
         next: NextFunction
     ): Promise<Response | void> => {
         try {
-            const { id } = req.body;
+            const { _id } = req.body;
 
-            const orderClothes = await this.OrderClothesService.delete(id);
+            const orderClothes = await this.OrderClothesService.delete(_id);
 
-            res.status(201).json({ orderClothes });
+            res.status(200).json({ orderClothes });
         } catch (error) {
             next(new HttpException(400, 'Cannot delete order clothes'));
         }
@@ -72,10 +90,10 @@ class OrderClothesController implements Controller {
         next: NextFunction
     ): Promise<Response | void> => {
         try {
-            const { id, clothes_id, order_id, count, size, color } = req.body;
+            const { _id, clothes_id, order_id, count, size, color } = req.body;
 
             const orderClothes = await this.OrderClothesService.update(
-                id,
+                _id,
                 clothes_id,
                 order_id,
                 count,
@@ -83,21 +101,36 @@ class OrderClothesController implements Controller {
                 color
             );
 
-            res.status(201).json({ orderClothes });
+            res.status(200).json({ orderClothes });
         } catch (error) {
-            next(new HttpException(400, 'Cannot change order clothes'));
+            next(new HttpException(400, 'Cannot update order clothes'));
         }
     };
 
-    private findById = async (
+    
+    private get = async (
         req: Request,
         res: Response,
         next: NextFunction
     ): Promise<Response | void> => {
         try {
-            const { id } = req.body;
+            const orderClothes = await this.OrderClothesService.get();
 
-            const orderClothes = await this.OrderClothesService.findById(id);
+            res.status(200).json({ orderClothes });
+        } catch (error) {
+            next(new HttpException(400, 'Cannot found order clothes'));
+        }
+    };
+
+    private find = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<Response | void> => {
+        try {
+            const props = req.body;
+
+            const orderClothes = await this.OrderClothesService.find(props);
 
             res.status(200).json({ orderClothes });
         } catch (error) {

@@ -34,10 +34,10 @@ class ModelingService {
     /**
      * Attempt to delete modeling by id
      */
-    public async delete(id: Schema.Types.ObjectId): Promise<Modeling> {
+    public async delete(_id: Schema.Types.ObjectId): Promise<Modeling> {
         try {
             const modeling = await this.modeling
-                .findOneAndDelete({ _id: id })
+                .findOneAndDelete({ _id })
                 .populate({
                     path: 'user_id',
                     populate: { path: '_id' },
@@ -57,7 +57,7 @@ class ModelingService {
      * Attempt to update modeling by id
      */
     public async update(
-        id: Schema.Types.ObjectId,
+        _id: Schema.Types.ObjectId,
         name: string,
         size: string,
         color: string,
@@ -67,7 +67,7 @@ class ModelingService {
         try {
             const modeling = await this.modeling
                 .findByIdAndUpdate(
-                    { _id: id },
+                    { _id },
                     {
                         name: name,
                         size: size,
@@ -92,23 +92,43 @@ class ModelingService {
         }
     }
 
+    
+    /**
+     * Attempt to find all sets
+     */
+     public async get(): Promise<Modeling | Array<Modeling> | Modeling> {
+        try {
+            const modeling = await this.modeling.find({}, null, {
+                sort: { createdAt: -1 },
+            });
+
+            if (!modeling) {
+                throw new Error('Unable to find modeling');
+            }
+
+            return modeling;
+        } catch (error) {
+            throw new Error('Unable to find modeling');
+        }
+    }
+
     /**
      * Attempt to find modeling by id
      */
-    public async findById(id: Schema.Types.ObjectId): Promise<Modeling> {
+    public async find(props: Object): Promise<Modeling | Array<Modeling> | Modeling> {
         try {
-            const clothes = await this.modeling.findById(id).populate({
+            const modeling = await this.modeling.find(props).populate({
                 path: 'user_id',
                 populate: { path: '_id' },
             });
 
-            if (!clothes) {
-                throw new Error('Unable to find modeling with that id');
+            if (!modeling) {
+                throw new Error('Unable to find modeling');
             }
 
-            return clothes;
+            return modeling;
         } catch (error) {
-            throw new Error('Unable to find clothes');
+            throw new Error('Unable to find modeling');
         }
     }
 }

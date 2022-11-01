@@ -14,23 +14,20 @@ const login = Joi.object({
     password: Joi.string().required(),
 });
 
-const idPassword = Joi.object({
-    id: Joi.string().hex().length(24).required(),
-    password: Joi.string().required(),
-});
-
 const update = Joi.object({
-    id: Joi.string().hex().length(24).required(),
+    _id: Joi.string().hex().length(24).required(),
     email: Joi.string().email(),
-    password: Joi.string(),
+    password: Joi.string().min(6),
     name: Joi.string(),
-    phone: Joi.string(),
+    phone: Joi.string()
+    .length(10)
+    .pattern(/^[0-9]+$/),
     role: Joi.string(),
     adress: Joi.string(),
 });
 
-const id = Joi.object({
-    id: Joi.string().hex().length(24).required(),
+const delete0 = Joi.object({
+    _id: Joi.string().hex().length(24).required(),
 });
 
-export default { register, login, idPassword, update, id };
+export default { register, login, update, delete0 };

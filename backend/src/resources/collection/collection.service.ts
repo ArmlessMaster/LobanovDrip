@@ -28,7 +28,7 @@ class CollectionService {
         name: string,
         images: Express.Multer.File[],
         description: string
-    ): Promise<Collection> {
+    ): Promise<Collection | Error> {
         try {
             const imagesUrls: Array<string> = [];
             const gifUrls: Array<string> = [];
@@ -78,11 +78,11 @@ class CollectionService {
      *Attempt to update a collection by id
      */
     public async update(
-        id: Schema.Types.ObjectId,
+        _id: Schema.Types.ObjectId,
         name: string,
         images: Express.Multer.File[],
         description: string
-    ): Promise<Collection> {
+    ): Promise<Collection | Error> {
         try {
             const imagesUrls: Array<string> = [];
             const gifUrls: Array<string> = [];
@@ -125,7 +125,7 @@ class CollectionService {
             }
 
             const collection = await this.collection.findByIdAndUpdate(
-                id,
+                _id,
                 update,
                 { new: true }
             );
@@ -141,88 +141,12 @@ class CollectionService {
     }
 
     /**
-     * Attempt to find collections by id
+     * Attempt to delete collection
      */
 
-    public async findById(id: Schema.Types.ObjectId): Promise<Collection> {
+    public async delete(_id: Schema.Types.ObjectId): Promise<Collection | Error> {
         try {
-            const collections = await this.collection.findById(id);
-
-            if (!collections) {
-                throw new Error('Unable to find collections with that id');
-            }
-
-            return collections;
-        } catch (error) {
-            throw new Error('Unable to find clothes');
-        }
-    }
-
-    /**
-     * Attempt to find collections by name
-     */
-
-    public async findByName(name: string): Promise<Collection | any> {
-        try {
-            const collections = await this.collection.find({ name: name });
-
-            if (!collections) {
-                throw new Error('Unable to find clothes with that name');
-            }
-
-            return collections;
-        } catch (error) {
-            throw new Error('Unable to find clothes');
-        }
-    }
-
-    /**
-     * Attempt to delete image by url
-     */
-
-    public async deleteImage(
-        id: Schema.Types.ObjectId,
-        url: string
-    ): Promise<Collection> {
-        try {
-            const deletePic =
-                '☂' + url.split('%E2%98%82')[1].split('%E2%98%81')[0] + '☁';
-            const deleteRef = ref(storage, deletePic);
-            const result = await deleteObject(deleteRef)
-                .then(() => {
-                    return 'deleted';
-                })
-                .catch((error: Error) => {
-                    throw new Error(error.message);
-                });
-            let collection = (await this.collection.findById(id)) as Collection;
-            if (collection.imageUrl === url) {
-                collection = (await this.collection.findByIdAndUpdate(
-                    id,
-                    { imageUrl: '' },
-                    { new: true }
-                )) as Collection;
-            } else {
-                collection = (await this.collection.findByIdAndUpdate(
-                    id,
-                    { gifUrl: '' },
-                    { new: true }
-                )) as Collection;
-            }
-
-            return collection;
-        } catch (error) {
-            throw new Error('Unable to find image');
-        }
-    }
-
-    /**
-     * Attempt to delete clothes
-     */
-
-    public async delete(id: Schema.Types.ObjectId): Promise<Collection> {
-        try {
-            const collection = await this.collection.findByIdAndDelete(id);
+            const collection = await this.collection.findByIdAndDelete(_id);
 
             if (!collection) {
                 throw new Error('Unable to delete clothes with that id');
@@ -235,11 +159,51 @@ class CollectionService {
     }
 
     /**
+     * Attempt to delete image by url
+     */
+
+    public async deleteImage(
+        _id: Schema.Types.ObjectId,
+        url: string
+    ): Promise<Collection | Error> {
+        try {
+            const deletePic =
+                '☂' + url.split('%E2%98%82')[1].split('%E2%98%81')[0] + '☁';
+            const deleteRef = ref(storage, deletePic);
+            const result = await deleteObject(deleteRef)
+                .then(() => {
+                    return 'deleted';
+                })
+                .catch((error: Error) => {
+                    throw new Error(error.message);
+                });
+            let collection = (await this.collection.findById(_id)) as Collection;
+            if (collection.imageUrl === url) {
+                collection = (await this.collection.findByIdAndUpdate(
+                    _id,
+                    { imageUrl: '' },
+                    { new: true }
+                )) as Collection;
+            } else {
+                collection = (await this.collection.findByIdAndUpdate(
+                    _id,
+                    { gifUrl: '' },
+                    { new: true }
+                )) as Collection;
+            }
+
+            return collection;
+        } catch (error) {
+            throw new Error('Unable to find image');
+        }
+    }
+
+    /**
      * Attempt to find all collections
      */
-    public async getAll(): Promise<Collection | any> {
+    public async get(): Promise<Collection | Array<Collection> | Error> {
         try {
-            const collections = await this.collection.find({});
+            const collections = await this.collection.find({},  null, { sort: { createdAt: -1 }});
 
             if (!collections) {
                 throw new Error('Unable to find clothes');
@@ -248,6 +212,24 @@ class CollectionService {
             return collections;
         } catch (error) {
             throw new Error('Unable to find clothes');
+        }
+    }
+
+    /**
+     * Attempt to find collections by params
+     */
+
+    public async find(props: Object): Promise<Collection | Array<Collection> | Error> {
+        try {
+            const collections = await this.collection.find(props,  null, { sort: { createdAt: -1 }});
+
+            if (!collections) {
+                throw new Error(`Unable to find collections`);
+            }
+
+            return collections;
+        } catch (error) {
+            throw new Error(`Unable to find collections`);
         }
     }
 }

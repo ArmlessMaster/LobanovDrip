@@ -14,7 +14,7 @@ class OrderClothesService {
         count: number,
         size: string,
         color: string
-    ): Promise<OrderClothes> {
+    ): Promise<OrderClothes | Error> {
         try {
             const orderClothes = await this.orderClothes.create({
                 clothes_id,
@@ -33,10 +33,10 @@ class OrderClothesService {
     /**
      * Attempt to delete orderClothes by id
      */
-    public async delete(id: string): Promise<OrderClothes> {
+    public async delete(_id: Schema.Types.ObjectId): Promise<OrderClothes | Error> {
         try {
             const orderClothes = await this.orderClothes
-                .findByIdAndDelete(id)
+                .findByIdAndDelete(_id)
                 .populate({
                     path: 'clothes_id',
                     populate: { path: '_id' },
@@ -60,17 +60,17 @@ class OrderClothesService {
      * Attempt to update orderClothes by id
      */
     public async update(
-        id: string,
+        _id: string,
         clothes_id: Schema.Types.ObjectId,
         order_id: Schema.Types.ObjectId,
         count: number,
         size: string,
         color: string
-    ): Promise<OrderClothes> {
+    ): Promise<OrderClothes | Error> {
         try {
             const orderClothes = await this.orderClothes
                 .findByIdAndUpdate(
-                    { id },
+                    { _id },
                     {
                         clothes_id: clothes_id,
                         order_id: order_id,
@@ -99,13 +99,33 @@ class OrderClothesService {
         }
     }
 
+    
+    /**
+     * Attempt to find all sets
+     */
+     public async get(): Promise<OrderClothes | Array<OrderClothes> | Error> {
+        try {
+            const orderClothes = await this.orderClothes.find({}, null, {
+                sort: { createdAt: -1 },
+            });
+
+            if (!orderClothes) {
+                throw new Error('Unable to find order clothes');
+            }
+
+            return orderClothes;
+        } catch (error) {
+            throw new Error('Unable to order clothes');
+        }
+    }
+
     /**
      * Attempt to find orderClothes by id
      */
-    public async findById(id: Schema.Types.ObjectId): Promise<OrderClothes> {
+    public async find(props: Object): Promise<OrderClothes | Array<OrderClothes> | Error> {
         try {
             const orderClothes = await this.orderClothes
-                .findById(id)
+                .find(props)
                 .populate({
                     path: 'clothes_id',
                     populate: { path: '_id' },
@@ -116,7 +136,7 @@ class OrderClothesService {
                 });
 
             if (!orderClothes) {
-                throw new Error('Unable to find order clothes with that id');
+                throw new Error('Unable to find order clothes');
             }
 
             return orderClothes;
