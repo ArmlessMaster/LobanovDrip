@@ -6,7 +6,7 @@ import Cart from "../assets/images/menu/CartBtn.svg";
 import Account from "../assets/images/menu/AccountBtn.svg";
 import React from "react";
 
-export default function Footer() {
+export default function Footer({ navigation }) {
     return(
         <View style={{flex: 1, backgroundColor: 'black'}}>
             <View style={{flex: 5, flexDirection: 'row', justifyContent: 'space-around',
@@ -15,7 +15,9 @@ export default function Footer() {
                 <Create/>
                 <Menu/>
                 <Cart/>
-                <Account/>
+                <Pressable onPress={() => navigation.navigate('Registration')}>
+                    <Account/>
+                </Pressable>
             </View>
         </View>
     );

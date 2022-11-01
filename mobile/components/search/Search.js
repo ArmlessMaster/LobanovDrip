@@ -12,8 +12,11 @@ import {
 import React from 'react';
 import Arrow from "../../assets/images/rightArrow.svg";
 import Loupe from "../../assets/images/search 1.svg";
+import Filter from "../filter/Filter"
+import SlidingUpPanel from "rn-sliding-up-panel";
+import Footer from "../footer";
 
-export default function Search() {
+export default function Search({navigation}) {
 
     const DATA = [
         {
@@ -69,8 +72,10 @@ export default function Search() {
     return (
         <View style={{flex: 1}}>
             <View style={{backgroundColor: '#323232', flex: 0.5}}></View>
-            <View style={{flex: 1, backgroundColor: '#323232', justifyContent: 'flex-end',
-                alignItems: 'center', flexDirection: 'row'}}>
+            <View style={{
+                flex: 1, backgroundColor: '#323232', justifyContent: 'flex-end',
+                alignItems: 'center', flexDirection: 'row'
+            }}>
                 <Loupe style={{flex: 1, left: '50%'}}></Loupe>
                 <TextInput style={styles.searchInput} placeholder="Search..." placeholderTextColor='white'></TextInput>
                 <Pressable style={{right: '20%'}}><Arrow/></Pressable>
@@ -78,9 +83,10 @@ export default function Search() {
             <View style={{borderWidth: 0.75, borderColor: 'white', bottom: '1%', width: '80%', alignSelf: 'center'}}/>
             <View style={{flex: 1}}></View>
             <View style={{flex: 1, flexDirection: 'row'}}>
-                <Pressable style={styles.filter}>
+                <Pressable onPress={() => this._panel.show()} style={styles.filter}>
                     <Text style={{fontSize: 18, fontFamily: 'roboto-regular'}}>Filter</Text>
                 </Pressable>
+
             </View>
             <SafeAreaView style={{flex: 9}}>
                 <FlatList data={DATA} renderItem={({item}) => (
@@ -92,6 +98,12 @@ export default function Search() {
                     </View>
                 )} keyExtractor={item => item.id} numColumns='2'/>
             </SafeAreaView>
+            {/*<Footer/>*/}
+            <SlidingUpPanel ref={c => this._panel = c}>
+                <View style={{flex: 1, backgroundColor: 'white', marginTop: '15%'}}>
+                    <Filter/>
+                </View>
+            </SlidingUpPanel>
         </View>
     )
 }

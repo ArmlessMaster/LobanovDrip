@@ -2,18 +2,17 @@ import React, { useEffect, useCallback } from 'react';
 import {Text, View, StyleSheet, StatusBar} from 'react-native';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
-import Registration from "./components/registration/Registration";
-import Login from "./components/login/Login";
-import LoginAndRegistration from "./components/logAndReg"
-<<<<<<< HEAD
-// import Navigation from "./navigation/navigation";
-import Filter from "./components/filter/Filter"
-import {FilterButtonGroup} from "./components/filter/FilterButtonGroup";
-=======
+import Authorization from "./components/authorization/Authorization";
 import Search from "./components/search/Search";
+import Main from "./components/main/Main";
+import LogAndReg from "./components/authorization/logAndReg"
+import Filter from "./components/filter/Filter";
+import Login from "./components/authorization/LoginScreen";
+import Navigator from "./navigation/navigation";
+import Navigation from "./navigation/navigation";
+import {NavigationContainer} from "@react-navigation/native";
 import Footer from "./components/footer";
-
->>>>>>> 61d7bb92b1b0e9b77725ad056d50f202ce43d5bc
+import ChangePassword from "./components/authorization/ChangePassword"
 
 export default function App() {
     const [fontsLoaded] = useFonts({
@@ -21,6 +20,7 @@ export default function App() {
         'inter-medium': require('./assets/fonts/Inter-Medium.ttf'),
         'roboto-light-i': require('./assets/fonts/Roboto-LightItalic.ttf'),
         'roboto-regular': require('./assets/fonts/Roboto-Regular.ttf'),
+        'roboto-medium': require('./assets/fonts/Roboto-Medium.ttf'),
         'VCR_OSD_MONO': require('./assets/fonts/VCR_OSD_MONO_1.001.ttf'),
         'inter-regular': require('./assets/fonts/Inter-Regular.otf')
     });
@@ -46,15 +46,7 @@ export default function App() {
 
     return (
           <View style={styles.container} onLayout={onLayoutRootView}>
-<<<<<<< HEAD
-              {/*<LoginAndRegistration/>*/}
-              <Filter/>
-=======
-              <View style={{flex: 12.5}}><LoginAndRegistration/></View>
-              <View style={{flex: 1}}>
-                  <Footer/>
-              </View>
->>>>>>> 61d7bb92b1b0e9b77725ad056d50f202ce43d5bc
+              <ChangePassword/>
           </View>
       );
 }

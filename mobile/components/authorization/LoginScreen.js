@@ -4,19 +4,10 @@ import React, {useRef} from 'react';
 import LeftArrow from '../.././assets/images/login/Arrow 4.svg';
 import Mark from '../.././assets/images/login/xMark.svg';
 import DecorLogin from '../.././assets/images/login/Login Decor Thing.svg';
-<<<<<<< HEAD
-import Footer from "../footer"
-=======
-import Registration from "../registration/Registration";
->>>>>>> 61d7bb92b1b0e9b77725ad056d50f202ce43d5bc
 
-
-export default function Login({navigation}) {
-    const pressHandler = () => {
-
-    }
-
+export default function Login({ navigation }) {
     return (
+
         <View style={{flex: 1}}>
             <Video
                 source={require('../.././assets/video/background.mp4')}
@@ -29,13 +20,17 @@ export default function Login({navigation}) {
 
             </View>
             <View style={{flex: 1, justifyContent: 'center'}}>
-                <View>
-                    <Text style={styles.signIn}>
-                        SWIPE TO SIGN-IN
-                    </Text>
-                    <LeftArrow style={styles.arrow}/>
+                <View >
+                    <Pressable onPress={() => navigation.navigate('Registration')}>
+                        <Text style={styles.signIn}>
+                            SWIPE TO SIGN-IN
+                        </Text>
+                        <LeftArrow style={styles.arrow}/>
+                    </Pressable>
+                    <Pressable onPress={() => navigation.navigate('ChangePassword')}>
+                        <Mark style={styles.xMark}/>
+                    </Pressable>
                 </View>
-                <Mark style={styles.xMark}/>
             </View>
             <DecorLogin style={styles.loginThing}/>
             <View style={styles.main}>
@@ -70,6 +65,7 @@ const styles = StyleSheet.create({
         left: '3%',
         position: 'absolute',
         borderBottomColor: 'black',
+        bottom: '1%',
         elevation: 5,
         shadowColor: '#000',
         shadowOffset: {width: 2, height: 2},

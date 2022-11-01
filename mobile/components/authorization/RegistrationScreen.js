@@ -61,10 +61,10 @@ export default function Registration({ navigation }) {
                 alignItems: 'center',
                 flexDirection: 'row'
             }}>
-                <Pressable style={{flex: 1}}>
-                    <Christ style={{left: '20%'}}></Christ>
+                <Pressable style={{flex: 1}} onPress={() => navigation.navigate('Search')}>
+                    <Christ style={{left: '6%'}}></Christ>
                 </Pressable>
-                <Pressable style={{flex: 1, flexDirection: 'row'}}>
+                <Pressable style={{flex: 1, flexDirection: 'row'}}  onPress={() => navigation.navigate('Login')}>
                     <Arrow style={{flex: 1, right: '15%', top: '1%'}}></Arrow>
                     <Text style={styles.loginText}>SWIPE TO LOGIN-IN</Text>
                 </Pressable>
