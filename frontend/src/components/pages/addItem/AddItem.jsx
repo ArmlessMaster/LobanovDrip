@@ -9,22 +9,10 @@ import makeAnimated from 'react-select/animated';
 
 export const AddItem = () => {
   const animatedComponents = makeAnimated();
-  const colourOptions = [
-    { value: 'black', label: 'Black'},
-    { value: 'White', label: 'White'},
-    { value: 'Red', label: 'Red'},
-    { value: 'Blue', label: 'Blue'},
-    { value: 'Grey', label: 'Grey'},
-    { value: 'Green', label: 'Green'},
-    { value: 'Yellow', label: 'Yellow'},
-  ];
-
 
   const auth = useContext(AuthContext);
 
-  const { loading, requestWithFiles, request } = useHttp();
-
-
+  const { loading, request } = useHttp();
 
 
   const [preview, setPreview] = useState([]);
@@ -40,7 +28,8 @@ export const AddItem = () => {
   const [previewGifCollection, setPreviewGifCollection] = useState(null);
   const [gifCollection, setGifCollection] = useState(null);
 
-  const [Collection, setCollection] = useState(null)
+  const [collection, setCollection] = useState(null)
+  
 
   const [clothesData, setClothesData] = useState({
     name: "",
@@ -54,10 +43,7 @@ export const AddItem = () => {
     collection_id: "",
     sale: 0,
     company: "",
-    clothesCount: [{
-      size: "xs",
-      count: 0
-    }],
+    clothesCount: [{size: "XS", count: 0}, {size: "S", count: 0}, {size: "M", count: 0}, {size: "L", count: 0}, {size: "XL", count: 0}, {size: "XXL", count: 0}, {size: "UN", count: 0}] 
   });
 
   const [collectionData, setCollectionsData] = useState({
@@ -65,22 +51,34 @@ export const AddItem = () => {
     description: ""
   });
 
-  
+
 
   const changeHandlerItem = (event) => {
-    
-    setClothesData({ ...clothesData, [event.target.name]: event.target.value});
+
+    setClothesData((prevState) => (
+      event.target.id === "clothesCount" ?
+      {
+        ...clothesData,
+      clothesCount: prevState.clothesCount.map((obj) =>
+        obj.size === event.target.name
+          ? Object.assign(obj, { count: parseInt(event.target.value) })
+          : obj
+      ),
+    } : {...clothesData, [event.target.name]: event.target.value}
+    ));
   };
+
 
   const changeHandlerItemCollection = (event) => {
     
     setCollectionsData({ ...collectionData, [event.target.name]: event.target.value});
   };
 
+
   
   const createItemCloth = async () => {
     try {
-      //setImages((prevState) => [...prevState, gif]);
+      
       await request(
         "/api/clothes/create",
         "POST",
@@ -101,8 +99,7 @@ export const AddItem = () => {
       
       imagesArray.push(imagesCollection);
       imagesArray.push(gifCollection);
-
-      await request(
+      const data = await request(
         "/api/collection/create",
         "POST",
         { ...collectionData },
@@ -110,11 +107,15 @@ export const AddItem = () => {
         { Authorization: `Bearer ${auth.token}` }
       );
       // NotificationManager.success('Authorization success', 'Glad to see you!');
+      const newElement = data.collection;
+      collection.push(newElement);
+      setCollection(collection);
+      console.log(collection);
     } catch (e) {
       // NotificationManager.error('Error Authorization', 'Wrong login or password!');
     }
   };
-
+  
 
   const getBase64 = (file) =>
     new Promise((resolve, reject) => {
@@ -125,10 +126,6 @@ export const AddItem = () => {
 
       reader.onerror = (error) => reject(error);
   });
-
-
-
-
 
 
   const handleChange = async (e) => {
@@ -143,6 +140,20 @@ export const AddItem = () => {
       //
     }
   };
+  const handleChangeTypes = (option) =>{
+    setClothesData({ ...clothesData, type: option.value });
+  }
+  const handleChangeColors = (options) => {
+    let array = [];
+    options.map(o => 
+      array.push(o.value)
+    );
+    setClothesData({...clothesData, "color": array}); 
+  }
+
+  const handleChangeCollections = (option) => {
+    setClothesData({...clothesData, "collection_id": option._id});
+  }
 
   const handleChangeGif = async (e) => {
       const newImage = e.target.files[0];
@@ -170,11 +181,31 @@ export const AddItem = () => {
       setGifCollection(newImage);
   };
 
-  const ababa = []
+  const colourOptions = [
+    { value: 'Black', label: 'Black'},
+    { value: 'White', label: 'White'},
+    { value: 'Red', label: 'Red'},
+    { value: 'Blue', label: 'Blue'},
+    { value: 'Grey', label: 'Grey'},
+    { value: 'Green', label: 'Green'},
+    { value: 'Yellow', label: 'Yellow'},
+  ];
+  const typeOptions = [
+    { value: "T-Shirt", label: "T-Shirt" },
+    { value: "Hoodie", label: "Hoodie" },
+    { value: "Pants", label: "Pants" },
+    { value: "Backpack", label: "Backpack" },
+    { value: "Case", label: "Case" },
+    { value: "Sweetshirt", label: "Sweetshirt" },
+  ];
+  const [hasLoaded, setHasLoaded] = useState();
   const fetchCollections = useCallback(async () => {
     try {
-        const fetched = await request('/api/collection', 'GET', null);
-          setCollection(fetched);
+        const fetched = await request('/api/collection', 'GET', null).then((res) => {
+          setCollection(res.collections);
+        });
+        setHasLoaded(true);
+
       } catch (e) {
       }
     }, [request]);
@@ -182,8 +213,8 @@ export const AddItem = () => {
     useEffect(() => {
       fetchCollections();
     }, [fetchCollections]);
-  console.log(Collection);
-  return (
+
+  return hasLoaded ?  (
     <section className="AddItem">
       <video autoPlay loop muted>
         <source src={BackgroundVideo} type="video/mp4" />
@@ -211,20 +242,25 @@ export const AddItem = () => {
           </div>
 
           <div className="input-flex">
+    
             <Select
-              defaultValue={[colourOptions[2], colourOptions[3]]}
-              isMulti
+              isMulti={true}
               name="colors"
               options={colourOptions}
               className="my-react-select-container"
               classNamePrefix="my-react-select"
-              components={animatedComponents}/>
+              components={animatedComponents}
+              onChange={handleChangeColors}/>
+
             <Select
               name="collection"
-              options={colourOptions}
+              options={collection}
+              getOptionLabel={(option) => option.name}
+              getOptionValue={(option) => option._id}
               className="my-react-select-container"
               classNamePrefix="my-react-select"
-              components={animatedComponents}/>
+              components={animatedComponents}
+              onChange={handleChangeCollections}/>
           </div>
 
           <div className="input-flex">
@@ -270,51 +306,69 @@ export const AddItem = () => {
               onChange={changeHandlerItem}
               type="text"
               placeholder="Company"/>
+            <Select
+              isMulti={false}
+              name="type"
+              options={typeOptions}
+              className="my-react-select-container"
+              classNamePrefix="my-react-select"
+              components={animatedComponents}
+              onChange={handleChangeTypes}
+            />
+
           </div>
           <div className="input-flex">
             <PixelInput
-              id="xs"
+              onChange={changeHandlerItem}
+              id="clothesCount"
               name="xs"
               type="text"
               placeholder="XS"
-              className="little"/>
+              className="little"
+            />
             <PixelInput
-              id="s"
+              onChange={changeHandlerItem}
+              id="clothesCount"
               name="s"
               type="text"
               placeholder="S"
               className="little"
             />
             <PixelInput
-              id="m"
+              onChange={changeHandlerItem}
+              id="clothesCount"
               name="m"
               type="text"
               placeholder="M"
               className="little"
             />
             <PixelInput
-              id="l"
+              onChange={changeHandlerItem}
+              id="clothesCount"
               name="l"
               type="text"
               placeholder="L"
               className="little"
             />
             <PixelInput
-              id="xl"
+              onChange={changeHandlerItem}
+              id="clothesCount"
               name="xl"
               type="text"
               placeholder="XL"
               className="little"
             />
             <PixelInput
-              id="xxl"
+              onChange={changeHandlerItem}
+              id="clothesCount"
               name="xxl"
               type="text"
               placeholder="XXL"
               className="little"
             />
             <PixelInput
-              id="un"
+              onChange={changeHandlerItem}
+              id="clothesCount"
               name="un"
               type="text"
               placeholder="UN"
@@ -455,5 +509,5 @@ export const AddItem = () => {
         </div>
       </div>
     </section>
-  );
+  ) : <div>123</div>;
 };
