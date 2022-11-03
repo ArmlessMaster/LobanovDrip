@@ -262,8 +262,8 @@ class ClothesService {
 
     public async find(props: Props): Promise<Clothes | Array<Clothes> | Error> {
         try {
-            if (!props.limit) {
-                props.limit = 0;
+            if (props.fullTextSearch && props.name) {
+                props.name = {$regex: new RegExp(props.name), $options: "i"};
             }
             const clothes = await this.clothes
                 .find(props, null, { sort: { createdAt: -1 } })
@@ -272,6 +272,8 @@ class ClothesService {
                     path: 'collection_id',
                     populate: { path: '_id' },
                 });
+
+                
             if (!clothes) {
                 throw new Error('Unable to find clothes');
             }

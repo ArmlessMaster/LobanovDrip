@@ -10,7 +10,7 @@
     "build": "tsc",
     "postinstall": "npm run build",
     "frontend": "cd ../frontend && npm run start",
-    "dev1": "concurrently \"npm run dev\" \"npm run frontend\""
+    "developer": "concurrently \"npm run dev\" \"npm run frontend\""
   },
   "keywords": [],
   "author": "",

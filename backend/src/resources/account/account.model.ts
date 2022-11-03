@@ -47,7 +47,7 @@ AccountSchema.pre<Account>('findOneAndUpdate', async function (this) {
     const update: any = { ...this.getUpdate() };
     if (update.password) {
         update.password = await bcrypt.hash(update.password, 10);
-        this.setUpdate(update);
+        this.setUpdate(update)
     }
 });
 
