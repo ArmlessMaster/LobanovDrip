@@ -82,11 +82,13 @@ class CollectionController implements Controller {
         next: NextFunction
     ): Promise<Response | void> => {
         try {
-            const { _id, name, images, description } = req.body;
+            const { _id, name, imagesUrls, gifUrl, images, description } = req.body;
 
             const collection = await this.CollectionService.update(
                 _id,
                 name,
+                imagesUrls,
+                gifUrl,
                 images,
                 description
             );

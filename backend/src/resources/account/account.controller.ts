@@ -38,6 +38,12 @@ class AccountController implements Controller {
             authenticated,
             this.delete
         );
+        this.router.put(
+            `${this.path}/update/password`,
+            validationMiddleware(validate.updatePassword),
+            authenticated,
+            this.updatePassword
+        );
         this.router.get(`${this.path}`, authenticated, this.getAccount);
     }
 
@@ -94,6 +100,27 @@ class AccountController implements Controller {
                 phone,
                 role,
                 adress
+            );
+
+            res.status(200).json({ account });
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
+        }
+    };
+
+    private updatePassword = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<Response | void> => {
+        try {
+            const { _id, new_password, password } =
+                req.body;
+
+            const account = await this.AccountService.updatePassword(
+                _id,
+                new_password, 
+                password
             );
 
             res.status(200).json({ account });

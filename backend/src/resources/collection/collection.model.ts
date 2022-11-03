@@ -6,8 +6,8 @@ const CollectionSchema = new Schema(
         name: {
             type: String,
         },
-        imageUrl: {
-            type: String,
+        imagesUrls: {
+            type: Array<String>,
         },
         gifUrl: {
             type: String,

@@ -93,6 +93,42 @@ class AccountService {
     }
 
     /**
+     * Attempt to update account password
+     */
+
+    public async updatePassword(
+        _id: Schema.Types.ObjectId,
+        new_password: string,
+        password: string
+    ): Promise<Account | Error> {
+        try {
+            const acc = await this.account.findOne({ _id });
+
+            if (!acc) {
+                throw new Error('Unable to find account with that id');
+            }
+
+            if (await acc.isValidPassword(password)) {
+                const account = await this.account.findByIdAndUpdate(
+                    _id,
+                    { password: new_password },
+                    { new: true }
+                );
+
+                if (!account) {
+                    throw new Error('Unable to update account with that id');
+                }
+
+                return account;
+            } else {
+                throw new Error('Wrong credentials given');
+            }
+        } catch (error) {
+            throw new Error('Unable to update account');
+        }
+    }
+
+    /**
      * Attempt to delete account
      */
 
