@@ -1,34 +1,49 @@
 import "./Store.scss";
 import {React, useCallback, useState, useEffect} from "react";
-import { ItemModule } from "../../layout/index";
-import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader  
-import { Carousel } from 'react-responsive-carousel';  
-import {test} from "../../../images"
+import { ItemModule, CursorElement } from "../../layout/index";
 import { useHttp } from "../../../hooks/http.hook";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, Pagination, Navigation } from "swiper";
+import { motion } from "framer-motion"
 
 
+import "swiper/css";
+import "swiper/css/pagination";
 
-export const Store = () => {
-  const [clothesData, setClothesData] = useState({
-    type: ""
-  });
 
-  const [hasLoaded, setHasLoaded] = useState();
-  const [visible, setVisible] = useState(15);
+const Store = () => {
+
+  const [hasLoaded, setHasLoaded] = useState(false);
 
   const [clothes, setClothes] = useState([]);
-  const { loading, request } = useHttp();
+  const [collection, setCollection] = useState([]);
+  const { request } = useHttp();
   
   const fetchClothes = useCallback(async () => {
     try {
-        const fetched = await request('/api/clothes/findByType', 'GET',  { type: 'T-Shirt', limit: 3})
-        setClothes(fetched);
+        const allfetched = [];
+        await request("/api/clothes/find?type=T-Shirt&limit=3")
+        .then((res) => {
+          allfetched.push(res.clothes);
+        })
+        .then(async () => {
+          await request("/api/clothes/find?type=Hoodie&limit=3").then((res) => {
+            allfetched.push(res.clothes);
+          });
+        })
+        .then(async () => {
+          await request("/api/clothes/find?type=Sweatshirt&limit=3")
+            .then((res) => {
+              allfetched.push(res.clothes);
+              setClothes([].concat(...allfetched))
+            })
+        });
 
-        setHasLoaded(true);
+        await request("/api/collection").then((res) => {
+          setCollection(res.collections);
+        }).then(setHasLoaded(true));
       } 
-    catch (e) {
-
-      }
+    catch (e) {}
     }, [request]);
     
     useEffect(() => {
@@ -40,41 +55,63 @@ export const Store = () => {
       sizeArr.forEach((element) => (element.count > 0 ? size += element.size + " " : ""));
       return size;
     }
+    
+    const [mousePos, setMousePos] = useState({});
 
-    console.log(clothes);
+    useEffect(() => {
+      const handleMouseMove = (event) => {
+        setMousePos({ x: event.clientX, y: event.clientY });
+      };
+  
+      window.addEventListener('mousemove', handleMouseMove);
+  
+      return () => {
+        window.removeEventListener(
+          'mousemove',
+          handleMouseMove
+        );
+      };
+    }, []);
+
   return hasLoaded ? (
 
     <section className='Store'>
+
+      {/* <motion.div   animate={{x: mousePos.x, y: mousePos.y,scale: 1,rotate: 0}}className="store-gif"><img src={collection[1].gifUrl}/></motion.div> */}
       <div className="store__collection-carusel">
-        <div className="store__collection-carusel_wrapper">
-          <Carousel autoPlay infiniteLoop showThumbs={false} interval="3000" emulateTouch >  
-            <div className="store__collection-carusel_element">  
-                <img src={test} />  
-            </div>  
-            <div className="store__collection-carusel_element">  
-                <img src={test}/>  
-            </div>  
-            <div className="store__collection-carusel_element">  
-                <img src={test } />  
-            </div>  
-          </Carousel>  
+        <div className="store__collection-carusel_wrapper"> 
+          <Swiper spaceBetween={1} centeredSlides={true} loop={true} autoplay={{delay: 4000, disableOnInteraction: false, }} speed={1600} pagination={{clickable: true,}} navigation={true} modules={[Autoplay, Pagination, Navigation]}>
+            {collection.map((item, index) => {
+              return(<SwiperSlide><div className="store__collection__img-resize-wrapper"><img className="store__collection-carusel_element" src={item.imagesUrls[1]}/><img className="store__collection-element-label" src={item.imagesUrls[0]}/></div></SwiperSlide>) 
+            })}
+          </Swiper>
         </div>
       </div>
       <div className="store-item-carusel">
         <div className="store__label">LOBANOV<span>EXCLUSIVE</span></div>
+        <div className="store-item-carusel-flex" >
+        <Swiper  slidesPerView={3} spaceBetween={50}   speed={1600} pagination={{clickable: true,}} navigation={true}  grid={{rows: 1,}} modules={[Autoplay, Pagination, Navigation]}>
+        
+          {clothes.map((cloth, index) => {
+              return( <SwiperSlide><ItemModule class="high" onMouseEnter={console.log("ababa")} text={cloth.name} price={cloth.price + "₴"}  key={cloth._id} img={cloth.imagesUrls[0]} sizes={sizeUpload(cloth.clothesCount)}/></SwiperSlide>) 
+            })}
+         </Swiper>
+         </div>
       </div>
       <div className="store-item-grid">
         <div className="store__label">LOBANOV<span>NEW THINGS</span></div>
         <div className="store-item-flex_center">
           <div className="store-item-grid_wrapper"> 
-          {clothes.clothes.slice(0, visible).map((cloth, index) => {
+          {clothes.map((cloth, index) => {
             return(<ItemModule class="high" text={cloth.name} price={cloth.price + "₴"}  key={cloth._id} img={cloth.imagesUrls[0]} sizes={sizeUpload(cloth.clothesCount)}/>) 
           })}
           </div>
         </div>
           {/* cloth.clothesCount.forEach(element => (element.count > 0 ? element.size : ""))*/}
       </div>
+      <CursorElement/>
     </section>
   ) : <div className="ababa">ababa</div>
 }
 
+export default Store;

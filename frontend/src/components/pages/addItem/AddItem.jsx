@@ -4,16 +4,15 @@ import { BackgroundVideo } from "../../../images";
 import { PixelBtn, PixelInput, Uploader } from "../../layout/index";
 import { useHttp } from "../../../hooks/http.hook";
 import { AuthContext } from "../../../context/AuthContext";
-import Select from 'react-select';
-import makeAnimated from 'react-select/animated';
+import Select from "react-select";
+import makeAnimated from "react-select/animated";
 
-export const AddItem = () => {
+const AddItem = () => {
   const animatedComponents = makeAnimated();
 
   const auth = useContext(AuthContext);
 
   const { loading, request } = useHttp();
-
 
   const [preview, setPreview] = useState([]);
   const [images, setImages] = useState([]);
@@ -21,15 +20,13 @@ export const AddItem = () => {
   const [previewGif, setPreviewGif] = useState();
   const [gif, setGif] = useState();
 
-
-  const [previewCollection, setPreviewCollection] = useState(null);
-  const [imagesCollection, setImagesCollection] = useState(null);
+  const [previewCollection, setPreviewCollection] = useState([]);
+  const [imagesCollection, setImagesCollection] = useState([]);
 
   const [previewGifCollection, setPreviewGifCollection] = useState(null);
   const [gifCollection, setGifCollection] = useState(null);
 
-  const [collection, setCollection] = useState(null)
-  
+  const [collection, setCollection] = useState(null);
 
   const [clothesData, setClothesData] = useState({
     name: "",
@@ -43,49 +40,63 @@ export const AddItem = () => {
     collection_id: "",
     sale: 0,
     company: "",
-    clothesCount: [{size: "XS", count: 0}, {size: "S", count: 0}, {size: "M", count: 0}, {size: "L", count: 0}, {size: "XL", count: 0}, {size: "XXL", count: 0}, {size: "UN", count: 0}] 
+    clothesCount: [{size: "xs", count: 0,},{ size: "s",count: 0,},
+      {
+        size: "m",
+        count: 0,
+      },
+      {
+        size: "l",
+        count: 0,
+      },
+      {
+        size: "xl",
+        count: 0,
+      },
+      {
+        size: "xxl",
+        count: 0,
+      },
+      {
+        size: "un",
+        count: 0,
+      },
+    ],
   });
 
   const [collectionData, setCollectionsData] = useState({
     name: "",
-    description: ""
+    description: "",
   });
 
-
-
   const changeHandlerItem = (event) => {
-
-    setClothesData((prevState) => (
-      event.target.id === "clothesCount" ?
-      {
-        ...clothesData,
-      clothesCount: prevState.clothesCount.map((obj) =>
-        obj.size === event.target.name
-          ? Object.assign(obj, { count: parseInt(event.target.value) })
-          : obj
-      ),
-    } : {...clothesData, [event.target.name]: event.target.value}
-    ));
+    setClothesData((prevState) =>
+      event.target.id === "clothesCount"
+        ? {
+            ...clothesData,
+            clothesCount: prevState.clothesCount.map((obj) =>
+              obj.size === event.target.name
+                ? Object.assign(obj, { count: parseInt(event.target.value) })
+                : obj
+            ),
+          }
+        : { ...clothesData, [event.target.name]: event.target.value }
+    );
   };
-
 
   const changeHandlerItemCollection = (event) => {
-    
-    setCollectionsData({ ...collectionData, [event.target.name]: event.target.value});
+    setCollectionsData({
+      ...collectionData,
+      [event.target.name]: event.target.value,
+    });
   };
 
-
-  
   const createItemCloth = async () => {
     try {
-      
-      await request(
-        "/api/clothes/create",
-        "POST",
-        { ...clothesData },
-        images,
-        { Authorization: `Bearer ${auth.token}` }
-      );
+      //setImages((prevState) => [...prevState, gif]);
+      await request("/api/clothes/create", "POST", { ...clothesData }, images, {
+        Authorization: `Bearer ${auth.token}`,
+      });
 
       // NotificationManager.success('Authorization success', 'Glad to see you!');
     } catch (e) {
@@ -96,9 +107,10 @@ export const AddItem = () => {
   const createItemCollection = async () => {
     try {
       const imagesArray = [];
-      
+
       imagesArray.push(imagesCollection);
       imagesArray.push(gifCollection);
+
       const data = await request(
         "/api/collection/create",
         "POST",
@@ -106,16 +118,14 @@ export const AddItem = () => {
         imagesArray,
         { Authorization: `Bearer ${auth.token}` }
       );
-      // NotificationManager.success('Authorization success', 'Glad to see you!');
       const newElement = data.collection;
       collection.push(newElement);
       setCollection(collection);
-      console.log(collection);
+      // NotificationManager.success('Authorization success', 'Glad to see you!');
     } catch (e) {
       // NotificationManager.error('Error Authorization', 'Wrong login or password!');
     }
   };
-  
 
   const getBase64 = (file) =>
     new Promise((resolve, reject) => {
@@ -125,8 +135,7 @@ export const AddItem = () => {
       reader.onload = () => resolve(reader.result);
 
       reader.onerror = (error) => reject(error);
-  });
-
+    });
 
   const handleChange = async (e) => {
     for (let i = 0; i < e.target.files.length; i++) {
@@ -140,81 +149,84 @@ export const AddItem = () => {
       //
     }
   };
-  const handleChangeTypes = (option) =>{
-    setClothesData({ ...clothesData, type: option.value });
-  }
-  const handleChangeColors = (options) => {
-    let array = [];
-    options.map(o => 
-      array.push(o.value)
-    );
-    setClothesData({...clothesData, "color": array}); 
-  }
-
-  const handleChangeCollections = (option) => {
-    setClothesData({...clothesData, "collection_id": option._id});
-  }
 
   const handleChangeGif = async (e) => {
-      const newImage = e.target.files[0];
-      newImage["id"] = Math.random();
-      let file_preview = await getBase64(newImage);
-      setPreviewGif(file_preview);
-      setGif(newImage);
-  };
-
-
-  const handleChangeCollection = async (e) => {
     const newImage = e.target.files[0];
     newImage["id"] = Math.random();
     let file_preview = await getBase64(newImage);
-    setPreviewCollection(file_preview);
-    setImagesCollection(newImage);
+    setPreviewGif(file_preview);
+    setGif(newImage);
+  };
+
+  const handleChangeCollection = async (e) => {
+    for (let i = 0; i < e.target.files.length; i++) {
+      const newImage = e.target.files[i];
+      newImage["id"] = Math.random();
+      setImagesCollection((prevState) => [...prevState, newImage]);
+
+      //
+      let file_preview = await getBase64(newImage);
+      setPreviewCollection((prevState) => [...prevState, file_preview]);
+      //
+    }
   };
 
   const handleChangeCollectionGif = async (e) => {
-  
-      const newImage = e.target.files[0];
-      newImage["id"] = Math.random();
-      let file_preview = await getBase64(newImage);
-      setPreviewGifCollection(file_preview);
-      setGifCollection(newImage);
+    const newImage = e.target.files[0];
+    newImage["id"] = Math.random();
+    let file_preview = await getBase64(newImage);
+    setPreviewGifCollection(file_preview);
+    setGifCollection(newImage);
   };
 
   const colourOptions = [
-    { value: 'Black', label: 'Black'},
-    { value: 'White', label: 'White'},
-    { value: 'Red', label: 'Red'},
-    { value: 'Blue', label: 'Blue'},
-    { value: 'Grey', label: 'Grey'},
-    { value: 'Green', label: 'Green'},
-    { value: 'Yellow', label: 'Yellow'},
+    { value: "black", label: "Black" },
+    { value: "White", label: "White" },
+    { value: "Red", label: "Red" },
+    { value: "Blue", label: "Blue" },
+    { value: "Grey", label: "Grey" },
+    { value: "Green", label: "Green" },
+    { value: "Yellow", label: "Yellow" },
   ];
+
   const typeOptions = [
     { value: "T-Shirt", label: "T-Shirt" },
     { value: "Hoodie", label: "Hoodie" },
     { value: "Pants", label: "Pants" },
     { value: "Backpack", label: "Backpack" },
     { value: "Case", label: "Case" },
-    { value: "Sweetshirt", label: "Sweetshirt" },
+    { value: "Sweatshirt", label: "Sweatshirt" },
   ];
+
   const [hasLoaded, setHasLoaded] = useState();
   const fetchCollections = useCallback(async () => {
     try {
-        const fetched = await request('/api/collection', 'GET', null).then((res) => {
-          setCollection(res.collections);
-        });
-        setHasLoaded(true);
+      await request("/api/collection", "GET", null).then((res) => {
+        setCollection(res.collections);
+      });
+      setHasLoaded(true);
+    } catch (e) {}
+  }, [request]);
 
-      } catch (e) {
-      }
-    }, [request]);
-  
-    useEffect(() => {
-      fetchCollections();
-    }, [fetchCollections]);
+  useEffect(() => {
+    fetchCollections();
+  }, [fetchCollections]);
 
-  return hasLoaded ?  (
+  const handleChangeColors = (options) => {
+    let array = [];
+    options.map((o) => array.push(o.value));
+    setClothesData({ ...clothesData, color: array });
+  };
+
+  const handleChangeCollections = (option) => {
+    setClothesData({ ...clothesData, collection_id: option._id });
+  };
+
+  const handleChangeTypes = (option) => {
+    setClothesData({ ...clothesData, type: option.value });
+  };
+
+  return hasLoaded ? (
     <section className="AddItem">
       <video autoPlay loop muted>
         <source src={BackgroundVideo} type="video/mp4" />
@@ -242,7 +254,6 @@ export const AddItem = () => {
           </div>
 
           <div className="input-flex">
-    
             <Select
               isMulti={true}
               name="colors"
@@ -250,7 +261,8 @@ export const AddItem = () => {
               className="my-react-select-container"
               classNamePrefix="my-react-select"
               components={animatedComponents}
-              onChange={handleChangeColors}/>
+              onChange={handleChangeColors}
+            />
 
             <Select
               name="collection"
@@ -260,7 +272,8 @@ export const AddItem = () => {
               className="my-react-select-container"
               classNamePrefix="my-react-select"
               components={animatedComponents}
-              onChange={handleChangeCollections}/>
+              onChange={handleChangeCollections}
+            />
           </div>
 
           <div className="input-flex">
@@ -289,14 +302,16 @@ export const AddItem = () => {
               value={clothesData.sex}
               onChange={changeHandlerItem}
               type="text"
-              placeholder="Sex"/>
+              placeholder="Sex"
+            />
             <PixelInput
               id="sale"
               name="sale"
               value={clothesData.sale}
               onChange={changeHandlerItem}
               type="text"
-              placeholder="Sale"/>
+              placeholder="Sale"
+            />
           </div>
           <div className="input-flex">
             <PixelInput
@@ -305,8 +320,11 @@ export const AddItem = () => {
               value={clothesData.company}
               onChange={changeHandlerItem}
               type="text"
-              placeholder="Company"/>
-            <Select
+              placeholder="Company"
+            />
+          </div>
+        <div className="input-flex">
+          <Select
               isMulti={false}
               name="type"
               options={typeOptions}
@@ -314,9 +332,7 @@ export const AddItem = () => {
               classNamePrefix="my-react-select"
               components={animatedComponents}
               onChange={handleChangeTypes}
-            />
-
-          </div>
+            /></div>
           <div className="input-flex">
             <PixelInput
               onChange={changeHandlerItem}
@@ -443,37 +459,62 @@ export const AddItem = () => {
           </div>
         </div>
         <div className="input__menu-clothes">
-          
           <div className="input-flex">
-            <PixelInput id="name" name="name" type="text" placeholder="Name" 
-             value={collectionData.name}
-             onChange={changeHandlerItemCollection}/>
+            <PixelInput
+              id="name"
+              name="name"
+              type="text"
+              placeholder="Name"
+              value={collectionData.name}
+              onChange={changeHandlerItemCollection}
+            />
           </div>
           <div className="input-flex">
-            <PixelInput id="description" name="description" type="text" placeholder="Description" 
-                         value={collectionData.description}
-                         onChange={changeHandlerItemCollection}/>
+            <PixelInput
+              id="description"
+              name="description"
+              type="text"
+              placeholder="Description"
+              value={collectionData.description}
+              onChange={changeHandlerItemCollection}
+            />
           </div>
 
           <div className="images__add">
-          <div className="images__add-form">
+            <div className="images__add-form">
               <Uploader handleChange={handleChangeCollection} />
               <div className="create-left-grid">
-                {previewCollection && (
-                  <div className="imgs-wrapper">
-                    <img src={previewCollection} alt="" className="" />
-                    <div className="button-create-wrapper">
-                      <button
-                        className="button-create-delete"
-                        onClick={() => {
-                          setPreviewCollection(null);
-                          setImagesCollection(null)
-                        }}>
-                        X
-                      </button>
+              {previewCollection.map((item) => {
+                  return (
+                    <div className="imgs-wrapper">
+                      <div className="imgs-wrapper-flex">
+                        <img src={`${item}`} alt="123" />
+                      </div>
+                      <div className="imgs-wrapper-flex">
+                        <div className="button-create-wrapper">
+                          <button
+                            className="button-create-delete"
+                            onClick={() => {
+                              let x = 0;
+                              for (let i = 0; i < previewCollection.length; i++) {
+                                if (previewCollection[i] === item) {
+                                  break;
+                                }
+                                x++;
+                              }
+                              setPreviewCollection(
+                                previewCollection.filter((prev) => prev !== item)
+                              );
+                              imagesCollection.splice(x, 1);
+                            }}
+                          >
+                            X
+                          </button>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                )}
+                  );
+                })}
               </div>
             </div>
             <div className="images__add-form">
@@ -488,26 +529,30 @@ export const AddItem = () => {
                         onClick={() => {
                           setPreviewGifCollection(null);
                           setGifCollection(null);
-                        }}>
+                        }}
+                      >
                         X
                       </button>
                     </div>
                   </div>
                 )}
               </div>
-            </div>         
-          </div>              
-               
-
-
+            </div>
+          </div>
 
           <div className="input-flex">
-            <PixelBtn text="ENTER"              
-            disabled={loading}
-            onClick={createItemCollection} />
+            <PixelBtn
+              text="ENTER"
+              disabled={loading}
+              onClick={createItemCollection}
+            />
           </div>
         </div>
       </div>
     </section>
-  ) : <div>123</div>;
+  ) : (
+    <div>123</div>
+  );
 };
+
+export default AddItem;

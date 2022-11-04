@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import {NotificationContainer, NotificationManager} from 'react-notifications';
 import './test.scss';
 
+
 const variantsInputs = {
   open: { opacity: 1, y: "-8vw" },
   closed: { opacity: 1, y: "20vw" },
@@ -38,9 +39,8 @@ const decorAnimation = {
 }
 
 
-export const Authorization = () => {
+const Authorization = () => {
 
-  
   const [isOpen, setIsOpen] = useState(false);
 
   const auth = useContext(AuthContext);
@@ -84,24 +84,24 @@ export const Authorization = () => {
 
   const loginHandler = async () => {
     try {
-        const data = await request('/api/account/login', 'POST', { ...formLogin });
-        auth.login(data.token);
-        NotificationManager.success('Authorization success', 'Glad to see you!');
-    } catch (e) {
-        console.log('Unable to login account');
-        NotificationManager.error('Error Authorization', 'Wrong login or password!');
-    }
+      const data = await request('/api/account/login', 'POST', { ...formLogin });
+      auth.login(data.token);
+      NotificationManager.success('Authorization success', 'Glad to see you!');
+  } catch (e) {
+      console.log('Unable to login account');
+      NotificationManager.error('Error Authorization', 'Wrong login or password!');
+  }
 }
 const registerHandler = async () => {
-    try {
-      formRegister.name = formRegisterName.name + " " + formRegisterName.surname;
-        const data = await request('/api/account/register', 'POST', { ...formRegister });
-        auth.login(data.token);
-        NotificationManager.success('Authorization success', 'Welcome to the club, buddy!');
-    } catch (e) {
-      console.log('Unable to create account');
-      NotificationManager.error('Error Registration', 'Сheck the entered data.');
-    }
+  try {
+    formRegister.name = formRegisterName.name + " " + formRegisterName.surname;
+      const data = await request('/api/account/register', 'POST', { ...formRegister });
+      auth.login(data.token);
+      NotificationManager.success('Authorization success', 'Welcome to the club, buddy!');
+  } catch (e) {
+    console.log('Unable to create account');
+    NotificationManager.error('Error Registration', 'Сheck the entered data.');
+  }
 }
 
 
@@ -267,3 +267,4 @@ const registerHandler = async () => {
   )
 }
 
+export default Authorization;

@@ -8,7 +8,6 @@ export const useHttp = () => {
     async (url, method = "GET", body = null, files = null, headers = {}) => {
       setLoading(true);
       try {
-
         const formData = new FormData();
         if (body && files) {
           body = JSON.stringify(body);
@@ -22,15 +21,13 @@ export const useHttp = () => {
           body = JSON.stringify(body);
           headers["Content-Type"] = "application/json";
         }
-        
         const response = await fetch(url, {
           method,
           body,
           headers,
         });
-        console.log(body);
+    
         const data = await response.json();
-
         if (!response.ok) {
           throw new Error(data.message || "Something went wrong");
         }

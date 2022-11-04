@@ -6,9 +6,11 @@ const ItemModuls = (props) => {
   return (
     <div className={"ItemModul " + props.class}>
       <img className="ItemModul-img" src={props.img} alt="" />
-      <p className="ItemModul-name">{props.text}</p>
-      <p className="ItemModul-sizes">{props.sizes}</p>
-      <p  className="ItemModul-prices">{props.price}</p>
+      <div>
+        <p className="ItemModul-name">{props.text}</p>
+        <p className="ItemModul-sizes">{props.sizes}</p>
+        <p  className="ItemModul-prices">{props.price}</p>
+      </div>
     </div>
   )
 }
