@@ -10,12 +10,16 @@ const register = Joi.object({
 
 const login = Joi.object({
     email: Joi.string().email().required(),
-
     password: Joi.string().required(),
 });
 
+const googleLogin = Joi.object({
+    email: Joi.string().email().required(),
+    passwordGoogle: Joi.string().min(6).required(),
+    name: Joi.string().required(),
+});
+
 const update = Joi.object({
-    _id: Joi.string().hex().length(24).required(),
     email: Joi.string().email(),
     password: Joi.string().min(6),
     name: Joi.string(),
@@ -26,14 +30,10 @@ const update = Joi.object({
     adress: Joi.string(),
 });
 
-const delete0 = Joi.object({
-    _id: Joi.string().hex().length(24).required(),
-});
-
 const updatePassword = Joi.object({
-    _id: Joi.string().hex().length(24).required(),
-    password: Joi.string().min(6),
-    new_password: Joi.string().min(6),
+    password: Joi.string().min(6).required(),
+    new_password: Joi.string().min(6).required(),
 });
 
-export default { register, login, update, delete0, updatePassword };
+
+export default { register, login, googleLogin, update, updatePassword };

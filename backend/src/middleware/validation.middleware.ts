@@ -19,11 +19,16 @@ function validationMiddleware(schema: Joi.Schema): RequestHandler {
                 data = JSON.parse(req.body.data);
                 data['images'] = req.files;
             }
+            
             else {
                 data = req.body;
             }
             if (!(Object.keys(req.query).length === 0)){  
                 data = req.query
+                if (data.size) {
+                    let size = data.size as string;
+                    data.size = size.split(',');
+                }
             }
             if (!(Object.keys(req.params).length === 0)){
                 data = req.params

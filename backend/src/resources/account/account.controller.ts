@@ -26,23 +26,27 @@ class AccountController implements Controller {
             validationMiddleware(validate.login),
             this.login
         );
+        this.router.post(
+            `${this.path}/google/login`,
+            validationMiddleware(validate.googleLogin),
+            this.googleLogin
+        );
         this.router.put(
             `${this.path}/update`,
             validationMiddleware(validate.update),
             authenticated,
             this.update
         );
-        this.router.delete(
-            `${this.path}/delete`,
-            validationMiddleware(validate.delete0),
-            authenticated,
-            this.delete
-        );
         this.router.put(
             `${this.path}/update/password`,
             validationMiddleware(validate.updatePassword),
             authenticated,
             this.updatePassword
+        );
+        this.router.delete(
+            `${this.path}/delete`,
+            authenticated,
+            this.delete
         );
         this.router.get(`${this.path}`, authenticated, this.getAccount);
     }
@@ -83,15 +87,31 @@ class AccountController implements Controller {
         }
     };
 
+    private googleLogin = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<Response | void> => {
+        try {
+            const { email, passwordGoogle, name } = req.body;
+
+            const token = await this.AccountService.googleLogin(email, passwordGoogle, name);
+
+            res.status(200).json({ token });
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
+        }
+    };
+
     private update = async (
         req: Request,
         res: Response,
         next: NextFunction
     ): Promise<Response | void> => {
         try {
-            const { _id, email, password, name, phone, role, adress } =
+            const { email, password, name, phone, role, adress } =
                 req.body;
-
+            const _id = req.account._id;
             const account = await this.AccountService.update(
                 _id,
                 email,
@@ -114,9 +134,9 @@ class AccountController implements Controller {
         next: NextFunction
     ): Promise<Response | void> => {
         try {
-            const { _id, new_password, password } =
+            const {new_password, password } =
                 req.body;
-
+            const _id = req.account._id;
             const account = await this.AccountService.updatePassword(
                 _id,
                 new_password, 
@@ -135,8 +155,7 @@ class AccountController implements Controller {
         next: NextFunction
     ): Promise<Response | void> => {
         try {
-            const { _id } = req.body;
-
+            const _id = req.account._id;
             const account = await this.AccountService.delete(_id);
 
             res.status(200).json({ account });

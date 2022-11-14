@@ -287,7 +287,7 @@ class ClothesService {
     /**
      * Attempt to filter clothes
      */
-    public async filter(
+     public async filter(
         type: string,
         from_price: number,
         to_price: number,
@@ -296,153 +296,29 @@ class ClothesService {
         try {
             let clothes = null;
 
-            if (size && from_price && to_price) {
-                clothes = await this.clothes
-                    .find(
-                        {
-                            type: type,
-                            $and: [
-                                { price: { $gte: from_price, $lt: to_price } },
-                                {
-                                    clothesCount: {
-                                        $elemMatch: {
-                                            size: { $in: size },
-                                            count: { $gt: 0 },
-                                        },
+            clothes = await this.clothes
+                .find(
+                    {
+                        type: type,
+                        $and: [
+                            { price: { $gte: from_price, $lt: to_price } },
+                            {
+                                clothesCount: {
+                                    $elemMatch: {
+                                        size: { $in: size },
+                                        count: { $gt: 0 },
                                     },
                                 },
-                            ],
-                        },
-                        null,
-                        { sort: { createdAt: -1 } }
-                    )
-                    .populate({
-                        path: 'collection_id',
-                        populate: { path: '_id' },
-                    });
-            } else if (from_price && to_price) {
-                clothes = await this.clothes
-                    .find(
-                        {
-                            type: type,
-                            $and: [
-                                { price: { $gte: from_price, $lt: to_price } },
-                            ],
-                        },
-                        null,
-                        { sort: { createdAt: -1 } }
-                    )
-                    .populate({
-                        path: 'collection_id',
-                        populate: { path: '_id' },
-                    });
-            } else if (size && to_price) {
-                clothes = await this.clothes
-                    .find(
-                        {
-                            type: type,
-                            $and: [
-                                { price: { $lt: to_price } },
-                                {
-                                    clothesCount: {
-                                        $elemMatch: {
-                                            size: { $in: size },
-                                            count: { $gt: 0 },
-                                        },
-                                    },
-                                },
-                            ],
-                        },
-                        null,
-                        { sort: { createdAt: -1 } }
-                    )
-                    .populate({
-                        path: 'collection_id',
-                        populate: { path: '_id' },
-                    });
-            } else if (from_price && size) {
-                clothes = await this.clothes
-                    .find(
-                        {
-                            type: type,
-                            $and: [
-                                { price: { $gte: from_price } },
-                                {
-                                    clothesCount: {
-                                        $elemMatch: {
-                                            size: { $in: size },
-                                            count: { $gt: 0 },
-                                        },
-                                    },
-                                },
-                            ],
-                        },
-                        null,
-                        { sort: { createdAt: -1 } }
-                    )
-                    .populate({
-                        path: 'collection_id',
-                        populate: { path: '_id' },
-                    });
-            } else if (to_price) {
-                clothes = await this.clothes
-                    .find(
-                        { type: type, $and: [{ price: { $lt: to_price } }] },
-                        null,
-                        { sort: { createdAt: -1 } }
-                    )
-                    .populate({
-                        path: 'collection_id',
-                        populate: { path: '_id' },
-                    });
-            } else if (from_price) {
-                clothes = await this.clothes
-                    .find(
-                        { type: type, $and: [{ price: { $gte: from_price } }] },
-                        null,
-                        { sort: { createdAt: -1 } }
-                    )
-                    .populate({
-                        path: 'collection_id',
-                        populate: { path: '_id' },
-                    });
-            } else if (size) {
-                clothes = await this.clothes
-                    .find(
-                        {
-                            type: type,
-                            $and: [
-                                {
-                                    clothesCount: {
-                                        $elemMatch: {
-                                            size: { $in: size },
-                                            count: { $gt: 0 },
-                                        },
-                                    },
-                                },
-                            ],
-                        },
-                        null,
-                        { sort: { createdAt: -1 } }
-                    )
-                    .populate({
-                        path: 'collection_id',
-                        populate: { path: '_id' },
-                    });
-            } else {
-                clothes = await this.clothes
-                    .find(
-                        {
-                            type: type,
-                        },
-                        null,
-                        { sort: { createdAt: -1 } }
-                    )
-                    .populate({
-                        path: 'collection_id',
-                        populate: { path: '_id' },
-                    });
-            }
+                            },
+                        ],
+                    },
+                    null,
+                    { sort: { createdAt: -1 } }
+                )
+                .populate({
+                    path: 'collection_id',
+                    populate: { path: '_id' },
+                });
 
             if (!clothes) {
                 throw new Error('Unable to find clothes by sample');

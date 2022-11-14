@@ -25,13 +25,25 @@ async function authenticatedMiddleware(
             return next(new HttpException(401, 'Unauthorised'));
         }
 
+        // const account = await AccountModel.findById(payload.id)
+        //     .select(['-password', '-passwordGoogle'])
+        //     .exec();
+        //     console.log(account?._id);
         const account = await AccountModel.findById(payload.id)
-            .select('-password')
             .exec();
+            console.log(account);
 
         if (!account) {
             return next(new HttpException(401, 'Unauthorised'));
         }
+//
+        if (account.password) {
+            account.password = "exist";
+        }
+        if (account.passwordGoogle) {
+            account.passwordGoogle = "exist";
+        }
+//
 
         req.account = account;
 

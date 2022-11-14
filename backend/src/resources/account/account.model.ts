@@ -13,6 +13,9 @@ const AccountSchema = new Schema(
         password: {
             type: String,
         },
+        passwordGoogle: {
+            type: String,
+        },
         name: {
             type: String,
         },
@@ -32,14 +35,17 @@ const AccountSchema = new Schema(
 );
 
 AccountSchema.pre<Account>('save', async function (next) {
-    if (!this.isModified('password')) {
+    if (!this.isModified('password') && !this.isModified('passwordGoogle')) {
         return next();
     }
-
-    const hash = await bcrypt.hash(this.password, 10);
-
-    this.password = hash;
-
+    if (this.password) {
+        const hash = await bcrypt.hash(this.password, 10);
+        this.password = hash;
+    }
+    if (this.passwordGoogle) {
+        const hash = await bcrypt.hash(this.passwordGoogle, 10);
+        this.passwordGoogle = hash;
+    }
     next();
 });
 
@@ -49,12 +55,22 @@ AccountSchema.pre<Account>('findOneAndUpdate', async function (this) {
         update.password = await bcrypt.hash(update.password, 10);
         this.setUpdate(update)
     }
+    if (update.passwordGoogle) {
+        update.passwordGoogle = await bcrypt.hash(update.passwordGoogle, 10);
+        this.setUpdate(update)
+    }
 });
 
 AccountSchema.methods.isValidPassword = async function (
     password: string
 ): Promise<Error | boolean> {
     return await bcrypt.compare(password, this.password);
+};
+
+AccountSchema.methods.isValidPasswordGoogle = async function (
+    passwordGoogle: string
+): Promise<Error | boolean> {
+    return await bcrypt.compare(passwordGoogle, this.passwordGoogle ? this.passwordGoogle : "");
 };
 
 export default model<Account>('Accounts', AccountSchema);
