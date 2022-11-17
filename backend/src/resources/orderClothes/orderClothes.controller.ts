@@ -4,11 +4,10 @@ import HttpException from '@/utils/exceptions/http.exception';
 import validationMiddleware from '@/middleware/validation.middleware';
 import validate from '@/resources/orderClothes/orderClothes.validation';
 import OrderClothesService from '@/resources/orderClothes/orderClothes.service';
-import OrderClothesModel from '@/resources/orderClothes/orderClothes.model';
 import authenticated from '@/middleware/authenticated.middleware';
 
 class OrderClothesController implements Controller {
-    public path = '/orderClothes';
+    public path = '/order-clothes';
     public router = Router();
     private OrderClothesService = new OrderClothesService();
 
@@ -35,10 +34,7 @@ class OrderClothesController implements Controller {
             authenticated,
             this.delete
         );
-        this.router.get(
-            `${this.path}`,
-            this.get
-        );
+        this.router.get(`${this.path}`, this.get);
         this.router.get(
             `${this.path}/find`,
             validationMiddleware(validate.find),
@@ -107,7 +103,6 @@ class OrderClothesController implements Controller {
         }
     };
 
-    
     private get = async (
         req: Request,
         res: Response,

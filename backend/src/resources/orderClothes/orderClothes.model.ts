@@ -20,6 +20,12 @@ const OrderClothesSchema = new Schema(
         color: {
             type: String,
         },
+        clothesPrice: {
+            type: Number,
+        },
+        clothesSale: {
+            type: Number,
+        },
     },
     { timestamps: true }
 );

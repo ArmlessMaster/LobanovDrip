@@ -14,11 +14,15 @@ const create = Joi.object({
             'completed'
         )
         .required(),
-    adress: Joi.string(),
+        region: Joi.string(),
+    city: Joi.string(),
+    novaposhta: Joi.string(),
     phone: Joi.string()
         .length(10)
         .pattern(/^[0-9]+$/),
-    name: Joi.string(),
+        name: Joi.string(),
+    surname: Joi.string(),
+    patronymic: Joi.string(),
     email: Joi.string().email(),
     invoice: Joi.string(),
     status_update: Joi.date(),
@@ -37,11 +41,15 @@ const update = Joi.object({
         'cancellation',
         'completed'
     ),
-    adress: Joi.string(),
+    region: Joi.string(),
+    city: Joi.string(),
+    novaposhta: Joi.string(),
     phone: Joi.string()
         .length(10)
         .pattern(/^[0-9]+$/),
-    name: Joi.string(),
+        name: Joi.string(),
+    surname: Joi.string(),
+    patronymic: Joi.string(),
     email: Joi.string().email(),
     invoice: Joi.string(),
     status_update: Joi.date(),
@@ -67,11 +75,15 @@ const find = Joi.object({
             'cancellation',
             'completed'
         ),
-    adress: Joi.string(),
+        region: Joi.string(),
+        city: Joi.string(),
+        novaposhta: Joi.string(),
     phone: Joi.string()
         .length(10)
         .pattern(/^[0-9]+$/),
-    name: Joi.string(),
+        name: Joi.string(),
+    surname: Joi.string(),
+    patronymic: Joi.string(),
     email: Joi.string().email(),
     invoice: Joi.string(),
     status_update: Joi.date(),
