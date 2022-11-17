@@ -1,24 +1,52 @@
-import React, {useState} from "react";
-import {StyleSheet, View, TouchableOpacity, Text, SafeAreaView, ScrollView, Pressable} from "react-native";
+import React, {useEffect, useState} from "react";
+import {StyleSheet, View, TouchableOpacity, Text, Pressable, TextInput, Button} from "react-native";
 
-export const SizeButtonGroup = ({buttons, doSomethingAfterClick}) => {
+export const SizeButtonGroup = ({buttons, available, multiple, sizeButtonsToFilter}) => {
 
-    const [clickedId, setClickedId] = useState(0)
+    const [clickedId, setClickedId] =  multiple ? useState(buttons) : useState([])
     const handleClick = (item, id) => {
         setClickedId(id)
-        doSomethingAfterClick(item)
     }
 
-    return (
+    const handleMultipleClick = (buttonLabel) => {
+        if (clickedId.indexOf(buttonLabel) === -1) {
+            setClickedId(clickedId => [...clickedId, buttonLabel]);
+        } else {
+            setClickedId(clickedId.filter(item => item !== buttonLabel))}
+    }
+
+    useEffect(() => {
+        if(sizeButtonsToFilter !== null){
+            sizeButtonsToFilter(clickedId)
+        }
+    }, [clickedId]);
+
+    return !multiple ? (
         <View style={{flex: 1, flexDirection: 'row'}}>
             {
                 buttons.map((buttonLabel, index) => {
                     return (
-                        <TouchableOpacity onPress={(item) => handleClick(item, index)} key={index} style={[
-                            index === clickedId ? styles.sizeBoxActive : styles.sizeBox
+                        <TouchableOpacity disabled={available==null ? false : !available[index]} onPress={(item) => handleClick(item, index)} key={index} style={[
+                            index === clickedId ? styles.sizeBoxActive : available==null || available[index] ? styles.sizeBox : styles.sizeBoxIsNotAvailable
                         ]}>
                             <Text style={[
-                                index === clickedId ? styles.sizeBoxTextActive : styles.sizeBoxText
+                                index === clickedId ? styles.sizeBoxTextActive : available==null || available[index] ? styles.sizeBoxText : styles.sizeBoxTextIsNotAvailable
+                            ]}>{buttonLabel}</Text>
+                        </TouchableOpacity>
+                    )
+                })
+            }
+        </View>
+    ) : (
+        <View style={{flex: 1, flexDirection: 'row'}}>
+            {
+                buttons.map((buttonLabel, index) => {
+                    return (
+                        <TouchableOpacity onPress={() => handleMultipleClick(buttonLabel)} key={index} style={[
+                            clickedId.indexOf(buttonLabel) !== -1 ? styles.sizeBoxActive : styles.sizeBox
+                        ]}>
+                            <Text style={[
+                                clickedId.indexOf(buttonLabel) !== -1 ? styles.sizeBoxTextActive :  styles.sizeBoxText
                             ]}>{buttonLabel}</Text>
                         </TouchableOpacity>
                     )
@@ -36,12 +64,13 @@ const styles = StyleSheet.create({
         width: '10%',
         alignItems: 'center',
         justifyContent: 'center',
-        marginHorizontal: '2%'
+        marginHorizontal: '2%',
     },
     sizeBoxText: {
         fontFamily: 'roboto-regular',
         fontStyle: 'normal',
         fontSize: 16,
+        color: 'black'
     },
     sizeBoxActive: {
         borderColor: 'black',
@@ -51,12 +80,27 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         marginHorizontal: '2%',
-        backgroundColor: 'black'
+        backgroundColor: 'black',
     },
     sizeBoxTextActive: {
         fontFamily: 'roboto-regular',
         fontStyle: 'normal',
         fontSize: 18,
         color: 'white'
+    },
+    sizeBoxIsNotAvailable: {
+        borderColor: '#C1B9B9',
+        borderWidth: 1,
+        borderStyle: 'solid',
+        width: '10%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginHorizontal: '2%'
+    },
+    sizeBoxTextIsNotAvailable: {
+        fontFamily: 'roboto-regular',
+        fontStyle: 'normal',
+        fontSize: 16,
+        color: '#C1B9B9'
     },
 })

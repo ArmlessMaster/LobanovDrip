@@ -1,31 +1,53 @@
-import React from 'react';
-import {Text, View, StyleSheet, Pressable, SafeAreaView, ScrollView} from 'react-native';
+import React, {useState} from 'react';
+import {Text, View, StyleSheet, Pressable, ScrollView} from 'react-native';
 import {FilterButtonGroup} from "./FilterButtonGroup";
 import {SizeButtonGroup} from "./SizeButtonGroup"
 import FilterSlider from "./FilterSlider";
 import Mark from "../../assets/images/login/xMark.svg"
+import SafeAreaView, {SafeAreaProvider} from "react-native-safe-area-view";
 
-const Filter = ({ navigation }) => {
-    const printButtonLabel = (item) => {
-        console.log(item)
+const Filter = ({navigation}) => {
+
+    const clothes = navigation.getParam('clothes')
+    const [sort, setSort] = useState('Price Ascending')
+    const [fromPrice, setFromPrice] = useState(0)
+    const [toPrice, setToPrice] = useState(navigation.getParam('max'))
+    const [sizes, setSizes] = useState(["xs", "s", "m", "l", "xl", "xxl", "un"])
+    const sliderToFilter = (sliderFromPrice, sliderToPrice) => {
+        setFromPrice(sliderFromPrice)
+        setToPrice(sliderToPrice)
     }
+    const sizeButtonsToFilter = (buttons) => {
+        const res = []
+        buttons.forEach(element => {
+            res.push(element)
+        })
+        setSizes(res)
+    }
+    const root = navigation.getParam('root')
+    const category = navigation.getParam('category')
+
+    const sortToFilter = (button) => {
+        setSort(button)
+    }
+
     return (
         <View style={styles.container}>
-            <View style={{backgroundColor: '#323232', flex: 0.5}}></View>
+            <View style={{flex: 0.5, backgroundColor: '#323232'}}>
+            </View>
             <View style={{
-                flex: 1, backgroundColor: '#323232', justifyContent: 'center',
+                flex: 1, backgroundColor: '#323232', justifyContent: 'space-between',
                 alignItems: 'center', flexDirection: 'row',
             }}>
-                <Pressable style={{left: '20%'}}>
-                    <Mark />
+                <Pressable style={{left: '40%'}} onPress={() => navigation.goBack()}>
+                    <Mark  />
                 </Pressable>
                 <Text style={{
-                    flex: 1,
+                    paddingEnd: '45%',
                     textAlign: 'center',
                     fontSize: 18,
                     fontFamily: 'roboto-regular',
                     color: 'white',
-                    right: '20%'
                 }}>
                     FILTER
                 </Text>
@@ -38,12 +60,13 @@ const Filter = ({ navigation }) => {
             </View>
             <View style={{flex: 0.25}}/>
             <View style={{flex: 0.5}}>
-                <SafeAreaView>
-                    <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-                        <FilterButtonGroup buttons={['Low-High price', 'High-Low price', 'From A to B', 'From B to A',
-                            'Newest']} doSomethingAfterClick={printButtonLabel}></FilterButtonGroup>
-                    </ScrollView>
-                </SafeAreaView>
+                <SafeAreaProvider>
+                    <SafeAreaView>
+                        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+                            <FilterButtonGroup buttons={['Price Ascending', 'Price Descending', 'Newest']} sortToFilter={sortToFilter}></FilterButtonGroup>
+                        </ScrollView>
+                    </SafeAreaView>
+                </SafeAreaProvider>
             </View>
             <View style={{flex: 0.5, alignItems: 'center'}}>
                 <View style={{
@@ -59,7 +82,7 @@ const Filter = ({ navigation }) => {
             </View>
             <View style={{flex: 0.75, alignItems: 'center'}}/>
             <View style={{flex: 0.5, flexDirection: 'column', bottom: '5%'}}>
-                <FilterSlider/>
+                <FilterSlider sliderToFilter={sliderToFilter} to={toPrice}/>
                 <View style={{flex: 0.5}}/>
             </View>
             <View style={{flex: 0.5, alignItems: 'center'}}>
@@ -76,22 +99,24 @@ const Filter = ({ navigation }) => {
             </View>
             <View style={{flex: 0.25}}/>
             <View style={{flex: 0.5}}>
-                <SafeAreaView style={{flex: 1, alignItems: 'center'}}>
-                    <SizeButtonGroup buttons={['XS', 'S', 'M', 'L', 'XL', 'XXL']}
-                                     doSomethingAfterClick={printButtonLabel}></SizeButtonGroup>
-                </SafeAreaView>
+                <SafeAreaProvider>
+                    <SafeAreaView style={{flex: 1, alignItems: 'center'}}>
+                        <SizeButtonGroup buttons={['XS', 'S', 'M', 'L', 'XL', 'XXL', 'UN']}
+                                         multiple={true} sizeButtonsToFilter={sizeButtonsToFilter}></SizeButtonGroup>
+                    </SafeAreaView>
+                </SafeAreaProvider>
             </View>
             <View style={{flex: 4.725}}/>
             <View style={{flex: 0.7, flexDirection: 'row'}}>
                 <View style={{flex: 1}}>
-                    <Pressable style={styles.accessButton}>
+                    <Pressable style={styles.accessButton} onPress={() => root===0 ? navigation.push("ItemsByCategory", {category: category, fromPrice: fromPrice, toPrice: toPrice, sizes: sizes, sort: sort}) : navigation.navigate("Search")}>
                         <Text style={styles.accessButtonText}>
                             Access
                         </Text>
                     </Pressable>
                 </View>
                 <View style={{flex: 1}}>
-                    <Pressable onPress={() => this._panel.hide()} style={styles.cancelButton}>
+                    <Pressable onPress={() => navigation.goBack()} style={styles.cancelButton}>
                         <Text style={styles.cancelButtonText}>
                             Cancel
                         </Text>
@@ -105,7 +130,7 @@ const Filter = ({ navigation }) => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
     },
     main: {
         flex: 11,

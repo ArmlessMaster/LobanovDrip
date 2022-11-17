@@ -1,5 +1,5 @@
-import {Pressable, StyleSheet, Text, TextInput, View} from "react-native";
-import React, {useState} from 'react';
+import {Alert, Pressable, StyleSheet, Text, TextInput, View} from "react-native";
+import React, {useContext, useState} from 'react';
 import ClothingCompanyJP from "../../assets/images/clothingCompanyJP.svg";
 import Kharkiv from "../../assets/images/KHARKIV.svg";
 import Scull from '../../assets/images/scull.svg';
@@ -8,9 +8,45 @@ import Arrow from '../../assets/images/Arrow 4.svg';
 import DecorJP from '../../assets/images/Decor Jpn.svg';
 import Decor from '../../assets/images/Registration Decor Thing.svg';
 import DecorBottom from '../../assets/images/Decor Thing.svg';
+import axios from "axios";
+import {AuthContext} from "../../context/AuthContext";
 
 
-export default function Registration({ navigation }) {
+export default function Registration({navigation}) {
+
+    const auth = useContext(AuthContext)
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [name, setName] = useState("");
+    const [surname, setSurname] = useState("");
+    const [repeatedPassword, setRepeatedPassword] = useState("");
+    const registerHandler = async () => {
+        try {
+            if (password === repeatedPassword) {
+                const response = await axios.post(
+                    `https://lobanovdriptest.herokuapp.com/api/account/register`,
+                    { email: `${email}`, password: `${password}`, name: `${name + " " + surname}` }
+                );
+                Alert.alert(
+                    'Success',
+                    'Registration completed successfully! Please, login in.',
+                    [
+                        {
+                            text: 'OK',
+                            onPress: () => navigation.push('Authorization')
+                        },
+                    ],
+                    {cancelable: false},
+                );
+                console.log("Success")
+            }
+            else {
+                Alert.alert("Wrong repeated password!")
+            }
+        } catch (e) {
+            Alert.alert("Error! Unable to register account")
+        }
+    }
 
     function first() {
         return (
@@ -33,17 +69,34 @@ export default function Registration({ navigation }) {
     function second() {
         return (
             <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-                <TextInput style={styles.input} placeholder="EMAIL"
-                           placeholderTextColor='white'></TextInput>
-                <TextInput style={styles.input} secureTextEntry={true} placeholder="PASSWORD"
-                           placeholderTextColor='white'></TextInput>
-                <TextInput style={styles.input} secureTextEntry={true} placeholder="REPEAT PASSWORD"
-                           placeholderTextColor='white'></TextInput>
-                <TextInput style={styles.input} placeholder="NAME"
-                           placeholderTextColor='white'></TextInput>
-                <TextInput style={styles.input} placeholder="SURNAME"
-                           placeholderTextColor='white'></TextInput>
-                <Pressable style={styles.button}>
+                <TextInput
+                    style={styles.input}
+                    placeholder="EMAIL"
+                    onChangeText={(value) => setEmail(value)}
+                    placeholderTextColor='white'/>
+                <TextInput
+                    style={styles.input}
+                    secureTextEntry={true}
+                    placeholder="PASSWORD"
+                    onChangeText={(value) => setPassword(value)}
+                    placeholderTextColor='white'/>
+                <TextInput
+                    style={styles.input}
+                    secureTextEntry={true}
+                    placeholder="REPEAT PASSWORD"
+                    onChangeText={(value) => setRepeatedPassword(value)}
+                    placeholderTextColor='white'/>
+                <TextInput
+                    style={styles.input}
+                    placeholder="NAME"
+                    onChangeText={(value) => setName(value)}
+                    placeholderTextColor='white'/>
+                <TextInput
+                    style={styles.input}
+                    placeholder="SURNAME"
+                    onChangeText={(value) => setSurname(value)}
+                    placeholderTextColor='white'/>
+                <Pressable style={styles.button} onPress={registerHandler}>
                     <Text style={styles.buttonText}>SIGN-IN</Text>
                 </Pressable>
             </View>
@@ -61,12 +114,12 @@ export default function Registration({ navigation }) {
                 alignItems: 'center',
                 flexDirection: 'row'
             }}>
-                <Pressable style={{flex: 1}} onPress={() => navigation.navigate('Search')}>
+                <Pressable style={{flex: 1}} onPress={() => navigation.navigate("SwipeStore")}>
                     <Christ style={{left: '6%'}}></Christ>
                 </Pressable>
-                <Pressable style={{flex: 1, flexDirection: 'row'}}  onPress={() => navigation.navigate('Login')}>
-                    <Arrow style={{flex: 1, right: '15%', top: '1%'}}></Arrow>
-                    <Text style={styles.loginText}>SWIPE TO LOGIN-IN</Text>
+                <Pressable style={{flex: 1, flexDirection: 'row'}}>
+                    <Arrow style={{flex: 1, left: '100%', top: '1%'}}></Arrow>
+                    <Text style={styles.loginText}>LOGIN-IN</Text>
                 </Pressable>
             </View>
             <View style={{flex: 11}}>
@@ -123,7 +176,7 @@ const styles = StyleSheet.create({
         top: '10%'
     },
     loginText: {
-        flex: 1, left: '5%', color: 'white', fontSize: 18, fontFamily: 'VCR_OSD_MONO'
+        flex: 1, left: '130%', color: 'white', fontSize: 18, fontFamily: 'VCR_OSD_MONO'
     },
     input: {
         height: '6%',

@@ -1,28 +1,32 @@
-import {createStackNavigator} from "react-navigation-stack";
+import {CardStyleInterpolators, createStackNavigator} from "react-navigation-stack";
 import { createAppContainer } from "react-navigation";
-import LogAndReg from "../components/authorization/logAndReg"
 import Search from "../components/search/Search";
-import Login from "../components/authorization/LoginScreen";
-import Registration from "../components/authorization/RegistrationScreen";
-import {NavigationContainer} from "@react-navigation/native";
 import Filter from "../components/filter/Filter";
-import Main from "../components/main/Main";
-import Footer from "../components/footer";
 import ChangePassword from "../components/authorization/ChangePassword";
+import Authorization from "../components/authorization/Authorization";
+import Footer from "../components/footer";
+import ItemPage from "../components/itemPages/ItemPage";
+import SelectCategory from "../components/categories/SelectCategory"
+import ItemsByCategory from "../components/categories/ItemsByCategory"
+import SwipeStore from "../components/store/SwipeStore";
+import StoreScreen from "../components/store/StoreScreen";
+import Collections from "../components/store/Collections";
 
 const screens = {
-    Login: {
-        screen: Login,
+    SwipeStore:{
+        screen: SwipeStore,
         navigationOptions: {
             headerShown: false,
             tabBarStyle: { display: "none" },
-        }
+            animationEnabled: false
+        },
     },
-    Registration: {
-        screen: Registration,
+    StoreScreen: {
+        screen: StoreScreen,
         navigationOptions: {
             headerShown: false,
             tabBarStyle: { display: "none" },
+            animationEnabled: false
         }
     },
     Search: {
@@ -30,6 +34,15 @@ const screens = {
         navigationOptions: {
             headerShown: false,
             tabBarStyle: { display: "none" },
+            animationEnabled: false
+        },
+    },
+    Authorization: {
+        screen: Authorization,
+        navigationOptions: {
+            headerShown: false,
+            tabBarStyle: { display: "none" },
+            animationEnabled: false
         }
     },
     Filter: {
@@ -37,13 +50,7 @@ const screens = {
         navigationOptions: {
             headerShown: false,
             tabBarStyle: { display: "none" },
-        }
-    },
-    Main: {
-        screen: Main,
-        navigationOptions: {
-            headerShown: false,
-            tabBarStyle: { display: "none" },
+            cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
         }
     },
     ChangePassword: {
@@ -51,7 +58,47 @@ const screens = {
         navigationOptions: {
             headerShown: false,
             tabBarStyle: { display: "none" },
+            animationEnabled: false
         }
+    },
+    Footer: {
+        screen: Footer,
+        navigationOptions: {
+            headerShown: false,
+            tabBarStyle: { display: "none" },
+        }
+    },
+    ItemPage: {
+        screen: ItemPage,
+        navigationOptions: {
+            headerShown: false,
+            tabBarStyle: { display: "none" },
+            cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
+        },
+    },
+    SelectCategory: {
+        screen: SelectCategory,
+        navigationOptions: {
+            headerShown: false,
+            tabBarStyle: { display: "none" },
+            animationEnabled: false
+        },
+    },
+    ItemsByCategory: {
+        screen: ItemsByCategory,
+        navigationOptions: {
+            headerShown: false,
+            tabBarStyle: { display: "none" },
+            animationEnabled: false
+        },
+    },
+    Collections: {
+        screen: Collections,
+        navigationOptions: {
+            headerShown: false,
+            tabBarStyle: { display: "none" },
+            animationEnabled: false
+        },
     }
 }
 

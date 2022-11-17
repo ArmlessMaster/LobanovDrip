@@ -1,24 +1,27 @@
-import React, {useState} from "react";
-import {StyleSheet, View, TouchableOpacity, Text, SafeAreaView, ScrollView, Pressable} from "react-native";
+import React, {useEffect, useState} from "react";
+import {StyleSheet, View, TouchableOpacity, Text} from "react-native";
 
-export const FilterButtonGroup = ({buttons, doSomethingAfterClick}) => {
+export const FilterButtonGroup = ({buttons, sortToFilter}) => {
 
-    const [clickedId, setClickedId] = useState(0)
-    const handleClick = (item, id) => {
-        setClickedId(id)
-        doSomethingAfterClick(item)
+    const [clickedId, setClickedId] = useState(buttons[0])
+    const handleClick = (buttonLabel) => {
+        setClickedId(buttonLabel)
     }
+
+    useEffect(() => {
+        sortToFilter(clickedId)
+    }, [clickedId])
 
     return (
         <View style={{flex: 1, flexDirection: 'row'}}>
             {
                 buttons.map((buttonLabel, index) => {
                     return (
-                        <TouchableOpacity onPress={(item) => handleClick(item, index)} key={index} style={[
-                            index === clickedId ? styles.sortButtonActive : styles.sortButton
+                        <TouchableOpacity onPress={() => handleClick(buttonLabel)} key={index} style={[
+                            buttonLabel === clickedId ? styles.sortButtonActive : styles.sortButton
                         ]}>
                             <Text style={[
-                                index === clickedId ? styles.sortButtonTextActive : styles.sortButtonText
+                                buttonLabel === clickedId ? styles.sortButtonTextActive : styles.sortButtonText
                             ]}>{buttonLabel}</Text>
                         </TouchableOpacity>
                     )

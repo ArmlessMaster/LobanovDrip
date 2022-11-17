@@ -1,47 +1,26 @@
 import React, { useState } from 'react'
-import styled from 'styled-components/native'
 import MultiSlider from '@ptomasroos/react-native-multi-slider'
 import CustomMarker from './customMarker';
-import {Dimensions} from "react-native";
+import {Dimensions, StyleSheet, Text, View} from "react-native";
 
 
 
-const SliderWrapper = styled.View`
-  justify-content: center;
-`
+const Slider = ({sliderToFilter, to}) => {
 
-const ViewContainer = styled.View`
-  align-self: center;
-  justify-content: center;
-`
-const LabelWrapper = styled.View`
-  flex-direction: row;
-  justify-content: space-between;
-  margin-left: -8px;
-  margin-right: -10px;
-  top: 18%;
-  left: 1%
-`
+    const [multiSliderValue, setMultiSliderValue] = useState([0, to])
 
-const LabelText = styled.Text`
-  font-size: 20px;
-`
-
-const Slider = () => {
-    let min = 0
-    let max = 890
-
-    const [multiSliderValue, setMultiSliderValue] = useState([min, max])
-
-    const multiSliderValuesChange = (values) => setMultiSliderValue(values)
+    const multiSliderValuesChange = (values) => {
+        setMultiSliderValue(values)
+        sliderToFilter(values[0], values[1])
+    }
 
     return (
-        <ViewContainer>
-            <SliderWrapper>
-                <LabelWrapper>
-                    <LabelText>{multiSliderValue[0]} </LabelText>
-                    <LabelText>{multiSliderValue[1]}</LabelText>
-                </LabelWrapper>
+        <View style={styles.viewContainer}>
+            <View style={styles.sliderWrapper}>
+                <View style={styles.labelWrapper}>
+                    <Text style={styles.labelText}>{multiSliderValue[0]} </Text>
+                    <Text style={styles.labelText}>{multiSliderValue[1]}</Text>
+                </View>
                 <MultiSlider
                     selectedStyle={{
                         backgroundColor: 'black',
@@ -54,15 +33,35 @@ const Slider = () => {
                     values={[multiSliderValue[0], multiSliderValue[1]]}
                     sliderLength={Dimensions.get("screen").width/100*85}
                     onValuesChange={multiSliderValuesChange}
-                    min={min}
-                    max={max}
-                    minMarkerOverlapDistance={10}
+                    min={0}
+                    max={to}
                     step={1}
                     customMarker={CustomMarker}
                 />
-            </SliderWrapper>
-        </ViewContainer>
+            </View>
+        </View>
     )
 }
+
+const styles = StyleSheet.create({
+    sliderWrapper: {
+        justifyContent: 'center'
+    },
+    viewContainer: {
+        alignSelf: 'center',
+        justifyContent: 'center'
+    },
+    labelWrapper: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginLeft: -8,
+        marginRight: -10,
+        top: '18%',
+        left: '1%',
+    },
+    labelText: {
+        fontSize: 20
+    }}
+)
 
 export default Slider

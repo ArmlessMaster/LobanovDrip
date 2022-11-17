@@ -2,26 +2,23 @@ import React, { useEffect, useCallback } from 'react';
 import {Text, View, StyleSheet, StatusBar} from 'react-native';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
-import Authorization from "./components/authorization/Authorization";
 import Search from "./components/search/Search";
-import Main from "./components/main/Main";
-import LogAndReg from "./components/authorization/logAndReg"
-import Filter from "./components/filter/Filter";
-import Login from "./components/authorization/LoginScreen";
-import Navigator from "./navigation/navigation";
-import Navigation from "./navigation/navigation";
-import {NavigationContainer} from "@react-navigation/native";
-import Footer from "./components/footer";
+import Login from "./components/authorization/Login"
 import ChangePassword from "./components/authorization/ChangePassword"
+import Navigation from "./navigation/navigation";
+import navigation from "./navigation/navigation";
+import { useAuth } from "./hooks/auth.hook";
+import {AuthContext} from "./context/AuthContext";
+import 'localstorage-polyfill';
 
 export default function App() {
+
     const [fontsLoaded] = useFonts({
-        'vsr-osd-mono': require('./assets/fonts/VCR_OSD_MONO_1.001.ttf'),
         'inter-medium': require('./assets/fonts/Inter-Medium.ttf'),
         'roboto-light-i': require('./assets/fonts/Roboto-LightItalic.ttf'),
         'roboto-regular': require('./assets/fonts/Roboto-Regular.ttf'),
+        'VCR_OSD_MONO': require('./assets/fonts/VCR_OSD_Mono.ttf'),
         'roboto-medium': require('./assets/fonts/Roboto-Medium.ttf'),
-        'VCR_OSD_MONO': require('./assets/fonts/VCR_OSD_MONO_1.001.ttf'),
         'inter-regular': require('./assets/fonts/Inter-Regular.otf')
     });
 
@@ -31,8 +28,9 @@ export default function App() {
           }
           prepare();
       }, []);
-
-      const onLayoutRootView = useCallback(async () => {
+    const { token, login, logout, ready } = useAuth();
+    const isAuthenticated = !!token;
+    const onLayoutRootView = useCallback(async () => {
           if (fontsLoaded) {
               await SplashScreen.hideAsync();
           }
@@ -44,10 +42,23 @@ export default function App() {
 
     StatusBar.setBarStyle('light-content', true);
 
+
     return (
-          <View style={styles.container} onLayout={onLayoutRootView}>
-              <ChangePassword/>
-          </View>
+        <AuthContext.Provider value={{
+            token,
+            login,
+            logout,
+            isAuthenticated,
+        }}>
+            <View style={styles.container} onLayout={onLayoutRootView}>
+                {/*<View style={{flex: 12.5}}><LoginAndRegistration/></View>*/}
+                {/*<View style={{flex: 1}}>*/}
+                {/*    <Footer/>*/}
+                {/*</View>*/}
+                <Navigation/>
+            </View>
+        </AuthContext.Provider>
+
       );
 }
 

@@ -1,17 +1,8 @@
-import {Dimensions, SafeAreaView, ScrollView, Image, StyleSheet, Text, View} from "react-native";
+import {Dimensions, SafeAreaView, ScrollView, Image, StyleSheet, View} from "react-native";
 import {useState} from "react";
 import React from "react";
 import Dot from '../../assets/images/GreyDot.svg'
 import RedDot from "../../assets/images/RedDot.svg"
-
-const images = [
-    require('../../assets/images/lobanovDripProducts/1.jpg'),
-    require('../../assets/images/lobanovDripProducts/4.jpg'),
-    require('../../assets/images/lobanovDripProducts/3.png'),
-    require('../../assets/images/lobanovDripProducts/2.png'),
-    require('../../assets/images/lobanovDripProducts/6.jpg'),
-
-]
 
 const WIDTH = Dimensions.get('window').width
 const HEIGHT = Dimensions.get('window').height
@@ -33,7 +24,7 @@ function showImage(index, e) {
         <Image key={index} resizeMode='cover' source={e} style={styles.wrap}/>)
 }
 
-const Carousel = () => {
+const Carousel = ({images}) => {
     const [imgActive, setimgActive] = useState(0)
 
     const onchange = (nativeEvent) => {
