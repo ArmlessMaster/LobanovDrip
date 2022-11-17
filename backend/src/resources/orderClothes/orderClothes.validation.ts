@@ -30,4 +30,4 @@ const find = Joi.object({
     color: Joi.string(),
 });
 
-export default { create, update, delete0, find};
+export default { create, update, delete0, find };
