@@ -4,7 +4,6 @@ import HttpException from '@/utils/exceptions/http.exception';
 import validationMiddleware from '@/middleware/validation.middleware';
 import validate from '@/resources/modeling/modeling.validation';
 import ModelingService from '@/resources/modeling/modeling.service';
-import ModelingModel from '@/resources/modeling/modeling.model';
 import authenticated from '@/middleware/authenticated.middleware';
 
 class ModelingController implements Controller {
@@ -35,10 +34,7 @@ class ModelingController implements Controller {
             authenticated,
             this.delete
         );
-        this.router.get(
-            `${this.path}`,
-            this.get
-        );
+        this.router.get(`${this.path}`, this.get);
         this.router.get(
             `${this.path}/find`,
             validationMiddleware(validate.find),

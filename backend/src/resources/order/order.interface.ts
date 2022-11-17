@@ -6,13 +6,9 @@ export default interface Order extends Document {
     user_id: Schema.Types.ObjectId | Account;
     moderator_id: Schema.Types.ObjectId | Account;
     status: string;
-    region: string,
-    city: string,
-    novaposhta: string,
+    adress: string;
     phone: string;
-    name: string,
-    surname: string,
-    patronymic:string,
+    name: string;
     email: string;
     invoice: string;
     status_update: Date;

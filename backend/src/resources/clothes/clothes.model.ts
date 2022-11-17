@@ -1,6 +1,7 @@
 import { Schema, model } from 'mongoose';
 import Clothes from '@/resources/clothes/clothes.interface';
 import ClothesCount from '@/utils/interfaces/clothesCount.interface';
+import OrderClothesModel from '@/resources/orderClothes/orderClothes.model';
 
 const ClothesSchema = new Schema(
     {
@@ -48,5 +49,10 @@ const ClothesSchema = new Schema(
     },
     { timestamps: true }
 );
+
+ClothesSchema.post('findOneAndDelete', async function (result, next) {
+    await OrderClothesModel.deleteMany({ clothes_id: result._id });
+    next();
+});
 
 export default model<Clothes>('Clothes', ClothesSchema);

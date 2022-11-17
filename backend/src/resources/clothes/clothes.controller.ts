@@ -57,6 +57,11 @@ class ClothesController implements Controller {
             validationMiddleware(validate.filter),
             this.filter
         );
+        this.router.get(
+            `${this.path}/count/exist`,
+            validationMiddleware(validate.exist),
+            this.exist
+        );
         this.router.get(`${this.path}/find/sales`, this.findBySales);
     }
 
@@ -252,6 +257,27 @@ class ClothesController implements Controller {
             res.status(200).json({ clothes });
         } catch (error) {
             next(new HttpException(400, 'Cannot found clothes'));
+        }
+    };
+
+    private exist = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<Response | void> => {
+        try {
+            const { _id } = req.body;
+
+            const exist = await this.ClothesService.exist(_id);
+
+            res.status(200).json({ exist });
+        } catch (error) {
+            next(
+                new HttpException(
+                    400,
+                    'Failed to check if the clothes are over'
+                )
+            );
         }
     };
 }

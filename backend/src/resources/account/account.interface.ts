@@ -7,7 +7,11 @@ export default interface Account extends Document {
     name: string;
     phone: string;
     role: string;
-    adress: string;
+    surname: string;
+    patronymic: string;
+    region: string;
+    city: string;
+    novaposhta: string;
 
     getUpdate(): Promise<Error | Object>;
     setUpdate(obj: Object): Promise<Error | boolean>;

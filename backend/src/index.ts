@@ -9,6 +9,7 @@ import OrderController from '@/resources/order/order.controller';
 import OrderClothesController from '@/resources/orderClothes/orderClothes.controller';
 import SetController from '@/resources/set/set.controller';
 import CollectionController from '@/resources/collection/collection.controller';
+import ClothesToOrderController from '@/resources/clothesToOrder/clothesToOrder.controller';
 
 validateEnv();
 
@@ -21,6 +22,7 @@ const app = new App(
         new OrderClothesController(),
         new SetController(),
         new CollectionController(),
+        new ClothesToOrderController()
     ],
     Number(process.env.PORT)
 );

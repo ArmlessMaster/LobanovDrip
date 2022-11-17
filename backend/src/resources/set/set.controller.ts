@@ -4,7 +4,6 @@ import HttpException from '@/utils/exceptions/http.exception';
 import validationMiddleware from '@/middleware/validation.middleware';
 import validate from '@/resources/set/set.validation';
 import SetService from '@/resources/set/set.service';
-import SetModel from '@/resources/set/set.model';
 import authenticated from '@/middleware/authenticated.middleware';
 
 class SetController implements Controller {
@@ -35,10 +34,7 @@ class SetController implements Controller {
             authenticated,
             this.delete
         );
-        this.router.get(
-            `${this.path}`,
-            this.get
-        );
+        this.router.get(`${this.path}`, this.get);
         this.router.get(
             `${this.path}/find`,
             validationMiddleware(validate.find),

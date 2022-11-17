@@ -59,6 +59,7 @@ class ClothesService {
                         .catch((error: Error) => console.log(error.message));
                     await getDownloadURL(ref(storage, randomName)).then(
                         (url: string) => {
+                            console.log(file?.mimetype);
                             if (file?.mimetype === 'image/gif') {
                                 gifUrls.push(url);
                             } else {
@@ -187,7 +188,40 @@ class ClothesService {
             if (!clothes) {
                 throw new Error('Unable to delete clothes with that id');
             }
+            if (clothes.imagesUrls && clothes.imagesUrls.length > 0) {
+                await Promise.all(
+                    clothes.imagesUrls.map(async (image: string) => {
+                        const deletePic =
+                            '☂' +
+                            image.split('%E2%98%82')[1].split('%E2%98%81')[0] +
+                            '☁';
+                        const deleteRef = ref(storage, deletePic);
+                        const result = await deleteObject(deleteRef)
+                            .then(() => {
+                                return 'deleted';
+                            })
+                            .catch((error: Error) => {
+                                throw new Error(error.message);
+                            });
+                    })
+                );
+            }
 
+            if (clothes.gifUrl) {
+                const deletePic =
+                    '☂' +
+                    clothes.gifUrl.split('%E2%98%82')[1].split('%E2%98%81')[0] +
+                    '☁';
+                const deleteRef = ref(storage, deletePic);
+                const result = await deleteObject(deleteRef)
+                    .then(() => {
+                        return 'deleted';
+                    })
+                    .catch((error: Error) => {
+                        throw new Error(error.message);
+                    });
+            }
+            
             return clothes;
         } catch (error) {
             throw new Error('Unable to delete clothes');
@@ -263,7 +297,7 @@ class ClothesService {
     public async find(props: Props): Promise<Clothes | Array<Clothes> | Error> {
         try {
             if (props.fullTextSearch && props.name) {
-                props.name = {$regex: new RegExp(props.name), $options: "i"};
+                props.name = { $regex: new RegExp(props.name), $options: 'i' };
             }
             const clothes = await this.clothes
                 .find(props, null, { sort: { createdAt: -1 } })
@@ -273,7 +307,6 @@ class ClothesService {
                     populate: { path: '_id' },
                 });
 
-                
             if (!clothes) {
                 throw new Error('Unable to find clothes');
             }
@@ -287,7 +320,7 @@ class ClothesService {
     /**
      * Attempt to filter clothes
      */
-     public async filter(
+    public async filter(
         type: string,
         from_price: number,
         to_price: number,
@@ -349,6 +382,48 @@ class ClothesService {
             return clothes;
         } catch (error) {
             throw new Error('Unable to find clothes with sales');
+        }
+    }
+
+    /**
+     * Attempt to check clothes exist
+     */
+    public async exist(_id: Schema.Types.ObjectId): Promise<Boolean | Error> {
+        try {
+            const clothes = await this.clothes.findOne({ _id: _id });
+
+            if (!clothes) {
+                throw new Error('Unable to find clothes');
+            }
+
+            const total = clothes.clothesCount
+                .map((item) => item.count)
+                .reduce((prev, next) => prev + next);
+
+            return !(total === 0);
+        } catch (error) {
+            throw new Error('Unable to find clothes with sales');
+        }
+    }
+
+    /**
+     * Attempt to increment clothes count
+     */
+    public async incrementClothesCount(
+        _id: Schema.Types.ObjectId,
+        size: string,
+        value: number
+    ): Promise<void | Error> {
+        try {
+            await this.clothes
+                .findOneAndUpdate(
+                    { _id: _id, 'clothesCount.size': size },
+                    { $inc: { 'clothesCount.$.count': value } },
+                    { new: true }
+                )
+                .exec();
+        } catch (error) {
+            throw new Error('Unable to increment');
         }
     }
 }

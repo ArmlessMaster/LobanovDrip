@@ -2,17 +2,19 @@ import AccountModel from '@/resources/account/account.model';
 import token from '@/utils/token';
 import Account from '@/resources/account/account.interface';
 import { Schema } from 'mongoose';
+import OrderModel from '@/resources/order/order.model';
 
 class AccountService {
     private account = AccountModel;
-
+    private order = OrderModel;
     /**
      * Register a new account
      */
     public async register(
         email: string,
         password: string,
-        name: string
+        name: string,
+        surname: string
     ): Promise<string | Error> {
         try {
             const accountExists = await this.account.findOne({ email });
@@ -25,9 +27,12 @@ class AccountService {
                 email,
                 password,
                 name,
+                surname,
             });
 
             const accesToken = token.createToken(account);
+
+            await this.order.create({ user_id: account._id });
 
             return accesToken;
         } catch (error) {
@@ -62,35 +67,39 @@ class AccountService {
         }
     }
 
-        /**
+    /**
      * Attempt to login a google account
      */
-         public async googleLogin(
-            email: string,
-            passwordGoogle: string,
-            name: string
-        ): Promise<string | Error> {
-            try {            
-                let account = await this.account.findOne({ email });
-                if (!account) {
-                    account = await this.account.create({
-                        email,
-                        passwordGoogle,
-                        name,
-                    });
-                }
-                if (await account.isValidPasswordGoogle(passwordGoogle)) {
-                    const accesToken = token.createToken(account);
-                    return accesToken;
-                } else {
-                    await this.account.findOneAndUpdate({_id: account._id}, { passwordGoogle });
-                    const accesToken = token.createToken(account);
-                    return accesToken;
-                }
-            } catch (error) {
-                throw new Error('Unable to login account');
+    public async googleLogin(
+        email: string,
+        passwordGoogle: string,
+        name: string
+    ): Promise<string | Error> {
+        try {
+            let account = await this.account.findOne({ email });
+            if (!account) {
+                account = await this.account.create({
+                    email,
+                    passwordGoogle,
+                    name,
+                });
+                await this.order.create({ user_id: account._id });
             }
+            if (await account.isValidPasswordGoogle(passwordGoogle)) {
+                const accesToken = token.createToken(account);
+                return accesToken;
+            } else {
+                await this.account.findOneAndUpdate(
+                    { _id: account._id },
+                    { passwordGoogle }
+                );
+                const accesToken = token.createToken(account);
+                return accesToken;
+            }
+        } catch (error) {
+            throw new Error('Unable to login account');
         }
+    }
 
     /**
      * Attempt to update account
@@ -103,14 +112,32 @@ class AccountService {
         name: string,
         phone: string,
         role: string,
-        adress: string
+        surname: string,
+        patronymic: string,
+        region: string,
+        city: string,
+        novaposhta: string
     ): Promise<Account | Error> {
         try {
-            const account = await this.account.findByIdAndUpdate(
-                _id,
-                { email, password, name, phone, role, adress },
-                { new: true }
-            ).select(['-password', '-passwordGoogle']).exec();
+            const account = await this.account
+                .findByIdAndUpdate(
+                    _id,
+                    {
+                        email,
+                        password,
+                        name,
+                        phone,
+                        role,
+                        surname,
+                        patronymic,
+                        region,
+                        city,
+                        novaposhta,
+                    },
+                    { new: true }
+                )
+                .select(['-password', '-passwordGoogle'])
+                .exec();
 
             if (!account) {
                 throw new Error('Unable to update account with that id');
@@ -125,7 +152,7 @@ class AccountService {
     /**
      * Attempt to update account password
      */
-     public async updatePassword(
+    public async updatePassword(
         _id: Schema.Types.ObjectId,
         new_password: string,
         password: string
@@ -138,11 +165,14 @@ class AccountService {
             }
 
             if (await acc.isValidPassword(password)) {
-                const account = await this.account.findOneAndUpdate(
-                    {_id},
-                    { password: new_password },
-                    { new: true }
-                ).select(['-password', '-passwordGoogle']).exec();
+                const account = await this.account
+                    .findOneAndUpdate(
+                        { _id },
+                        { password: new_password },
+                        { new: true }
+                    )
+                    .select(['-password', '-passwordGoogle'])
+                    .exec();
 
                 if (!account) {
                     throw new Error('Unable to update account with that id');
@@ -163,7 +193,10 @@ class AccountService {
 
     public async delete(_id: Schema.Types.ObjectId): Promise<Account | Error> {
         try {
-            const account = await this.account.findByIdAndDelete(_id).select(['-password', '-passwordGoogle']).exec();
+            const account = await this.account
+                .findByIdAndDelete(_id)
+                .select(['-password', '-passwordGoogle'])
+                .exec();
 
             if (!account) {
                 throw new Error('Unable to delete account with that id');

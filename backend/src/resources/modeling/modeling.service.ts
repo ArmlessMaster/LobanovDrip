@@ -92,11 +92,10 @@ class ModelingService {
         }
     }
 
-    
     /**
      * Attempt to find all sets
      */
-     public async get(): Promise<Modeling | Array<Modeling> | Modeling> {
+    public async get(): Promise<Modeling | Array<Modeling> | Modeling> {
         try {
             const modeling = await this.modeling.find({}, null, {
                 sort: { createdAt: -1 },
@@ -115,7 +114,9 @@ class ModelingService {
     /**
      * Attempt to find modeling by id
      */
-    public async find(props: Object): Promise<Modeling | Array<Modeling> | Modeling> {
+    public async find(
+        props: Object
+    ): Promise<Modeling | Array<Modeling> | Modeling> {
         try {
             const modeling = await this.modeling.find(props).populate({
                 path: 'user_id',

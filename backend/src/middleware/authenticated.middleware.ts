@@ -29,21 +29,19 @@ async function authenticatedMiddleware(
         //     .select(['-password', '-passwordGoogle'])
         //     .exec();
         //     console.log(account?._id);
-        const account = await AccountModel.findById(payload.id)
-            .exec();
-            console.log(account);
+        const account = await AccountModel.findById(payload.id).exec();
 
         if (!account) {
             return next(new HttpException(401, 'Unauthorised'));
         }
-//
+        //
         if (account.password) {
-            account.password = "exist";
+            account.password = 'exist';
         }
         if (account.passwordGoogle) {
-            account.passwordGoogle = "exist";
+            account.passwordGoogle = 'exist';
         }
-//
+        //
 
         req.account = account;
 

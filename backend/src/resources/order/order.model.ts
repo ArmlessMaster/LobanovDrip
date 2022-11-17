@@ -24,25 +24,13 @@ const OrderSchema = new Schema(
             ],
             default: 'cart',
         },
-        region: {
-            type: String,
-        },
-        city: {
-            type: String,
-        },
-        novaposhta: {
+        adress: {
             type: String,
         },
         phone: {
             type: String,
         },
         name: {
-            type: String,
-        },
-        surname: {
-            type: String,
-        },
-        patronymic: {
             type: String,
         },
         email: {

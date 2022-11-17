@@ -18,25 +18,20 @@ function validationMiddleware(schema: Joi.Schema): RequestHandler {
             if (req.body.data) {
                 data = JSON.parse(req.body.data);
                 data['images'] = req.files;
-            }
-            
-            else {
+            } else {
                 data = req.body;
             }
-            if (!(Object.keys(req.query).length === 0)){  
-                data = req.query
-                if (data.size) {
+            if (!(Object.keys(req.query).length === 0)) {
+                data = req.query;
+                if (data.size && !req.route.path.indexOf('order-clothes')) {
                     let size = data.size as string;
                     data.size = size.split(',');
                 }
             }
-            if (!(Object.keys(req.params).length === 0)){
-                data = req.params
+            if (!(Object.keys(req.params).length === 0)) {
+                data = req.params;
             }
-            const value = await schema.validateAsync(
-                data,
-                validationOptions
-            );     
+            const value = await schema.validateAsync(data, validationOptions);
             req.body = value;
             next();
         } catch (e: any) {

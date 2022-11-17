@@ -145,6 +145,42 @@ class CollectionService {
                 throw new Error('Unable to delete clothes with that id');
             }
 
+            if (collection.imagesUrls && collection.imagesUrls.length > 0) {
+                await Promise.all(
+                    collection.imagesUrls.map(async (image: string) => {
+                        const deletePic =
+                            '☂' +
+                            image.split('%E2%98%82')[1].split('%E2%98%81')[0] +
+                            '☁';
+                        const deleteRef = ref(storage, deletePic);
+                        const result = await deleteObject(deleteRef)
+                            .then(() => {
+                                return 'deleted';
+                            })
+                            .catch((error: Error) => {
+                                throw new Error(error.message);
+                            });
+                    })
+                );
+            }
+
+            if (collection.gifUrl) {
+                const deletePic =
+                    '☂' +
+                    collection.gifUrl
+                        .split('%E2%98%82')[1]
+                        .split('%E2%98%81')[0] +
+                    '☁';
+                const deleteRef = ref(storage, deletePic);
+                const result = await deleteObject(deleteRef)
+                    .then(() => {
+                        return 'deleted';
+                    })
+                    .catch((error: Error) => {
+                        throw new Error(error.message);
+                    });
+            }
+
             return collection;
         } catch (error) {
             throw new Error('Unable to delete clothes');

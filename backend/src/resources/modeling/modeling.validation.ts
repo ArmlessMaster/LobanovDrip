@@ -20,12 +20,11 @@ const update = Joi.object({
     size: Joi.string(),
     color: Joi.string(),
     user_id: Joi.string().hex().length(24),
-    images: Joi.array()
-        .items({
-            imageUrl: Joi.string().required(),
-            x_coordinate: Joi.number().required(),
-            y_coordinate: Joi.number().required(),
-        }),
+    images: Joi.array().items({
+        imageUrl: Joi.string().required(),
+        x_coordinate: Joi.number().required(),
+        y_coordinate: Joi.number().required(),
+    }),
 });
 
 const delete0 = Joi.object({

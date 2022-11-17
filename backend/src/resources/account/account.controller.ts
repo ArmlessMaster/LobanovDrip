@@ -43,11 +43,7 @@ class AccountController implements Controller {
             authenticated,
             this.updatePassword
         );
-        this.router.delete(
-            `${this.path}/delete`,
-            authenticated,
-            this.delete
-        );
+        this.router.delete(`${this.path}/delete`, authenticated, this.delete);
         this.router.get(`${this.path}`, authenticated, this.getAccount);
     }
 
@@ -57,12 +53,13 @@ class AccountController implements Controller {
         next: NextFunction
     ): Promise<Response | void> => {
         try {
-            const { email, password, name } = req.body;
+            const { email, password, name, surname } = req.body;
 
             const token = await this.AccountService.register(
                 email,
                 password,
-                name
+                name,
+                surname
             );
 
             res.status(201).json({ token });
@@ -95,7 +92,11 @@ class AccountController implements Controller {
         try {
             const { email, passwordGoogle, name } = req.body;
 
-            const token = await this.AccountService.googleLogin(email, passwordGoogle, name);
+            const token = await this.AccountService.googleLogin(
+                email,
+                passwordGoogle,
+                name
+            );
 
             res.status(200).json({ token });
         } catch (error: any) {
@@ -109,8 +110,18 @@ class AccountController implements Controller {
         next: NextFunction
     ): Promise<Response | void> => {
         try {
-            const { email, password, name, phone, role, adress } =
-                req.body;
+            const {
+                email,
+                password,
+                name,
+                phone,
+                role,
+                surname,
+                patronymic,
+                region,
+                city,
+                novaposhta,
+            } = req.body;
             const _id = req.account._id;
             const account = await this.AccountService.update(
                 _id,
@@ -119,7 +130,11 @@ class AccountController implements Controller {
                 name,
                 phone,
                 role,
-                adress
+                surname,
+                patronymic,
+                region,
+                city,
+                novaposhta,
             );
 
             res.status(200).json({ account });
@@ -134,12 +149,11 @@ class AccountController implements Controller {
         next: NextFunction
     ): Promise<Response | void> => {
         try {
-            const {new_password, password } =
-                req.body;
+            const { new_password, password } = req.body;
             const _id = req.account._id;
             const account = await this.AccountService.updatePassword(
                 _id,
-                new_password, 
+                new_password,
                 password
             );
 

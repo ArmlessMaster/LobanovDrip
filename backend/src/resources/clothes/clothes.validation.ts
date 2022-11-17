@@ -45,6 +45,10 @@ const delete0 = Joi.object({
     _id: Joi.string().hex().length(24).required(),
 });
 
+const exist = Joi.object({
+    _id: Joi.string().hex().length(24).required(),
+});
+
 const imageDelete = Joi.object({
     _id: Joi.string().hex().length(24).required(),
     url: Joi.string().uri().required(),
@@ -62,14 +66,14 @@ const find = Joi.object({
     sex: Joi.string(),
     collection_id: Joi.string().hex().length(24),
     limit: Joi.number().default(0),
-    fullTextSearch: Joi.boolean().default(false)
+    fullTextSearch: Joi.boolean().default(false),
 });
 
-const filter = Joi.object({ 
-    type: Joi.string().required(), 
-    from_price: Joi.number(), 
-    to_price: Joi.number(), 
-    size: Joi.array().items(Joi.string()) 
+const filter = Joi.object({
+    type: Joi.string().required(),
+    from_price: Joi.number(),
+    to_price: Joi.number(),
+    size: Joi.array().items(Joi.string()),
 });
 
 export default {
@@ -79,4 +83,5 @@ export default {
     imageDelete,
     find,
     filter,
+    exist,
 };
