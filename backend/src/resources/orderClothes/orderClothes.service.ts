@@ -1,12 +1,9 @@
 import OrderClothesModel from '@/resources/orderClothes/orderClothes.model';
 import OrderClothes from '@/resources/orderClothes/orderClothes.interface';
 import { Schema } from 'mongoose';
-import ClothesService from '@/resources/clothes/clothes.service';
-import Clothes from '@/resources/clothes/clothes.interface';
 
 class OrderClothesService {
     private orderClothes = OrderClothesModel;
-    private ClothesService = new ClothesService();
 
     /**
      * Create a new order clothes
@@ -19,24 +16,6 @@ class OrderClothesService {
         color: string
     ): Promise<OrderClothes | Error> {
         try {
-            const clothes = (await this.ClothesService.find({
-                _id: clothes_id,
-            })) as Array<Clothes>;
-
-            if (!clothes) {
-                throw new Error('Unable to add clothes with that id');
-            }
-
-            const clothesCount = clothes[0].clothesCount.find(
-                (item) => item.size === size
-            );
-
-            if (clothesCount && clothesCount.count < count) {
-                throw new Error(
-                    'The number of clothes specified in the order exceeds the allowable'
-                );
-            }
-
             const orderClothes = await this.orderClothes.create({
                 clothes_id,
                 order_id,
@@ -54,9 +33,7 @@ class OrderClothesService {
     /**
      * Attempt to delete orderClothes by id
      */
-    public async delete(
-        _id: Schema.Types.ObjectId
-    ): Promise<OrderClothes | Error> {
+    public async delete(_id: Schema.Types.ObjectId): Promise<OrderClothes | Error> {
         try {
             const orderClothes = await this.orderClothes
                 .findByIdAndDelete(_id)
@@ -91,32 +68,6 @@ class OrderClothesService {
         color: string
     ): Promise<OrderClothes | Error> {
         try {
-            const currOrderClothes = (await this.orderClothes.findOne({
-                _id: _id,
-            })) as OrderClothes;
-
-            if (!currOrderClothes) {
-                throw new Error('Unable to add clothes with that id');
-            }
-
-            const clothes = (await this.ClothesService.find({
-                _id: currOrderClothes.clothes_id,
-            })) as Array<Clothes>;
-
-            if (!clothes) {
-                throw new Error('Unable to add clothes with that id');
-            }
-
-            const clothesCount = clothes[0].clothesCount.find(
-                (item) => item.size === currOrderClothes.size
-            );
-
-            if (clothesCount && clothesCount.count < count) {
-                throw new Error(
-                    'The number of clothes specified in the order exceeds the allowable'
-                );
-            }
-
             const orderClothes = await this.orderClothes
                 .findByIdAndUpdate(
                     { _id },
@@ -148,10 +99,11 @@ class OrderClothesService {
         }
     }
 
+    
     /**
      * Attempt to find all sets
      */
-    public async get(): Promise<OrderClothes | Array<OrderClothes> | Error> {
+     public async get(): Promise<OrderClothes | Array<OrderClothes> | Error> {
         try {
             const orderClothes = await this.orderClothes.find({}, null, {
                 sort: { createdAt: -1 },
@@ -170,11 +122,18 @@ class OrderClothesService {
     /**
      * Attempt to find orderClothes by id
      */
-    public async find(
-        props: Object
-    ): Promise<OrderClothes | Array<OrderClothes> | Error> {
+    public async find(props: Object): Promise<OrderClothes | Array<OrderClothes> | Error> {
         try {
-            const orderClothes = await this.orderClothes.find(props);
+            const orderClothes = await this.orderClothes
+                .find(props)
+                .populate({
+                    path: 'clothes_id',
+                    populate: { path: '_id' },
+                })
+                .populate({
+                    path: 'order_id',
+                    populate: { path: '_id' },
+                });
 
             if (!orderClothes) {
                 throw new Error('Unable to find order clothes');

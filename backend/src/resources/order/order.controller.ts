@@ -4,7 +4,6 @@ import HttpException from '@/utils/exceptions/http.exception';
 import validationMiddleware from '@/middleware/validation.middleware';
 import validate from '@/resources/order/order.validation';
 import OrderService from '@/resources/order/order.service';
-import OrderModel from '@/resources/order/order.model';
 import authenticated from '@/middleware/authenticated.middleware';
 
 class OrderController implements Controller {
@@ -35,10 +34,7 @@ class OrderController implements Controller {
             authenticated,
             this.delete
         );
-        this.router.get(
-            `${this.path}`,
-            this.get
-        );
+        this.router.get(`${this.path}`, this.get);
         this.router.get(
             `${this.path}/find`,
             validationMiddleware(validate.find),
@@ -60,6 +56,9 @@ class OrderController implements Controller {
                 phone,
                 name,
                 email,
+                invoice,
+                status_update,
+                payment_type,
             } = req.body;
 
             const order = await this.OrderService.create(
@@ -69,7 +68,10 @@ class OrderController implements Controller {
                 adress,
                 phone,
                 name,
-                email
+                email,
+                invoice,
+                status_update,
+                payment_type
             );
 
             res.status(201).json({ order });
@@ -109,7 +111,12 @@ class OrderController implements Controller {
                 phone,
                 name,
                 email,
+                invoice,
+                status_update,
+                payment_type,
             } = req.body;
+
+            const accout_id = req.account._id;
 
             const order = await this.OrderService.update(
                 _id,
@@ -119,7 +126,11 @@ class OrderController implements Controller {
                 adress,
                 phone,
                 name,
-                email
+                email,
+                invoice,
+                status_update,
+                payment_type,
+                accout_id
             );
 
             res.status(200).json({ order });
