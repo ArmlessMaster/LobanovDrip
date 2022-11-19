@@ -7,16 +7,14 @@ import Login from "./components/authorization/Login"
 import ChangePassword from "./components/authorization/ChangePassword"
 import Navigation from "./navigation/navigation";
 import navigation from "./navigation/navigation";
-import TestTest from "./components/test/test";
-import STDTest from "./components/test/STDTest";
 import { useAuth } from "./hooks/auth.hook";
 import {AuthContext} from "./context/AuthContext";
 import 'localstorage-polyfill';
-import SwipeToDelete from "./components/test/example/swipe_to_delete";
 import Store from "./components/store/Store";
 import FirstHeader from "./components/store/FirstHeader";
 import SecondHeader from "./components/store/SecondHeader";
 import ItemPage from "./components/itemPages/ItemPage";
+import Cart from "./components/cart/Cart"
 
 export default function App() {
 
@@ -63,7 +61,7 @@ export default function App() {
                 {/*    <Footer/>*/}
                 {/*</View>*/}
                 {/*<Navigation/>*/}
-                <TestTest/>
+                <Cart/>
             </View>
         </AuthContext.Provider>
 

@@ -11,18 +11,10 @@ import {
     Animated,
     useWindowDimensions, Image, Dimensions,
 } from 'react-native';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {SwipeListView} from 'react-native-swipe-list-view';
 import {Icon} from 'react-native-eva-icons';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 
-const COLORS = {
-    red: '#cc0000',
-    green: '#4cA64c',
-    blue: '#4c4cff',
-    white: '#fff',
-    grey: '#ddd',
-};
 
 const hapticFeedbackOptions = {
     enableVibrateFallback: true,
@@ -220,7 +212,7 @@ Array(3)
         };
     });
 
-export default function Swipe_to_delete(){
+export default function SwipeToDeletePanel(){
     const backgroundStyle = {
         backgroundColor: '#0D0D0D',
     };
@@ -230,7 +222,7 @@ export default function Swipe_to_delete(){
         [...new Array(3)].map((_, i) => ({
             key: `${i}`,
             text:  `abc`,
-            image: require('../../../assets/images/lobanovDripProducts/4.jpg'),
+            image: require('../../assets/images/lobanovDripProducts/4.jpg'),
         })),
     );
 
@@ -352,7 +344,7 @@ const styles = StyleSheet.create({
     },
     backLeftBtn: {
         alignItems: 'flex-end',
-        backgroundColor: COLORS.green,
+        backgroundColor: 'green',
         paddingRight: 16,
     },
     backRightBtn: {
@@ -370,7 +362,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     backBtnText: {
-        color: COLORS.white,
+        color: 'white',
         marginTop: 2,
     },
     image: {
