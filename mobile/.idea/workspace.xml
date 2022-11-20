@@ -2,40 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d87e1953-3d81-4945-9f59-5607751f5385" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/assets/fonts/Roboto-Medium.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/images/filter/Line.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/images/filter/blackDot.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/images/filter/boba.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/images/filter/xMark.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/images/main/ExclusiveTitle.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/images/main/Header.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/images/main/Skeleton.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/images/main/Title.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/components/authorization/Authorization.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/components/authorization/ChangePassword.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/components/filter/Filter.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/components/filter/FilterButtonGroup.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/components/filter/FilterSlider.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/components/filter/SizeButtonGroup.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/components/filter/customMarker.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/components/search/carousel.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/leftArrow.svg" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/leftArrow.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/babel.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/babel.config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/footer.js" beforeDir="false" afterPath="$PROJECT_DIR$/components/footer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/itemPages/ColorButtonGroup.js" beforeDir="false" afterPath="$PROJECT_DIR$/components/itemPages/ColorButtonGroup.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/itemPages/ItemPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/components/itemPages/ItemPage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/itemPages/carousel.js" beforeDir="false" afterPath="$PROJECT_DIR$/components/itemPages/carousel.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/logAndReg.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/login/Login.js" beforeDir="false" afterPath="$PROJECT_DIR$/components/authorization/LoginScreen.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/registration/Registration.js" beforeDir="false" afterPath="$PROJECT_DIR$/components/authorization/RegistrationScreen.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/search/Search.js" beforeDir="false" afterPath="$PROJECT_DIR$/components/search/Search.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/search/chooseGender.js" beforeDir="false" afterPath="$PROJECT_DIR$/components/search/chooseGender.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/navigation/navigation.js" beforeDir="false" afterPath="$PROJECT_DIR$/navigation/navigation.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,7 +37,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/Users/anger/WebstormProjects/LobanovDrip/LobanovDrip/mobile/components",
+    "last_opened_file_path": "/Users/ekaterinamelnik/Desktop/НЕ ПП/LobanovDrip/mobile",
     "nodejs_package_manager_path": "npm",
     "ts.external.directory.path": "C:\\Program Files\\JetBrains\\WebStorm 2022.2.2\\plugins\\JavaScriptLanguage\\jsLanguageServicesImpl\\external",
     "vue.rearranger.settings.migration": "true"
@@ -106,6 +75,7 @@
       <workItem from="1667504567003" duration="8826000" />
       <workItem from="1667551695682" duration="33641000" />
       <workItem from="1667633063292" duration="99484000" />
+      <workItem from="1668972708160" duration="2267000" />
     </task>
     <servers />
   </component>

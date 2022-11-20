@@ -11,6 +11,8 @@ import ItemsByCategory from "../components/categories/ItemsByCategory"
 import SwipeStore from "../components/store/SwipeStore";
 import StoreScreen from "../components/store/StoreScreen";
 import Collections from "../components/store/Collections";
+import MyAccount from "../components/authorization/MyAccount";
+import PersonalInfo from "../components/authorization/PersonalInfo"
 
 const screens = {
     SwipeStore:{
@@ -99,7 +101,24 @@ const screens = {
             tabBarStyle: { display: "none" },
             animationEnabled: false
         },
+    },
+    MyAccount: {
+        screen: MyAccount,
+        navigationOptions: {
+            headerShown: false,
+            tabBarStyle: { display: "none" },
+            animationEnabled: false
+        },
+    },
+    PersonalInfo: {
+        screen: PersonalInfo,
+        navigationOptions: {
+            headerShown: false,
+            tabBarStyle: { display: "none" },
+            animationEnabled: false
+        },
     }
+
 }
 
 
