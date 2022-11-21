@@ -12,6 +12,7 @@ import AdressIcon from '../../assets/images/Adress.svg'
 import FullNameIcon from '../../assets/images/FullName.svg'
 import PhoneIcon from '../../assets/images/Phone.svg'
 import AccountLine from '../../assets/images/AccountLine.svg'
+import NovaPoshta from '../../assets/images/NovaPoshta.svg'
 import WhiteText from '../../assets/images/WhiteTextMyAccount.svg'
 import BackgroundText from '../../assets/images/BackgroundTextMyAccount.svg'
 import Footer from "../footer";
@@ -82,8 +83,10 @@ export default function MyAccount({navigation}) {
                                     <Text style={styles.textInfo}>{info.surname}</Text>
                                 </View>
                             </View>
-                            <View style={{flexDirection:'row', left:'20%'}}>
-                                <PhoneIcon/>
+                            <View style={{flexDirection:'row', left:'23%'}}>
+                                <View style={{right: '10%'}}>
+                                    <PhoneIcon/>
+                                </View>
                                 <View style={{left:'40%'}}>
                                     <Text style={styles.textItem}>PHONE NUMBER</Text>
                                     <Text style={styles.textInfo}>+38{info.phone != null ? info.phone : "NOT SPECIFIED"}</Text>
@@ -91,7 +94,7 @@ export default function MyAccount({navigation}) {
 
                             </View>
                             <View style={{flexDirection:'row', left:'20%'}}>
-                                <AdressIcon/>
+                                <NovaPoshta/>
 
                                 <View style={{left:'40%'}}>
                                     <Text style={styles.textItem}>NOVAPOSHTA BRANCH</Text>
@@ -101,7 +104,9 @@ export default function MyAccount({navigation}) {
 
                             </View>
                             <View style={{flexDirection:'row', left:'20%'}}>
-                                <AdressIcon/>
+                                <View style={{left: '3%'}}>
+                                    <AdressIcon/>
+                                </View>
                                 <View style={{left:'40%'}}>
                                     <Text style={styles.textItem}>ADRESS</Text>
                                     <Text style={styles.textInfo}>{info.region != null ? (info.region + ", " + info.city) : "NOT SPECIFIED" + info.city}</Text>
@@ -225,7 +230,6 @@ const styles = StyleSheet.create({
 
 
     },
-
     logOut:{
         flex:2,
         alignItems:"center",
@@ -249,8 +253,7 @@ const styles = StyleSheet.create({
         shadowOffset: {width: 0, height: 4},
         textDecorationLine: "underline",
         textDecorationColor: '#609FFF',
-        textDecorationStyle: 'solid'
-
+        textDecorationStyle: 'solid',
     },
 
 

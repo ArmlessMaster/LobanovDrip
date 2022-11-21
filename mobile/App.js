@@ -15,6 +15,7 @@ import FirstHeader from "./components/store/FirstHeader";
 import SecondHeader from "./components/store/SecondHeader";
 import ItemPage from "./components/itemPages/ItemPage";
 import Cart from "./components/cart/Cart"
+import MyAccount from "./components/authorization/MyAccount";
 
 export default function App() {
 
@@ -61,7 +62,7 @@ export default function App() {
                 {/*    <Footer/>*/}
                 {/*</View>*/}
                 {/*<Navigation/>*/}
-                <Cart/>
+                <Navigation/>
             </View>
         </AuthContext.Provider>
 

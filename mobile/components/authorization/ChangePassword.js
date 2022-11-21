@@ -79,7 +79,7 @@ export default function ChangePassword({navigation}) {
                     <Christ style={{left: '6%'}}></Christ>
                 </Pressable>
                 <Pressable style={{flex: 1, flexDirection: 'row'}} onPress={() => navigation.goBack()}>
-                    <Arrow style={{flex: 1, left: '30%', top: '1%'}}></Arrow>
+                    <Arrow style={{flex: 1, left: '130%', top: '2%'}}></Arrow>
                     <Text style={styles.loginText}>BACK</Text>
                 </Pressable>
             </View>
@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
         top: '10%'
     },
     loginText: {
-        flex: 1, left: '50%', color: 'white', fontSize: 18, fontFamily: 'VCR_OSD_MONO'
+        flex: 1, left: '150%', color: 'white', fontSize: 20, fontFamily: 'VCR_OSD_MONO'
     },
     input: {
         height: '6%',
