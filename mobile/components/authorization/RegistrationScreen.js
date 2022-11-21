@@ -25,7 +25,7 @@ export default function Registration({navigation}) {
             if (password === repeatedPassword) {
                 const response = await axios.post(
                     `https://lobanovdriptest.herokuapp.com/api/account/register`,
-                    { email: `${email}`, password: `${password}`, name: `${name + " " + surname}` }
+                    { email: `${email}`, password: `${password}`, name: `${name}`, surname: `${surname}` }
                 );
                 Alert.alert(
                     'Success',

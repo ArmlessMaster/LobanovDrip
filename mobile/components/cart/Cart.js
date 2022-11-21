@@ -1,7 +1,7 @@
-import React, {useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {
     Dimensions,
-    FlatList, Image, SafeAreaView, StyleSheet,
+    FlatList, Image, Pressable, SafeAreaView, StyleSheet,
     Text,
     TouchableOpacity,
     View,
@@ -13,14 +13,28 @@ import VisaMasterCard from "../../assets/images/card/cards 1.svg"
 import SwipeToDeletePanel from "./swipeToDeletePanel";
 import Constants from "expo-constants";
 import Christ from "../../assets/images/login/xMark.svg"
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 
 
-export default function Cart() {
+export default function Cart({navigation}) {
     const [swipeablePanelActive, setSwipeablePanelActive] = useState(true);
+    const[cart, setCart] = useState([])
+    const[itemNum, setItemNum] = useState(0);
+    const getData = useCallback(async () => {
+        try {
+            setCart(JSON.parse(await AsyncStorage.getItem('cart')));
+            setItemNum(cart.map(item => item.count).reduce((prev, curr) => prev + curr, 0));
+        }
+        catch (e) {}
+    }, [cart])
+
+    useEffect(() => {
+       getData()
+    }, [getData])
 
     const hidePanel = () => setSwipeablePanelActive(false);
     const showPanel = () => setSwipeablePanelActive(true);
-    const itemNum = 5
     return (
         <>
             <View style={{height: Constants.statusBarHeight, backgroundColor: '#0D0D0D'}}>
@@ -28,7 +42,9 @@ export default function Cart() {
             </View>
             <View style={{flex:1, backgroundColor: '#0D0D0D'}}>
                 <View style={{flex:0.7, flexDirection: 'row', alignItems: 'center'}}>
-                    <Christ style={{left: '30%'}}/>
+                    <Pressable style={{left: '30%'}} onPress={() => console.log(cart)}>
+                        <Christ/>
+                    </Pressable>
                     <Text style={{fontFamily: 'roboto-medium',
                         fontSize: 30,
                         left: '110%',

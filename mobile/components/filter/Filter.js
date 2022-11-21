@@ -17,7 +17,7 @@ const Filter = ({navigation}) => {
         setFromPrice(sliderFromPrice)
         setToPrice(sliderToPrice)
     }
-    const sizeButtonsToFilter = (buttons) => {
+    const sizeButtonsToRoot = (buttons) => {
         const res = []
         buttons.forEach(element => {
             res.push(element)
@@ -102,7 +102,7 @@ const Filter = ({navigation}) => {
                 <SafeAreaProvider>
                     <SafeAreaView style={{flex: 1, alignItems: 'center'}}>
                         <SizeButtonGroup buttons={['XS', 'S', 'M', 'L', 'XL', 'XXL', 'UN']}
-                                         multiple={true} sizeButtonsToFilter={sizeButtonsToFilter}></SizeButtonGroup>
+                                         multiple={true} sizeButtonsToRoot={sizeButtonsToRoot}></SizeButtonGroup>
                     </SafeAreaView>
                 </SafeAreaProvider>
             </View>

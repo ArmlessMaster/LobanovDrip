@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from "react";
 import {StyleSheet, View, TouchableOpacity, Text, Pressable, TextInput, Button} from "react-native";
 
-export const SizeButtonGroup = ({buttons, available, multiple, sizeButtonsToFilter}) => {
+export const SizeButtonGroup = ({buttons, available, multiple, sizeButtonsToRoot}) => {
 
-    const [clickedId, setClickedId] =  multiple ? useState(buttons) : useState([])
+    const [clickedId, setClickedId] =  multiple ? useState(buttons) : useState(0)
     const handleClick = (item, id) => {
         setClickedId(id)
     }
@@ -16,8 +16,8 @@ export const SizeButtonGroup = ({buttons, available, multiple, sizeButtonsToFilt
     }
 
     useEffect(() => {
-        if(sizeButtonsToFilter !== null){
-            sizeButtonsToFilter(clickedId)
+        if(sizeButtonsToRoot !== null){
+            sizeButtonsToRoot(buttons[clickedId])
         }
     }, [clickedId]);
 

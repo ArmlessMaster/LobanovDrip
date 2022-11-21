@@ -13,6 +13,8 @@ import StoreScreen from "../components/store/StoreScreen";
 import Collections from "../components/store/Collections";
 import MyAccount from "../components/authorization/MyAccount";
 import PersonalInfo from "../components/authorization/PersonalInfo"
+import Cart from "../components/cart/Cart";
+
 
 const screens = {
     SwipeStore:{
@@ -117,7 +119,15 @@ const screens = {
             tabBarStyle: { display: "none" },
             animationEnabled: false
         },
-    }
+    },
+    Cart: {
+        screen: Cart,
+        navigationOptions: {
+            headerShown: false,
+            tabBarStyle: { display: "none" },
+            cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
+        },
+    },
 
 }
 

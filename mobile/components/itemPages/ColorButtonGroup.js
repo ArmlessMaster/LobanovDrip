@@ -1,13 +1,19 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {StyleSheet, View, TouchableOpacity} from "react-native";
 
-export const ColorButtonGroup = ({buttons, doSomethingAfterClick}) => {
+export const ColorButtonGroup = ({buttons, doSomethingAfterClick, colorButtonToRoot}) => {
 
     const [clickedId, setClickedId] = useState(0)
     const handleClick = (item, id) => {
         setClickedId(id)
         doSomethingAfterClick(item)
     }
+
+    useEffect(() => {
+        if(colorButtonToRoot !== null){
+            colorButtonToRoot(buttons[clickedId])
+        }
+    }, [clickedId]);
 
     return (
         <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>

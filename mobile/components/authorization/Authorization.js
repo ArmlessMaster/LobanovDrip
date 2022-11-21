@@ -17,10 +17,17 @@ export default function Authorization({navigation}) {
                     showsButtons={true}
                     loop={false}
                     prevButton={<View style={{opacity: 0}}>
-                        <Arrow style={styles.prevArrow}></Arrow>
-                        <Text style={styles.loginText}>LOGIN-IN</Text>
+                        <View style={styles.prev}>
+                            <Text>prev prev prev prev pr </Text>
+                            <Text>prev prev prev prev pr </Text>
+                            <Text>prev prev prev prev pr </Text>
+                        </View>
                     </View>}
-                    nextButton={<View style={{opacity: 0}}><Text style={styles.signIn}>SIGN-IN</Text><LeftArrow style={styles.arrow}/>
+                    nextButton={<View style={{opacity: 0}}><View style={styles.next}>
+                        <Text>next next next next next </Text>
+                        <Text>next next next next next </Text>
+                        <Text>next next next next next </Text>
+                    </View>
                 </View>}>
                     <Login navigation={navigation}/>
                     <Registration navigation={navigation}/>
@@ -58,5 +65,15 @@ const styles = StyleSheet.create({
         bottom: Dimensions.get('screen').height/100*38,
         left: Dimensions.get('screen').width/100*74,
         color: 'white', fontSize: 18, fontFamily: 'VCR_OSD_MONO'
+    },
+    next:{
+        position: "absolute",
+        bottom: Dimensions.get('screen').height/100*35,
+        right: Dimensions.get('screen').width/100,
+    },
+    prev:{
+        position: "absolute",
+        bottom: Dimensions.get('screen').height/100*35,
+        left: Dimensions.get('screen').width/1.7,
     },
 })

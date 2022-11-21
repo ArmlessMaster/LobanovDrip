@@ -31,7 +31,7 @@ export default function Footer({ navigation}) {
                 <Pressable>
                     <Menu/>
                 </Pressable>
-                <Pressable>
+                <Pressable onPress={() => navigation.navigate("Cart")}>
                     <Cart/>
                 </Pressable>
                 <Pressable onPress={() => clickedAccount()}>

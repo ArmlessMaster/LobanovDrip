@@ -1,4 +1,5 @@
 import {
+    Alert,
     Dimensions,
     FlatList, Image,
     Pressable,
@@ -7,7 +8,7 @@ import {
     Text,
     View,
 } from "react-native";
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useContext, useEffect, useState} from 'react';
 import Christ from "../../assets/images/BlackChrist.svg";
 import Cart from "../../assets/images/menu/blackCart.svg"
 import Carousel from "./carousel";
@@ -18,6 +19,8 @@ import SafeAreaView, {SafeAreaProvider} from "react-native-safe-area-view";
 import {SizeButtonGroup} from "../filter/SizeButtonGroup";
 import {useHttp} from "../../hooks/http.hook";
 import axios from "axios";
+import {AuthContext} from "../../context/AuthContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const statusBarHeight = Constants.statusBarHeight;
 
@@ -26,7 +29,62 @@ const printButtonLabel = (item) => {
 }
 
 const ItemPage = ({navigation}) => {
+    const [size, setSize] = useState()
+    const sizeButtonsToRoot = (button) => {
+        setSize(button)
+    }
+    const [color, setColor] = useState()
+    const colorButtonToRoot = (button) => {
+        setColor(button)
+    }
+    const [cart, setCart] = useState([])
+    const [isItemInCart, setIsItemInCart] = useState(false);
 
+    const setItem = async (item) => {
+        await AsyncStorage.setItem(
+            'cart',
+            item
+        );
+    }
+
+    function isItemHere(cart) {
+        for (let i = 0; i < cart.length; i++) {
+            if (cart[i].clothes_id === itemId && cart[i].size === size && cart[i].color === color) return true;
+        }
+        return false;
+    }
+
+    const addItemToCart = async () => {
+        try {
+            setCart(JSON.parse(await AsyncStorage.getItem('cart')) !== null ? JSON.parse(await AsyncStorage.getItem('cart')) : [])
+            setIsItemInCart(isItemHere(cart))
+            if (isItemInCart) {
+                console.log(true)
+                await AsyncStorage.setItem(
+                    'cart',
+                    JSON.stringify(cart.map((item) => { item.count = (item.clothes_id === itemId && item.color === color && item.size === size) ? item.count + 1 : item.count}))
+                );
+            } else {
+                console.log(false)
+                await AsyncStorage.setItem(
+                    'cart',
+                    JSON.stringify([...cart, {clothes_id: itemId, count: 1, size: size, color: color, name: clothesData.name, price: clothesData.price, image: clothesData.imagesUrls[0]}])                );
+            }
+            Alert.alert(
+                'Success',
+                'Item was successfully added to the cart.',
+                [
+                    {
+                        text: 'OK'
+                    },
+                ],
+                {cancelable: false},
+            );
+        } catch (error) {
+        }
+    };
+
+    const auth = useContext(AuthContext)
     const printColor = (item) => {
         console.log(item)
     }
@@ -40,6 +98,19 @@ const ItemPage = ({navigation}) => {
         try {
             const clothData = await axios.get(`https://lobanovdriptest.herokuapp.com/api/clothes/find?_id=${itemId}`)
             setClothesData(clothData.data.clothes[0])
+
+            const method = "GET";
+            let body = {user_id: getId(auth.token), status: "cart"};
+            body = JSON.stringify(body);
+            const headers = {Authorization: `Bearer ` + `${auth.token}`};
+            headers["Content-Type"] = "application/json";
+            const response = await fetch(`https://lobanovdriptest.herokuapp.com/api/account/update/password`, {
+                method,
+                body,
+                headers,
+            });
+            const data = await response.json()
+            console.log(data);
             setHasLoaded(true)
         }
         catch (e) {}
@@ -48,7 +119,6 @@ const ItemPage = ({navigation}) => {
     useEffect(() => {
         fetchClothesData()
     }, [fetchClothesData])
-
 
     const fetchCollections = useCallback(async () => {
         try {
@@ -90,6 +160,15 @@ const ItemPage = ({navigation}) => {
         })
     }
 
+    function getId (token) {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        return JSON.parse(jsonPayload).id;
+    }
+
     return hasLoaded ? (
         <SafeAreaProvider>
             <SafeAreaView style={{paddingTop: statusBarHeight}}>
@@ -102,7 +181,7 @@ const ItemPage = ({navigation}) => {
                                 <Christ></Christ>
                             </Pressable>
                             <View style={{flex: 1}}></View>
-                            <Pressable style={{flex: 0.2, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                            <Pressable style={{flex: 0.2, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}} onPress={() => navigation.navigate('Cart')}>
                                 <Cart style={{flex: 1}}></Cart>
                             </Pressable>
                         </View>
@@ -120,7 +199,7 @@ const ItemPage = ({navigation}) => {
                             textAlign: 'center', color: '#8A8A8A'}}>COLORS</Text>
                         <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', paddingTop: '3%'}}>
                             <ColorButtonGroup style={{top:'50%'}} buttons={colors}
-                                              doSomethingAfterClick={printColor}></ColorButtonGroup>
+                                              doSomethingAfterClick={printColor} colorButtonToRoot={colorButtonToRoot}></ColorButtonGroup>
                         </View>
                         <View style={{borderWidth: 0.75, borderColor: '#C6C6C6', width: '90%', alignSelf: 'center',
                             marginTop: '5%'}}/>
@@ -129,14 +208,14 @@ const ItemPage = ({navigation}) => {
                         <View style={{flex: 1}}/>
                         <View style={{paddingTop: '5%', height: '6.5%',  alignItems: 'center', justifyContent: 'space-around'}}>
                             <SizeButtonGroup buttons={sizes} available={available}
-                                             doSomethingAfterClick={printButtonLabel} multiple={false} sizeButtonsToFilter={null}></SizeButtonGroup>
+                                             doSomethingAfterClick={printButtonLabel} multiple={false} sizeButtonsToRoot={sizeButtonsToRoot}></SizeButtonGroup>
                         </View>
 
                         <Pressable style={{flex: 1, flexDirection: 'row', justifyContent: 'center', marginTop: '5%'}}>
                             <Ruler></Ruler>
                             <Text style={{fontFamily: 'roboto-regular', fontSize: 14, marginHorizontal: '1%'}}>Перевір свій розмір.</Text>
                         </Pressable>
-                        <Pressable style={{flex: 1, flexDirection: 'row', justifyContent: 'center', marginTop: '5%'}}>
+                        <Pressable style={{flex: 1, flexDirection: 'row', justifyContent: 'center', marginTop: '5%'}} onPress={addItemToCart}>
                             <View style={{backgroundColor: '#B03737', width: '80%'}}>
                                 <Text style={{paddingVertical: '3%', textAlign: 'center', fontFamily: 'roboto-regular', fontSize: 16, color: 'white'}}>Додати до кошику</Text>
                             </View>

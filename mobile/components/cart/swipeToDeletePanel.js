@@ -1,5 +1,5 @@
 
-import React, {useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
     SafeAreaView,
     StatusBar,
@@ -14,12 +14,15 @@ import {
 import {SwipeListView} from 'react-native-swipe-list-view';
 import {Icon} from 'react-native-eva-icons';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 
 
 const hapticFeedbackOptions = {
     enableVibrateFallback: true,
     ignoreAndroidSystemSettings: false,
 };
+
 
 const VisibleItem = props => {
     const {data, screenWidth, rowKey} = props;
@@ -45,7 +48,7 @@ const VisibleItem = props => {
                     },
                 ]}>
                 <View style={{left: '20%'}}>
-                    <Image style={styles.image} source={data.item.image}/>
+                    <Image style={styles.image} source={{uri: data.item.image}}/>
                 </View>
                 <View style={{flex: 1, flexDirection: 'column'}}>
                     <Text style={{
@@ -53,26 +56,25 @@ const VisibleItem = props => {
                         width: 200,
                         left: '15%',
                         fontFamily: 'roboto-medium',
-                        fontSize: '18'
-                    }}>Hoodie Evangelion black
-                        oversized</Text>
+                        fontSize: 18
+                    }}>{data.item.name}</Text>
                     <Text style={{
                         color:'#737373',
                         width: 200,
                         left: '15%',
                         fontFamily: 'roboto-medium',
-                        fontSize: '15'
+                        fontSize: 15
                     }}>
-                        XS
+                        {data.item.size}
                     </Text>
                     <Text style={{
                         color:'#FFFFFF',
                         width: 200,
                         left: '15%',
                         fontFamily: 'roboto-medium',
-                        fontSize: '20'
+                        fontSize: 20
                     }}>
-                        880₴
+                        {data.item.price}₴
                     </Text>
                 </View>
             </Animated.View>
@@ -200,31 +202,56 @@ const HiddenItemWithActions = props => {
         </Animated.View>
     );
 };
-
 const rowAnimatedValues = {};
-Array(3)
-    .fill('')
-    .forEach((_, i) => {
-        rowAnimatedValues[`${i}`] = {
-            rowHeight: new Animated.Value(Dimensions.get('screen').width / 3.2),
-            rowFrontTranslate: new Animated.Value(1),
-            rowBackWidth: new Animated.Value(100),
-        };
-    });
+
 
 export default function SwipeToDeletePanel(){
+
+    const [cart, setCart] = useState([])
+    const [list, setList] = useState([])
+    const [itemNum, setItemNum] = useState(0);
+    const [hasLoaded, setHasLoaded] = useState(false);
+    const getData = useCallback(async () => {
+        try {
+            setCart(JSON.parse(await AsyncStorage.getItem('cart')));
+            setItemNum(cart.map(item => item.count).reduce((prev, curr) => prev + curr, 0));
+        }
+        catch (e) {}
+    }, [cart])
+
+
+    const getList = useCallback(async () => {
+        try {
+            setList([...new Array(itemNum)].map((_, i) => ({
+                key: `${i}`,
+                size: cart[i].size,
+                name: cart[i].name,
+                price: cart[i].price,
+                image: cart[i].image,
+            })))
+            setHasLoaded(true)
+        } catch (e) {}
+    }, [cart])
+
+    useEffect(() => {
+        getData()
+        getList()
+    }, [getData, getList])
+
+    Array(itemNum)
+        .fill('')
+        .forEach((_, i) => {
+            rowAnimatedValues[`${i}`] = {
+                rowHeight: new Animated.Value(Dimensions.get('screen').width / 3.2),
+                rowFrontTranslate: new Animated.Value(1),
+                rowBackWidth: new Animated.Value(100),
+            };
+        });
+
     const backgroundStyle = {
         backgroundColor: '#0D0D0D',
     };
     const {width: screenWidth} = useWindowDimensions();
-
-    const [list, setList] = useState(
-        [...new Array(3)].map((_, i) => ({
-            key: `${i}`,
-            text:  `abc`,
-            image: require('../../assets/images/lobanovDripProducts/4.jpg'),
-        })),
-    );
 
     const closeRow = (rowMap, rowKey) => {
         if (rowMap[rowKey]) {
