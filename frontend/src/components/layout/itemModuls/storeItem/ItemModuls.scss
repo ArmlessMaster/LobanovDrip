@@ -3,11 +3,20 @@
   justify-self: center;
   margin-bottom: 8vw;
   font-weight: 700;
+  z-index: 3;
+  .ItemModul__img-wrapper{
+    height: 100%;
+    overflow: hidden;
+  }
   img{
     height: 100%;
     width: 100%;
+    transition: 0.5s all ease-in-out;
   }
+  img:hover{
+    transform: scale(1.05);
 
+  }
   .ItemModul-name{
     font-size: 1.250vw;
     

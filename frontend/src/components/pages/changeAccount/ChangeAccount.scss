@@ -1,0 +1,59 @@
+
+
+.ChangeAccount{
+  overflow-x: hidden;
+  font-family: "Roboto Condensed";
+  color: rgb(255, 255, 255);
+  background-color: #0D0D0D;
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  .ChangeAccount-wrapper{
+    display: flex;
+    margin-top: 5%;
+    .ChangeAccount-menu{
+      margin-left: 4%;
+    }
+    .ChangeAccount-values{
+      margin-left: 5%;
+      .ChangeAccount-label{
+        font-size: 2vw;
+        font-weight: 700;
+      }
+
+      .ChangeAccount-inputs{
+        margin-top: 3vw;
+        .inputs-label{
+          font-family: 'VCR OSD Mono';
+          font-size: 2vw;
+        }
+        .change-btn{
+          margin-top: 0.5vw;
+        }
+        .inputs-grid{
+          font-family: 'VCR OSD Mono';
+          display: grid;
+          margin-left: auto;
+          margin-right: auto;
+          grid-template-columns: 33.3% 33.3% 33.3%;
+          div + div{
+            margin-right: 1vw;
+          }
+          div{
+            margin-top: 1vw;
+          }
+          .inputsBtn{
+            margin-top: 2vw;
+          }
+        }
+
+      }
+      .ChangeAccount-inputs + .ChangeAccount-inputs{
+        .inputs-grid{
+          grid-template-columns: 33.3% 33.3%;
+        }
+      }
+    }
+  }
+  
+}

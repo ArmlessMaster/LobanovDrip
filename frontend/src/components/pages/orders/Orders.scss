@@ -1,0 +1,123 @@
+
+
+.Orders{
+  overflow-x: hidden;
+  font-family: "Roboto Condensed";
+  color: rgb(255, 255, 255);
+  background-color: #0D0D0D;
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  .decor__wrapper{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    z-index: -1;
+    .decor__graffity{
+      position: absolute;
+      font-family: 'Ruthless Wreckin ONE';
+    }
+    .decor__graffity.first{
+      left: 85%;
+      top: 93%;
+      font-size: 4vw;
+      letter-spacing: 0.095em;
+      color: #303030;
+      transform: rotate(-13.43deg);
+    }
+    .decor__graffity.second{
+      left: 0%;
+      top: 0%;
+      font-family: 'Ruthless Wreckin ONE';
+      font-size: 5vw;
+      letter-spacing: 0.095em;
+      color: #161616;
+      transform: rotate(-17.43deg);
+    }
+    .decor__graffity.third{
+      right: -12%;
+      top: 45%;
+      font-family: 'Ruthless Wreckin ONE';
+      font-size: 5vw;
+      letter-spacing: 0.095em;
+      color: #111111;
+      transform: rotate(-90deg);
+    }
+    .decor__jpntext{
+      z-index: -1;
+      position: absolute;
+      font-weight: 800;
+      font-size: 2vw;
+      color: #FFFFFF;
+      transform: rotate(90deg);
+    }
+    .decor__jpntext.first{
+      left: -2%;
+      top: 85%;
+    }
+    .decor__jpntext.second{
+      right: 0%;
+      top: 10%;
+    }
+    .label_registration{
+      position: absolute;
+      right: 1%;
+      top: 25%;
+      width: 2vw;
+      height: 20vw;
+      svg{
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+  .Orders-wrapper{
+    display: flex;
+    margin-top: 5%;
+    .Orders-menu{
+      margin-left: 4%;
+    }
+    .Orders-values{
+      margin-left: 5%;
+      .Orders-label{
+        font-size: 2vw;
+        font-weight: 700;
+      }
+
+      .Orders-inputs{
+        margin-top: 3vw;
+        .inputs-label{
+          font-family: 'VCR OSD Mono';
+          font-size: 2vw;
+        }
+        .change-btn{
+          margin-top: 0.5vw;
+        }
+        .inputs-grid{
+          font-family: 'VCR OSD Mono';
+          display: grid;
+          margin-left: auto;
+          margin-right: auto;
+          grid-template-columns: 33.3% 33.3% 33.3%;
+          div + div{
+            margin-right: 1vw;
+          }
+          div{
+            margin-top: 1vw;
+          }
+          .inputsBtn{
+            margin-top: 2vw;
+          }
+        }
+
+      }
+      .Orders-inputs + .Orders-inputs{
+        .inputs-grid{
+          grid-template-columns: 33.3% 33.3%;
+        }
+      }
+    }
+  }
+  
+}

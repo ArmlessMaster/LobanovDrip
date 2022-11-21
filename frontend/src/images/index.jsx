@@ -2,9 +2,13 @@ export { default as RegistrationLabel } from './icons/registerSvg/RegisterSvg';
 export { default as BackgroundVideo } from './video/bg_dots.mp4';
 export { default as BackgroundMainVideo } from './video/bg_main.mp4';
 export { default as PenSvg } from './icons/penSvg/PenSvg';
+export { default as PaySvg } from './icons/paySvg/PaySvg';
+export { default as PaySvg1 } from './icons/paySvg/PaySvg1';
+export { default as PaySvg2 } from './icons/paySvg/PaySvg2';
 export { default as TshirtSvg } from './icons/tshirtSvg/TshirtSvg';
+export { default as AttenSvg } from './icons/attenSvg/AttenSvg';
 export { default as test } from './test/1.png';
 export { default as test1 } from './test/2.jpg';
 export { default as test2 } from './test/6.jpg';
 export { default as test3 } from './test/7.jpg';
-
+export { default as Skull } from './icons/skullSvg/Skull.svg';

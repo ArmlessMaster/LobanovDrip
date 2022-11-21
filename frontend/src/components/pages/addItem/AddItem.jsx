@@ -1,11 +1,12 @@
 import "./AddItem.scss";
 import { React, useState, useContext, useEffect, useCallback } from "react";
 import { BackgroundVideo } from "../../../images";
-import { PixelBtn, PixelInput, Uploader } from "../../layout/index";
+import { PixelBtn, PixelInput, Uploader, Loader } from "../../layout";
 import { useHttp } from "../../../hooks/http.hook";
 import { AuthContext } from "../../../context/AuthContext";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
+
 
 const AddItem = () => {
   const animatedComponents = makeAnimated();
@@ -31,34 +32,34 @@ const AddItem = () => {
   const [clothesData, setClothesData] = useState({
     name: "",
     type: "",
-    price: 0,
+    price: null,
     material: "",
     care: "",
-    size: ["xs", "s", "m", "l", "xl", "xxl", "un"],
+
     color: [],
     sex: "",
     collection_id: "",
-    sale: 0,
+    sale: null,
     company: "",
-    clothesCount: [{size: "xs", count: 0,},{ size: "s",count: 0,},
+    clothesCount: [{size: "XS", count: 0,},{ size: "S",count: 0,},
       {
-        size: "m",
+        size: "M",
         count: 0,
       },
       {
-        size: "l",
+        size: "L",
         count: 0,
       },
       {
-        size: "xl",
+        size: "XL",
         count: 0,
       },
       {
-        size: "xxl",
+        size: "XXL",
         count: 0,
       },
       {
-        size: "un",
+        size: "UN",
         count: 0,
       },
     ],
@@ -96,8 +97,46 @@ const AddItem = () => {
       //setImages((prevState) => [...prevState, gif]);
       await request("/api/clothes/create", "POST", { ...clothesData }, images, {
         Authorization: `Bearer ${auth.token}`,
+      }).then(() => {
+        setClothesData({
+          name: "",
+          type: "",
+          price: 0,
+          material: "",
+          care: "",
+          color: [],
+          sex: "",
+          collection_id: "",
+          sale: 0,
+          company: "",
+          clothesCount: [{size: "XS", count: 0,},{ size: "S",count: 0,},
+            {
+              size: "M",
+              count: 0,
+            },
+            {
+              size: "L",
+              count: 0,
+            },
+            {
+              size: "XL",
+              count: 0,
+            },
+            {
+              size: "XXL",
+              count: 0,
+            },
+            {
+              size: "UN",
+              count: 0,
+            },
+          ],
+        });
+        setImages([]);
+        setPreview([]);
+        setGif([]);
+        setPreviewGif([]);
       });
-
       // NotificationManager.success('Authorization success', 'Glad to see you!');
     } catch (e) {
       // NotificationManager.error('Error Authorization', 'Wrong login or password!');
@@ -106,18 +145,24 @@ const AddItem = () => {
 
   const createItemCollection = async () => {
     try {
-      const imagesArray = [];
-
-      imagesArray.push(imagesCollection);
-      imagesArray.push(gifCollection);
-
+      imagesCollection.push(gifCollection);
+      console.log(imagesCollection)
       const data = await request(
         "/api/collection/create",
         "POST",
         { ...collectionData },
-        imagesArray,
+        imagesCollection,
         { Authorization: `Bearer ${auth.token}` }
-      );
+      ).then(() => {
+        setCollectionsData({
+          name: "",
+          description: "",
+        });
+        setPreviewCollection([]);
+        setImagesCollection([]);
+        setPreviewGifCollection([]);
+        setGifCollection([]);
+      });
       const newElement = data.collection;
       collection.push(newElement);
       setCollection(collection);
@@ -226,6 +271,10 @@ const AddItem = () => {
     setClothesData({ ...clothesData, type: option.value });
   };
 
+  const onClickInputFile = async (e) => {
+    e.target.value = null;
+  };
+  
   return hasLoaded ? (
     <section className="AddItem">
       <video autoPlay loop muted>
@@ -254,26 +303,37 @@ const AddItem = () => {
           </div>
 
           <div className="input-flex">
-            <Select
+          <div className="select-wrapper">
+          <Select
               isMulti={true}
               name="colors"
+              value={clothesData.color.map((option) => ({value: option, label: option})
+                )}
               options={colourOptions}
               className="my-react-select-container"
               classNamePrefix="my-react-select"
               components={animatedComponents}
               onChange={handleChangeColors}
+              menuPosition="fixed"
             />
 
-            <Select
+          </div>
+          <div className="select-wrapper">
+          <Select
+              isMulti={false}
               name="collection"
               options={collection}
-              getOptionLabel={(option) => option.name}
-              getOptionValue={(option) => option._id}
               className="my-react-select-container"
               classNamePrefix="my-react-select"
+              getOptionLabel={(option) => option.name}
+              getOptionValue={(option) => option._id}
               components={animatedComponents}
               onChange={handleChangeCollections}
+              menuPosition="fixed"
             />
+          </div>
+
+            
           </div>
 
           <div className="input-flex">
@@ -324,20 +384,25 @@ const AddItem = () => {
             />
           </div>
         <div className="input-flex">
-          <Select
+           <div className="select-wrapper">
+           <Select
               isMulti={false}
               name="type"
+              value={clothesData.type === "" ? null : {value: clothesData.type, label: clothesData.type}}
               options={typeOptions}
               className="my-react-select-container"
               classNamePrefix="my-react-select"
               components={animatedComponents}
               onChange={handleChangeTypes}
-            /></div>
+              menuPosition="fixed"
+            />
+            </div>
+          </div>
           <div className="input-flex">
             <PixelInput
               onChange={changeHandlerItem}
               id="clothesCount"
-              name="xs"
+              name="XS"
               type="text"
               placeholder="XS"
               className="little"
@@ -345,7 +410,7 @@ const AddItem = () => {
             <PixelInput
               onChange={changeHandlerItem}
               id="clothesCount"
-              name="s"
+              name="S"
               type="text"
               placeholder="S"
               className="little"
@@ -353,7 +418,7 @@ const AddItem = () => {
             <PixelInput
               onChange={changeHandlerItem}
               id="clothesCount"
-              name="m"
+              name="M"
               type="text"
               placeholder="M"
               className="little"
@@ -361,7 +426,7 @@ const AddItem = () => {
             <PixelInput
               onChange={changeHandlerItem}
               id="clothesCount"
-              name="l"
+              name="L"
               type="text"
               placeholder="L"
               className="little"
@@ -369,7 +434,7 @@ const AddItem = () => {
             <PixelInput
               onChange={changeHandlerItem}
               id="clothesCount"
-              name="xl"
+              name="XL"
               type="text"
               placeholder="XL"
               className="little"
@@ -377,7 +442,7 @@ const AddItem = () => {
             <PixelInput
               onChange={changeHandlerItem}
               id="clothesCount"
-              name="xxl"
+              name="XXL"
               type="text"
               placeholder="XXL"
               className="little"
@@ -385,7 +450,7 @@ const AddItem = () => {
             <PixelInput
               onChange={changeHandlerItem}
               id="clothesCount"
-              name="un"
+              name="UN"
               type="text"
               placeholder="UN"
               className="little"
@@ -393,7 +458,7 @@ const AddItem = () => {
           </div>
           <div className="images__add">
             <div className="images__add-form">
-              <Uploader handleChange={handleChange} isMultiple={true} />
+              <Uploader handleChange={handleChange} isMultiple={true} accept={".png, .jpg, .jpeg"} onClick={onClickInputFile}/>
               <div className="create-left-grid">
                 {preview.map((item) => {
                   return (
@@ -429,9 +494,9 @@ const AddItem = () => {
               </div>
             </div>
             <div className="images__add-form">
-              <Uploader handleChange={handleChangeGif} />
+              <Uploader handleChange={handleChangeGif} accept={".gif"} onClick={onClickInputFile}/>
               <div className="create-left-grid">
-                {previewGif && (
+                {(previewGif && previewGif.length >= 1) && (
                   <div className="imgs-wrapper">
                     <img src={previewGif} alt="" className="" />
                     <div className="button-create-wrapper">
@@ -455,6 +520,7 @@ const AddItem = () => {
               text="ENTER"
               disabled={loading}
               onClick={createItemCloth}
+              color="Red"
             />
           </div>
         </div>
@@ -482,7 +548,7 @@ const AddItem = () => {
 
           <div className="images__add">
             <div className="images__add-form">
-              <Uploader handleChange={handleChangeCollection} />
+              <Uploader handleChange={handleChangeCollection} accept={".png, .jpg, .jpeg"} onClick={onClickInputFile}/>
               <div className="create-left-grid">
               {previewCollection.map((item) => {
                   return (
@@ -518,9 +584,9 @@ const AddItem = () => {
               </div>
             </div>
             <div className="images__add-form">
-              <Uploader handleChange={handleChangeCollectionGif} />
+              <Uploader handleChange={handleChangeCollectionGif} accept={".gif"} onClick={onClickInputFile} />
               <div className="create-left-grid">
-                {previewGifCollection && (
+              {(previewGifCollection && previewGifCollection.length >= 1) && (
                   <div className="imgs-wrapper">
                     <img src={previewGifCollection} alt="" className="" />
                     <div className="button-create-wrapper">
@@ -545,14 +611,13 @@ const AddItem = () => {
               text="ENTER"
               disabled={loading}
               onClick={createItemCollection}
+              color="Red"
             />
           </div>
         </div>
       </div>
     </section>
-  ) : (
-    <div>123</div>
-  );
+  ) : <Loader/>
 };
 
 export default AddItem;

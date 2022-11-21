@@ -1,6 +1,6 @@
 import "./Store.scss";
 import {React, useCallback, useState, useEffect} from "react";
-import { ItemModule, CursorElement } from "../../layout/index";
+import { ItemModule, CursorElement, Loader } from "../../layout";
 import { useHttp } from "../../../hooks/http.hook";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination, Navigation } from "swiper";
@@ -76,8 +76,13 @@ const Store = () => {
   return hasLoaded ? (
 
     <section className='Store'>
-
-      {/* <motion.div   animate={{x: mousePos.x, y: mousePos.y,scale: 1,rotate: 0}}className="store-gif"><img src={collection[1].gifUrl}/></motion.div> */}
+      
+      <div className="store-decor">
+        <div className="decor-jpn first">洋服屋</div>
+        <div className="decor-graffity first">WHY U <p>mad?</p></div>
+        <div className="decor-graffity second">KHARKOV</div>
+        <div className="decor-graffity third">THE COLLEGE<p>DROPOUT</p></div>
+      </div>
       <div className="store__collection-carusel">
         <div className="store__collection-carusel_wrapper"> 
           <Swiper spaceBetween={1} centeredSlides={true} loop={true} autoplay={{delay: 4000, disableOnInteraction: false, }} speed={1600} pagination={{clickable: true,}} navigation={true} modules={[Autoplay, Pagination, Navigation]}>
@@ -93,17 +98,17 @@ const Store = () => {
         <Swiper  slidesPerView={3} spaceBetween={50}   speed={1600} pagination={{clickable: true,}} navigation={true}  grid={{rows: 1,}} modules={[Autoplay, Pagination, Navigation]}>
         
           {clothes.map((cloth, index) => {
-              return( <SwiperSlide><ItemModule class="high" onMouseEnter={console.log("ababa")} text={cloth.name} price={cloth.price + "₴"}  key={cloth._id} img={cloth.imagesUrls[0]} sizes={sizeUpload(cloth.clothesCount)}/></SwiperSlide>) 
+              return( <SwiperSlide><ItemModule class="high" link={`/store/${cloth.type}/${cloth._id}`} onMouseEnter={console.log("ababa")} text={cloth.name} price={cloth.price + "₴"}  key={cloth._id} img={cloth.imagesUrls[0]} sizes={sizeUpload(cloth.clothesCount)}/></SwiperSlide>) 
             })}
          </Swiper>
          </div>
       </div>
       <div className="store-item-grid">
-        <div className="store__label">LOBANOV<span>NEW THINGS</span></div>
+        <div className="store__label">LOBANOV<span className="label-border">NEW DROPS</span></div>
         <div className="store-item-flex_center">
           <div className="store-item-grid_wrapper"> 
           {clothes.map((cloth, index) => {
-            return(<ItemModule class="high" text={cloth.name} price={cloth.price + "₴"}  key={cloth._id} img={cloth.imagesUrls[0]} sizes={sizeUpload(cloth.clothesCount)}/>) 
+            return(<ItemModule class="high" text={cloth.name} price={cloth.price + "₴"} link={`/store/${cloth.type}/${cloth._id}`} key={cloth._id} img={cloth.imagesUrls[0]} sizes={sizeUpload(cloth.clothesCount)}/>) 
           })}
           </div>
         </div>
@@ -111,7 +116,7 @@ const Store = () => {
       </div>
       <CursorElement/>
     </section>
-  ) : <div className="ababa">ababa</div>
+  ) : <Loader/>
 }
 
 export default Store;

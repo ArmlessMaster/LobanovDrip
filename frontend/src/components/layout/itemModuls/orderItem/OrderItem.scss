@@ -1,0 +1,50 @@
+.OrderItem{
+  margin-top: 2vw;
+  .OrderItem-flex{
+    display: flex;
+    width: 70vw;
+    justify-content: space-between;
+    .OrderItem-flex__left{
+      .OrderItem-label{
+        margin-bottom: 0.5vw;
+        font-size: 1.3vw;
+        font-weight: 700;
+      }
+      .OrderItem-price{
+        margin-bottom: 0.5vw;
+        font-size: 1vw;
+      }
+    }
+    .OrderItem-flex__right{
+      .OrderItem-data{
+        margin-bottom: 0.3vw;
+        font-size: 1.3vw;
+        font-weight: 700;
+      }
+      .OrderItem-status{
+        margin-bottom: 0.3vw;
+        font-size: 1.2vw;
+        font-weight: 800;
+        text-align: right;
+      }
+      .OrderItem-status.Issued{
+        color: #59DE56;
+      }
+
+      .OrderItem-status.Expensive{
+        color: #DED056;
+      }
+      
+      .OrderItem-status.Forming{
+        color:#DE5656;
+      }
+    }
+  }
+  .OrderItem-clothes{
+    display: flex;
+    img{
+      width: 8vw;
+      margin-right: 1.5vw;
+    }
+  }
+}

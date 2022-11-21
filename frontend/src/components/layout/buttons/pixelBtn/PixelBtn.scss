@@ -8,26 +8,47 @@
   padding-left: 1.8vw;
   padding-right: 1.8vw;
   z-index: 1;
+  transition: 0.3s ease;
+  cursor: pointer;
+  outline: none;
 }
 
 .PixelBtn.Red{
   height: 2.760vw;
   background: #DB2525;
   font-size: 1.667vw;
-  border: none;
-  transition: 0.1s ease;
 }
 
 .PixelBtn.Red:hover{
-  height: 2.760vw;
   background: #971919;
-  font-size: 1.667vw;
-  border: none;
 }
 
 .PixelBtn.Blue{
-  border: none;
   font-size: 0.938vw;
   height: 1.823vw;
   background: #3124D0;
+}
+.PixelBtn.Blue:hover{
+  background:  #2b1fb2;
+} 
+
+.PixelBtn.BigRed{
+  background:  #DB2525;
+  width: 20.25vw;
+  font-size: 1.667vw;
+  height: 2.760vw;
+}
+.PixelBtn.BigRed:hover{
+  background:  #971919;
+}
+
+.PixelBtn.RedLittle{
+  background:  #DB2525;
+  min-width: 10vw;
+  font-size: 1vw;
+  height: 2vw;
+}
+
+.PixelBtn.RedLittle:hover{
+  background:  #971919;
 }

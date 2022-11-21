@@ -1,0 +1,17 @@
+.accountMenu{
+  .accountMenu-list{
+    line-height: 1.2vw;
+    font-weight: 600;
+    font-size: .8vw;
+  }
+  .accountMenu-list.MyAccountHover{
+    :nth-child(2) {
+      color: #ee4343;
+    }
+  }
+  .accountMenu-list.MyOrders{
+    :nth-child(1) {
+      color: #ee4343;
+    }
+  }
+}

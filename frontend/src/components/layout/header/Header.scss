@@ -19,12 +19,53 @@
       .header__menu-drop__item-flex.grid{
         display: flex;
         position: sticky;
-        margin-top: 3vw;
-        margin-left: 1vw;
+        margin-top: 2vw;
+        margin-left: 0.5vw;
         justify-content: left;
         flex-direction: column;
       }
+      .header__menu-accept{
+        width: 100%;
+        background-color: #232323;
+        position: absolute;
+        bottom: 0vw;
 
+        justify-content: space-around;
+        display: flex;
+        .accept-btn{
+          font-weight: 300;
+          margin-top: 0.5vw;
+          margin-bottom: 0.5vw;
+        }
+        .price{
+          margin-top: 0.5vw;
+          .price-label{
+            font-size: 1vw;
+          }
+          .low-text{
+            color: #5a5a5a;
+            font-weight: 400;
+            font-size: 0.6vw;
+          }
+        }
+      }
+      .header__menu-empty{
+
+        img{
+          position: absolute;
+          top: 0;
+          left: 0;
+        }
+        p{
+          position: absolute;
+          font-size: 3vw;
+          top: 80%;
+          left: 10%;
+          color: rgb(92, 92, 92);
+          font-weight: 900;
+          font-family: "Roboto Condensed";
+        }
+      }
       .header__menu-drop__item-flex{
         width: 100%;
         position: absolute;
@@ -49,6 +90,28 @@
         }
         div+div{
           left: 68.5%;
+        }
+      }
+      .header__menu-drop__item-account-wrapper{
+        margin-top: 3vw;
+        font-size: 0.9vw;
+        
+        .header__menu-drop__item-account{
+          margin-top: 0.8vw;
+          display: flex;
+          flex-direction: column;
+          div{
+            margin-left: 1vw;
+          }
+          .header__menu-drop__item-account_big-text{
+
+          }
+          .header__menu-drop__item-account_little-text{
+            margin-top: 0.4vw;
+            font-size: 0.7vw;
+            font-weight: 500;
+
+          }
         }
       }
     }
@@ -100,8 +163,20 @@
     .header__menu-drop__item.search{
       overflow-x: hidden;
       width: 25%;
-      height: 16vw;
+      height: 23vw;
       right: 10%;
+    }
+    .header__menu-drop__item.account{
+      overflow-x: hidden;
+      width: 15%;
+      height: 23vw;
+      right: 5%;
+    }
+    .header__menu-drop__item.card{
+      overflow-x: hidden;
+      width: 25%;
+      height: 25vw;
+      right: 3%;
     }
   }
 
@@ -154,6 +229,13 @@
       li:hover:after{
         width: 100%;
       }
+    }
+    .header__menu button:hover{
+      cursor: pointer;
+      outline: none;
+    }
+    .header__menu button:focus{
+      outline: none;
     }
     .header__btns{
       display: flex;

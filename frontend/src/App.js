@@ -3,10 +3,9 @@ import './App.css';
 import { useRoutes } from "./components/routers/Routers";
 import { BrowserRouter } from "react-router-dom";
 import { Header } from "./components/layout/header/Header";
-
 import { useAuth } from "./hooks/auth.hook";
 import { AuthContext } from "./context/AuthContext";
-import {Loader} from "./components/layout/loader/Loader"
+import {Loader} from "./components/layout"
 
 
 const App = () => {

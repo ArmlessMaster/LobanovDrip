@@ -5,7 +5,7 @@ import { motion } from "framer-motion"
 const PixelBtn = ({
   disabled, 
   onClick, 
-  isBlue, 
+  color, 
   variants, 
   animate, 
   text,  }) => {  
@@ -15,7 +15,7 @@ const PixelBtn = ({
       disabled={disabled} 
       onClick={onClick}
       type="button" 
-      className={"PixelBtn " + (isBlue ? "Blue" : "Red")} 
+      className={"PixelBtn " + color} 
       variants={variants} 
       transition={{ duration: 0.1 }} 
       animate={animate}> 

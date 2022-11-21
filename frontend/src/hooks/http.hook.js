@@ -8,12 +8,15 @@ export const useHttp = () => {
     async (url, method = "GET", body = null, files = null, headers = {}) => {
       setLoading(true);
       try {
+        console.log(files)
         const formData = new FormData();
         if (body && files) {
           body = JSON.stringify(body);
           formData.append("data", body);
           for (let i = 0; i < files.length; i++) {
             formData.append("pic", files[i]);
+            console.log(!!formData.entries().next().value);
+            console.log(formData.get("pic"));
           }
           body = formData;
         }

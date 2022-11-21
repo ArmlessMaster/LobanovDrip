@@ -4,6 +4,34 @@
 .AddItem{
   font-family: "VCR OSD";
   overflow-x: hidden;
+  .css-1s2u09g-control{
+    background-color: #1F1F1F;
+    border-radius: 0; 
+    border-width: 0;
+
+  }
+  .css-1pahdxg-control{
+
+    background-color: #1F1F1F;
+    border-radius: 0; 
+    border-width: 0;
+    box-shadow: 0 0 0 1px rgb(177, 50, 50);
+  }
+  .css-2613qy-menu{
+    background-color: #1F1F1F;
+    border-radius: 0; 
+    border-width: 0;
+
+  }
+  .css-1pahdxg-control:hover{
+    border-color: red;
+  }
+  .css-g1d714-ValueContainer{
+    padding: 10px 8px;
+  }
+  .css-qc6sy-singleValue{
+    color: #acacac;
+  }
   video{
     position: fixed;
     top: 0;
@@ -32,6 +60,9 @@
         margin-top: 1vw;
         display: flex;
         justify-content: space-evenly;
+        .select-wrapper{
+          width: 20.2vw;
+        }
       }
     }
   }

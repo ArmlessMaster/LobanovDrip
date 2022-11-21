@@ -1,0 +1,117 @@
+
+
+.Cart{
+  overflow-x: hidden;
+  font-family: 'VCR OSD Mono';
+    .cart__wrapper{
+      color: white;
+
+        .cart-wrapper{
+          font-family: "Roboto Condensed";
+          margin-top: 5%;
+          margin-left: 4%;
+
+          .cart-label{
+            span{
+
+              margin-left: 0.3vw;
+              font-size: 1.5vw;
+              background-color: #5A5A5A;
+              padding: 0.1vw;
+              padding-left: 0.2vw;
+              padding-right: 0.2vw;
+            }
+            font-size: 2vw;
+            font-weight: 900;
+          }
+          .cart-label-atten{
+            margin-top: 0.3vw;
+            font-family: "Roboto";
+            color: #014DB5;
+            font-size: 1.042vw;
+
+          }
+        }
+      background-color: #0D0D0D;
+      height: 100%;
+      width: 100%;
+      content: "";
+      position: fixed;
+
+    }
+   
+    .order-wrapper{
+      z-index: 1;
+      background-color: #161616;
+      color: white;
+      position: fixed;
+      top: 2.8vw;
+      right: 0;
+  
+      width: 30%;
+      height: 100%;
+      .order-label{
+          text-align: center;
+          margin-top: 2vw;
+          font-size: 2.5vw;
+      }
+      .order-info{
+        margin-top: 3vw;
+        margin-left: 3vw;
+        font-family: "Roboto Condensed";
+        .order-info__big{
+          font-weight: 900;
+          font-size: 2.2vw;
+        }
+        .order-info__little{
+          font-weight: 500;
+          font-size: 1.1vw;
+          margin-bottom: 0.3vw;
+        }
+      }
+      .order-btn{
+        display: flex;
+        margin-top: 5vw;
+        button{
+          margin-left: auto;
+          margin-right: auto;
+        }
+      }
+
+      .order-payment{
+        font-family: "Roboto";
+        color: #5A5A5A;
+        margin-left: 3vw;
+        margin-top: 2vw;
+        font-size: 0.8vw;
+
+        p{
+          padding-left: 0.4vw;
+          padding-bottom: 0.4vw;
+        }
+        span{
+          margin-left: 0.3vw;
+        }
+      }
+      .order-static__info{
+        margin-top: 4vw;
+        padding-left: 3.2vw;
+        padding-right: 3.8vw;
+        text-align: justify;
+        font-family: "Roboto";
+        font-size: 0.7vw;
+        color: #5A5A5A;
+        p{
+          margin-bottom: 2vw;
+        }
+        ul{
+          margin-bottom: 2vw;
+          list-style-type:circle;
+          margin-left: 1vw;
+        }
+        li+li{
+          margin-top: 0.3vw;
+        }
+      }
+    }
+}

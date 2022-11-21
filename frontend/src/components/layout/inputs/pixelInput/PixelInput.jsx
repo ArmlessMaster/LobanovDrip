@@ -11,6 +11,7 @@ const PixelInput = ({type,
   name, 
   value,
   onChange,
+  description,
   className}) => {  
  
   return (
@@ -18,6 +19,7 @@ const PixelInput = ({type,
       variants={variants} 
       transition={{ duration: 0.1 }} 
       animate={animate}>
+        <p className="description">{description}</p>
         <input className={"pixelInput " + className}
           type={type}
           placeholder={placeholder} 
