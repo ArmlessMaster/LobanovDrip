@@ -14,6 +14,7 @@ import Collections from "../components/store/Collections";
 import MyAccount from "../components/authorization/MyAccount";
 import PersonalInfo from "../components/authorization/PersonalInfo"
 import Cart from "../components/cart/Cart";
+import MyOrders from "../components/myOrders/myOrders"
 
 
 const screens = {
@@ -128,7 +129,14 @@ const screens = {
             cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
         },
     },
-
+    MyOrders: {
+        screen: MyOrders,
+        navigationOptions: {
+            headerShown: false,
+            tabBarStyle: { display: "none" },
+            animationEnabled:false
+        },
+    },
 }
 
 

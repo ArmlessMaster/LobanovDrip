@@ -22,9 +22,10 @@ import DecorBottom from '../../assets/images/Decor Thing.svg';
 import axios from "axios";
 import {AuthContext} from "../../context/AuthContext";
 import Constants from "expo-constants";
+import Footer from "../footer";
 
 
-export default function MyOrders() {
+export default function MyOrders({navigation}) {
 
     const DATA1 = [
         {
@@ -63,225 +64,228 @@ export default function MyOrders() {
 
     return (
         <View style={{flex: 1, backgroundColor: '#0D0D0D'}}>
-            <View style={{height: Constants.statusBarHeight, backgroundColor: 'black'}}/>
-            <View style={{
-                flex: 1,
-                backgroundColor: 'black',
-                justifyContent: 'flex-end',
-                alignItems: 'center',
-                flexDirection: 'row'
-            }}>
-                <Pressable style={{flex: 1}}>
-                    <Christ style={{left: '6%'}}></Christ>
-                </Pressable>
-                <Pressable style={{flex: 1, flexDirection: 'row'}}>
-                    <Arrow style={{flex: 1, left: '170%', top: '1%'}}></Arrow>
-                    <Text style={styles.loginText}>BACK</Text>
-                </Pressable>
-            </View>
-            <View style={{flex: 11, alignItems: 'center'}}>
-                <View style={{flex: 1, justifyContent: 'center'}}>
-                    <Text style={{
-                        bottom: '5%',
-                        fontFamily: 'VCR_OSD_MONO',
-                        fontSize: 36,
-                        color: '#FFFFFF',
-                        textAlign: 'center',
-                    }}>
-                        MY ORDERS
-                    </Text>
-                </View>
+            <View style={{flex: 10.5}}>
+                <View style={{height: Constants.statusBarHeight, backgroundColor: 'black'}}/>
                 <View style={{
-                    flex: 0.8,
+                    flex: 1,
+                    backgroundColor: 'black',
+                    justifyContent: 'flex-end',
+                    alignItems: 'center',
                     flexDirection: 'row'
                 }}>
-                    <View style={{
-                        flex: 1
-                    }}>
-                        <Text style={{
-                            color: 'white',
-                            fontFamily: 'roboto-medium',
-                            fontSize: 18,
-                            width: Dimensions.get("screen").width,
-                            left: '10%'
-                        }}>
-                            №1461346
-                        </Text>
-                        <Text style={{
-                            color: 'white',
-                            fontFamily: 'roboto-medium',
-                            fontSize: 15,
-                            width: Dimensions.get("screen").width,
-                            left: '10%',
-                            top: '10%'
-                        }}>
-                            1 446 UAH
-                        </Text>
-                    </View>
-                    <View style={{
-                        flex: 1,
-                    }}>
-                        <Text style={{
-                            color: '#59DE56',
-                            fontFamily: 'roboto-medium',
-                            fontSize: 15,
-                            width: Dimensions.get("screen").width,
-                            left: '58%'
-                        }}>
-                            ВИДАНО
-                        </Text>
-                        <Text style={{
-                            color: 'white',
-                            fontFamily: 'roboto-medium',
-                            fontSize: 15,
-                            width: Dimensions.get("screen").width,
-                            left: '22%',
-                            top: '10%'
-                        }}>
-                            1 oct. 2022 16:03:39
-                        </Text>
-                    </View>
+                    <Pressable style={{flex: 1}}>
+                        <Christ style={{left: '6%'}}></Christ>
+                    </Pressable>
+                    <Pressable style={{flex: 1, flexDirection: 'row'}}>
+                        <Arrow style={{flex: 1, left: '170%', top: '1%'}}></Arrow>
+                        <Text style={styles.loginText}>BACK</Text>
+                    </Pressable>
                 </View>
-                <SafeAreaView style={{flex: 2}}>
-                    <FlatList
-                        showsHorizontalScrollIndicator={false}
-                        horizontal
-                        data={DATA1} renderItem={({item}) => (
-                        <View style={styles.item}>
-                            <Image source={item.image} style={styles.image}></Image>
+                <View style={{flex: 11, alignItems: 'center'}}>
+                    <View style={{flex: 1, justifyContent: 'center'}}>
+                        <Text style={{
+                            bottom: '5%',
+                            fontFamily: 'VCR_OSD_MONO',
+                            fontSize: 36,
+                            color: '#FFFFFF',
+                            textAlign: 'center',
+                        }}>
+                            MY ORDERS
+                        </Text>
+                    </View>
+                    <View style={{
+                        flex: 0.8,
+                        flexDirection: 'row'
+                    }}>
+                        <View style={{
+                            flex: 1
+                        }}>
+                            <Text style={{
+                                color: 'white',
+                                fontFamily: 'roboto-medium',
+                                fontSize: 18,
+                                width: Dimensions.get("screen").width,
+                                left: '10%'
+                            }}>
+                                №1461346
+                            </Text>
+                            <Text style={{
+                                color: 'white',
+                                fontFamily: 'roboto-medium',
+                                fontSize: 15,
+                                width: Dimensions.get("screen").width,
+                                left: '10%',
+                                top: '10%'
+                            }}>
+                                1 446 UAH
+                            </Text>
                         </View>
-                    )} keyExtractor={item => item.id} numColumns='1'/>
-                </SafeAreaView>
-                <View style={{flex: 0.5}}/>
-                <View style={{
-                    flex: 0.8,
-                    flexDirection: 'row'
-                }}>
-                    <View style={{
-                        flex: 1
-                    }}>
-                        <Text style={{
-                            color: 'white',
-                            fontFamily: 'roboto-medium',
-                            fontSize: 18,
-                            width: Dimensions.get("screen").width,
-                            left: '10%'
+                        <View style={{
+                            flex: 1,
                         }}>
-                            №1461346
-                        </Text>
-                        <Text style={{
-                            color: 'white',
-                            fontFamily: 'roboto-medium',
-                            fontSize: 15,
-                            width: Dimensions.get("screen").width,
-                            left: '10%',
-                            top: '10%'
-                        }}>
-                            1 446 UAH
-                        </Text>
-                    </View>
-                    <View style={{
-                        flex: 1,
-                    }}>
-                        <Text style={{
-                            color: '#DED056',
-                            fontFamily: 'roboto-medium',
-                            fontSize: 15,
-                            width: Dimensions.get("screen").width,
-                            left: '56%'
-                        }}>
-                            У ДОРОЗІ
-                        </Text>
-                        <Text style={{
-                            color: 'white',
-                            fontFamily: 'roboto-medium',
-                            fontSize: 15,
-                            width: Dimensions.get("screen").width,
-                            left: '22%',
-                            top: '10%'
-                        }}>
-                            1 oct. 2022 16:03:39
-                        </Text>
-                    </View>
-                </View>
-                <SafeAreaView style={{flex: 2}}>
-                    <FlatList
-                        showsHorizontalScrollIndicator={false}
-                        horizontal
-                        data={DATA1} renderItem={({item}) => (
-                        <View style={styles.item}>
-                            <Image source={item.image} style={styles.image}></Image>
+                            <Text style={{
+                                color: '#59DE56',
+                                fontFamily: 'roboto-medium',
+                                fontSize: 15,
+                                width: Dimensions.get("screen").width,
+                                left: '58%'
+                            }}>
+                                ВИДАНО
+                            </Text>
+                            <Text style={{
+                                color: 'white',
+                                fontFamily: 'roboto-medium',
+                                fontSize: 15,
+                                width: Dimensions.get("screen").width,
+                                left: '22%',
+                                top: '10%'
+                            }}>
+                                1 oct. 2022 16:03:39
+                            </Text>
                         </View>
-                    )} keyExtractor={item => item.id} numColumns='1'/>
-                </SafeAreaView>
-                <View style={{flex: 0.5}}/>
-                <View style={{
-                    flex: 0.8,
-                    flexDirection: 'row'
-                }}>
-                    <View style={{
-                        flex: 1
-                    }}>
-                        <Text style={{
-                            color: 'white',
-                            fontFamily: 'roboto-medium',
-                            fontSize: 18,
-                            width: Dimensions.get("screen").width,
-                            left: '10%'
-                        }}>
-                            №1461346
-                        </Text>
-                        <Text style={{
-                            color: 'white',
-                            fontFamily: 'roboto-medium',
-                            fontSize: 15,
-                            width: Dimensions.get("screen").width,
-                            left: '10%',
-                            top: '10%'
-                        }}>
-                            1 446 UAH
-                        </Text>
                     </View>
+                    <SafeAreaView style={{flex: 2}}>
+                        <FlatList
+                            showsHorizontalScrollIndicator={false}
+                            horizontal
+                            data={DATA1} renderItem={({item}) => (
+                            <View style={styles.item}>
+                                <Image source={item.image} style={styles.image}></Image>
+                            </View>
+                        )} keyExtractor={item => item.id} numColumns='1'/>
+                    </SafeAreaView>
+                    <View style={{flex: 0.5}}/>
                     <View style={{
-                        flex: 1,
+                        flex: 0.8,
+                        flexDirection: 'row'
                     }}>
-                        <Text style={{
-                            color: '#DE5656',
-                            fontFamily: 'roboto-medium',
-                            fontSize: 15,
-                            width: Dimensions.get("screen").width,
-                            left: '27%'
+                        <View style={{
+                            flex: 1
                         }}>
-                            ОФОРМЛЮЄТЬСЯ
-                        </Text>
-                        <Text style={{
-                            color: 'white',
-                            fontFamily: 'roboto-medium',
-                            fontSize: 15,
-                            width: Dimensions.get("screen").width,
-                            left: '22%',
-                            top: '10%'
-                        }}>
-                            1 oct. 2022 16:03:39
-                        </Text>
-                    </View>
-                </View>
-                <SafeAreaView style={{flex: 2, zIndex: 1}}>
-                    <FlatList
-                        showsHorizontalScrollIndicator={false}
-                        horizontal
-                        data={DATA1} renderItem={({item}) => (
-                        <View style={styles.item}>
-                            <Image source={item.image} style={styles.image}></Image>
+                            <Text style={{
+                                color: 'white',
+                                fontFamily: 'roboto-medium',
+                                fontSize: 18,
+                                width: Dimensions.get("screen").width,
+                                left: '10%'
+                            }}>
+                                №1461346
+                            </Text>
+                            <Text style={{
+                                color: 'white',
+                                fontFamily: 'roboto-medium',
+                                fontSize: 15,
+                                width: Dimensions.get("screen").width,
+                                left: '10%',
+                                top: '10%'
+                            }}>
+                                1 446 UAH
+                            </Text>
                         </View>
-                    )} keyExtractor={item => item.id} numColumns='1'/>
-                </SafeAreaView>
-                <View style={{flex: 5}}>
+                        <View style={{
+                            flex: 1,
+                        }}>
+                            <Text style={{
+                                color: '#DED056',
+                                fontFamily: 'roboto-medium',
+                                fontSize: 15,
+                                width: Dimensions.get("screen").width,
+                                left: '56%'
+                            }}>
+                                У ДОРОЗІ
+                            </Text>
+                            <Text style={{
+                                color: 'white',
+                                fontFamily: 'roboto-medium',
+                                fontSize: 15,
+                                width: Dimensions.get("screen").width,
+                                left: '22%',
+                                top: '10%'
+                            }}>
+                                1 oct. 2022 16:03:39
+                            </Text>
+                        </View>
+                    </View>
+                    <SafeAreaView style={{flex: 2}}>
+                        <FlatList
+                            showsHorizontalScrollIndicator={false}
+                            horizontal
+                            data={DATA1} renderItem={({item}) => (
+                            <View style={styles.item}>
+                                <Image source={item.image} style={styles.image}></Image>
+                            </View>
+                        )} keyExtractor={item => item.id} numColumns='1'/>
+                    </SafeAreaView>
+                    <View style={{flex: 0.5}}/>
+                    <View style={{
+                        flex: 0.8,
+                        flexDirection: 'row'
+                    }}>
+                        <View style={{
+                            flex: 1
+                        }}>
+                            <Text style={{
+                                color: 'white',
+                                fontFamily: 'roboto-medium',
+                                fontSize: 18,
+                                width: Dimensions.get("screen").width,
+                                left: '10%'
+                            }}>
+                                №1461346
+                            </Text>
+                            <Text style={{
+                                color: 'white',
+                                fontFamily: 'roboto-medium',
+                                fontSize: 15,
+                                width: Dimensions.get("screen").width,
+                                left: '10%',
+                                top: '10%'
+                            }}>
+                                1 446 UAH
+                            </Text>
+                        </View>
+                        <View style={{
+                            flex: 1,
+                        }}>
+                            <Text style={{
+                                color: '#DE5656',
+                                fontFamily: 'roboto-medium',
+                                fontSize: 15,
+                                width: Dimensions.get("screen").width,
+                                left: '27%'
+                            }}>
+                                ОФОРМЛЮЄТЬСЯ
+                            </Text>
+                            <Text style={{
+                                color: 'white',
+                                fontFamily: 'roboto-medium',
+                                fontSize: 15,
+                                width: Dimensions.get("screen").width,
+                                left: '22%',
+                                top: '10%'
+                            }}>
+                                1 oct. 2022 16:03:39
+                            </Text>
+                        </View>
+                    </View>
+                    <SafeAreaView style={{flex: 2, zIndex: 1}}>
+                        <FlatList
+                            showsHorizontalScrollIndicator={false}
+                            horizontal
+                            data={DATA1} renderItem={({item}) => (
+                            <View style={styles.item}>
+                                <Image source={item.image} style={styles.image}></Image>
+                            </View>
+                        )} keyExtractor={item => item.id} numColumns='1'/>
+                    </SafeAreaView>
+                    <View style={{flex: 5}}>
 
+                    </View>
+                    <Scull style={{position: 'absolute', top: '1%', left: '5%', zIndex: 0}}></Scull>
+                    <DecorJP style={{position: 'absolute', top: '1%', right: '5%', zIndex: 0}}></DecorJP>
                 </View>
-                <Scull style={{position: 'absolute', top: '1%', left: '5%', zIndex: 0}}></Scull>
-                <DecorJP style={{position: 'absolute', top: '1%', right: '5%', zIndex: 0}}></DecorJP>
             </View>
+            <Footer navigation={navigation}/>
         </View>
     );
 

@@ -78,9 +78,9 @@ export default function ChangePassword({navigation}) {
                 <Pressable style={{flex: 1}} onPress={() => navigation.navigate("SwipeStore")}>
                     <Christ style={{left: '6%'}}></Christ>
                 </Pressable>
-                <Pressable style={{flex: 1, flexDirection: 'row'}}>
+                <Pressable style={{flex: 1, flexDirection: 'row'}} onPress={() => navigation.goBack()}>
                     <Arrow style={{flex: 1, left: '30%', top: '1%'}}></Arrow>
-                    <Text style={styles.loginText}>BACK TO MAIN</Text>
+                    <Text style={styles.loginText}>BACK</Text>
                 </Pressable>
             </View>
 

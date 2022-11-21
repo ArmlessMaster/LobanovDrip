@@ -12,7 +12,7 @@ export default function Footer({ navigation}) {
 
     function clickedAccount() {
         if (auth.isAuthenticated) {
-            navigation.navigate('ChangePassword')
+            navigation.navigate('MyAccount')
         } else {
             navigation.navigate('Authorization')
         }
