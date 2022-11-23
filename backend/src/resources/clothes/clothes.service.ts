@@ -221,7 +221,7 @@ class ClothesService {
                         throw new Error(error.message);
                     });
             }
-            
+
             return clothes;
         } catch (error) {
             throw new Error('Unable to delete clothes');
@@ -415,13 +415,30 @@ class ClothesService {
         value: number
     ): Promise<void | Error> {
         try {
-            await this.clothes
+            const clothes = await this.clothes
                 .findOneAndUpdate(
                     { _id: _id, 'clothesCount.size': size },
                     { $inc: { 'clothesCount.$.count': value } },
                     { new: true }
                 )
                 .exec();
+            if (!clothes) {
+                throw new Error('Unable to find clothes');
+            }
+            //
+            const sizeCount = clothes.clothesCount.filter((item) => {
+                return item.size === size;
+            }) as Array<ClothesCount>;
+            if (sizeCount[0].count < 0) {
+                await this.clothes
+                    .findOneAndUpdate(
+                        { _id: _id, 'clothesCount.size': size },
+                        { 'clothesCount.$.count': 0 },
+                        { new: true }
+                    )
+                    .exec();
+            }
+            //
         } catch (error) {
             throw new Error('Unable to increment');
         }
