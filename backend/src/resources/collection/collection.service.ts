@@ -21,6 +21,19 @@ class CollectionService {
         }
         return name;
     }
+
+    private isValidUrl(urlString: string) {
+        var urlPattern = new RegExp(
+            '^(https?:\\/\\/)?' +
+                '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' +
+                '((\\d{1,3}\\.){3}\\d{1,3}))' +
+                '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' +
+                '(\\?[;&a-z\\d%_.~+=-]*)?' +
+                '(\\#[-a-z\\d_]*)?$',
+            'i'
+        );
+        return !!urlPattern.test(urlString);
+    }
     /**
      * Create a new collection
      */
@@ -148,18 +161,27 @@ class CollectionService {
             if (collection.imagesUrls && collection.imagesUrls.length > 0) {
                 await Promise.all(
                     collection.imagesUrls.map(async (image: string) => {
-                        const deletePic =
-                            '☂' +
-                            image.split('%E2%98%82')[1].split('%E2%98%81')[0] +
-                            '☁';
-                        const deleteRef = ref(storage, deletePic);
-                        const result = await deleteObject(deleteRef)
-                            .then(() => {
-                                return 'deleted';
-                            })
-                            .catch((error: Error) => {
-                                throw new Error(error.message);
-                            });
+                        if (
+                            this.isValidUrl(image) &&
+                            image.indexOf('firebase') >= 0 &&
+                            image.indexOf('%E2%98%82') >= 0 &&
+                            image.indexOf('%E2%98%81') >= 0
+                        ) {
+                            const deletePic =
+                                '☂' +
+                                image
+                                    .split('%E2%98%82')[1]
+                                    .split('%E2%98%81')[0] +
+                                '☁';
+                            const deleteRef = ref(storage, deletePic);
+                            const result = await deleteObject(deleteRef)
+                                .then(() => {
+                                    return 'deleted';
+                                })
+                                .catch((error: Error) => {
+                                    throw new Error(error.message);
+                                });
+                        }
                     })
                 );
             }
@@ -241,6 +263,31 @@ class CollectionService {
             if (!collections) {
                 throw new Error('Unable to find clothes');
             }
+
+            //
+
+            await Promise.all(
+                collections.map((item: Collection) => {
+                    let boolean = false;
+                    item.imagesUrls.map((item: string) => {
+                        if (
+                            !(
+                                item.indexOf('firebase') >= 0 &&
+                                item.indexOf('%E2%98%82') >= 0 &&
+                                item.indexOf('%E2%98%81') >= 0
+                            )
+                        ) {
+                            boolean = true;
+                        }
+                    });
+                    if (boolean) {
+                        const _id = item._id;
+                        this.delete(_id);
+                    }
+                })
+            );
+
+            //
 
             return collections;
         } catch (error) {

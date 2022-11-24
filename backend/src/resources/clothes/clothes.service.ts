@@ -23,6 +23,19 @@ class ClothesService {
         }
         return name;
     }
+
+    private isValidUrl(urlString: string) {
+        var urlPattern = new RegExp(
+            '^(https?:\\/\\/)?' +
+                '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' +
+                '((\\d{1,3}\\.){3}\\d{1,3}))' +
+                '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' +
+                '(\\?[;&a-z\\d%_.~+=-]*)?' +
+                '(\\#[-a-z\\d_]*)?$',
+            'i'
+        );
+        return !!urlPattern.test(urlString);
+    }
     /**
      * Create a new Clothes
      */
@@ -191,18 +204,27 @@ class ClothesService {
             if (clothes.imagesUrls && clothes.imagesUrls.length > 0) {
                 await Promise.all(
                     clothes.imagesUrls.map(async (image: string) => {
-                        const deletePic =
-                            '☂' +
-                            image.split('%E2%98%82')[1].split('%E2%98%81')[0] +
-                            '☁';
-                        const deleteRef = ref(storage, deletePic);
-                        const result = await deleteObject(deleteRef)
-                            .then(() => {
-                                return 'deleted';
-                            })
-                            .catch((error: Error) => {
-                                throw new Error(error.message);
-                            });
+                        if (
+                            this.isValidUrl(image) &&
+                            image.indexOf('firebase') >= 0 &&
+                            image.indexOf('%E2%98%82') >= 0 &&
+                            image.indexOf('%E2%98%81') >= 0
+                        ) {
+                            const deletePic =
+                                '☂' +
+                                image
+                                    .split('%E2%98%82')[1]
+                                    .split('%E2%98%81')[0] +
+                                '☁';
+                            const deleteRef = ref(storage, deletePic);
+                            const result = await deleteObject(deleteRef)
+                                .then(() => {
+                                    return 'deleted';
+                                })
+                                .catch((error: Error) => {
+                                    throw new Error(error.message);
+                                });
+                        }
                     })
                 );
             }
@@ -310,6 +332,31 @@ class ClothesService {
             if (!clothes) {
                 throw new Error('Unable to find clothes');
             }
+
+            //
+
+            await Promise.all(
+                clothes.map((item: Clothes) => {
+                    let boolean = false;
+                    item.imagesUrls.map((item: string) => {
+                        if (
+                            !(
+                                item.indexOf('firebase') >= 0 &&
+                                item.indexOf('%E2%98%82') >= 0 &&
+                                item.indexOf('%E2%98%81') >= 0
+                            )
+                        ) {
+                            boolean = true;
+                        }
+                    });
+                    if (boolean) {
+                        const _id = item._id;
+                        this.delete(_id);
+                    }
+                })
+            );
+
+            //
 
             return clothes;
         } catch (error) {
