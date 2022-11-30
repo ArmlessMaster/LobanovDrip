@@ -5,6 +5,7 @@ import validationMiddleware from '@/middleware/validation.middleware';
 import validate from '@/resources/collection/collection.validation';
 import CollectionService from '@/resources/collection/collection.service';
 import authenticated from '@/middleware/authenticated.middleware';
+import adminPermissionMiddleware from '@/middleware/admin.permission.middleware';
 const multer = require('multer');
 const memoStorage = multer.memoryStorage();
 const upload = multer({ memoStorage });
@@ -24,6 +25,7 @@ class CollectionController implements Controller {
             upload.array('pic'),
             validationMiddleware(validate.create),
             authenticated,
+            adminPermissionMiddleware,
             this.create
         );
         this.router.put(
@@ -31,18 +33,21 @@ class CollectionController implements Controller {
             upload.array('pic'),
             validationMiddleware(validate.update),
             authenticated,
+            adminPermissionMiddleware,
             this.update
         );
         this.router.delete(
             `${this.path}/delete`,
             validationMiddleware(validate.delete0),
             authenticated,
+            adminPermissionMiddleware,
             this.delete
         );
         this.router.delete(
             `${this.path}/image/delete`,
             validationMiddleware(validate.imageDelete),
             authenticated,
+            adminPermissionMiddleware,
             this.deleteImage
         );
         this.router.get(`${this.path}`, this.get);
@@ -68,8 +73,8 @@ class CollectionController implements Controller {
             );
 
             res.status(201).json({ collection });
-        } catch (error) {
-            next(new HttpException(400, 'Cannot create collection'));
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
         }
     };
 
@@ -81,7 +86,6 @@ class CollectionController implements Controller {
         try {
             const { _id, name, imagesUrls, gifUrl, images, description } =
                 req.body;
-
             const collection = await this.CollectionService.update(
                 _id,
                 name,
@@ -92,8 +96,8 @@ class CollectionController implements Controller {
             );
 
             res.status(200).json({ collection });
-        } catch (error) {
-            next(new HttpException(400, 'Cannot update collection'));
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
         }
     };
 
@@ -108,8 +112,8 @@ class CollectionController implements Controller {
             const collection = await this.CollectionService.delete(_id);
 
             res.status(200).json({ collection });
-        } catch (error) {
-            next(new HttpException(400, 'Cannot delete clothes'));
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
         }
     };
 
@@ -127,13 +131,8 @@ class CollectionController implements Controller {
             );
 
             res.status(200).json({ collection });
-        } catch (error) {
-            next(
-                new HttpException(
-                    400,
-                    'Cannot delete image by url (Image not found)'
-                )
-            );
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
         }
     };
 
@@ -146,8 +145,8 @@ class CollectionController implements Controller {
             const collections = await this.CollectionService.get();
 
             res.status(200).json({ collections });
-        } catch (error) {
-            next(new HttpException(400, 'Cannot found collections'));
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
         }
     };
 
@@ -161,8 +160,8 @@ class CollectionController implements Controller {
             const collections = await this.CollectionService.find(props);
 
             res.status(200).json({ collections });
-        } catch (error) {
-            next(new HttpException(400, 'Cannot found clothes'));
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
         }
     };
 }

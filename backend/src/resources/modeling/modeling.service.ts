@@ -2,6 +2,7 @@ import ModelingModel from '@/resources/modeling/modeling.model';
 import Modeling from '@/resources/modeling/modeling.interface';
 import { Schema } from 'mongoose';
 import Image from '@/utils/interfaces/image.interface';
+import Props from '@/utils/types/props.type';
 
 class ModelingService {
     private modeling = ModelingModel;
@@ -26,30 +27,30 @@ class ModelingService {
             });
 
             return modeling;
-        } catch (error) {
-            throw new Error('Unable to create modeling');
+        } catch (error: any) {
+            throw new Error(error.message);
         }
     }
 
     /**
      * Attempt to delete modeling by id
      */
-    public async delete(_id: Schema.Types.ObjectId): Promise<Modeling> {
+    public async delete(_id: Schema.Types.ObjectId, account_id: Schema.Types.ObjectId): Promise<Modeling> {
         try {
             const modeling = await this.modeling
-                .findOneAndDelete({ _id })
+                .findOneAndDelete({ _id: _id, user_id: account_id})
                 .populate({
                     path: 'user_id',
                     populate: { path: '_id' },
                 });
 
             if (!modeling) {
-                throw new Error('Unable to delete modeling with that id');
+                throw new Error('Unable to delete modeling with that data. Maybe your account doesn`t have this information.');
             }
 
             return modeling;
-        } catch (error) {
-            throw new Error('Unable to delete modeling');
+        } catch (error: any) {
+            throw new Error(error.message);
         }
     }
 
@@ -62,12 +63,13 @@ class ModelingService {
         size: string,
         color: string,
         user_id: Schema.Types.ObjectId,
-        images: Array<Image>
+        images: Array<Image>,
+        account_id: Schema.Types.ObjectId,
     ): Promise<Modeling> {
         try {
             const modeling = await this.modeling
-                .findByIdAndUpdate(
-                    { _id },
+                .findOneAndUpdate(
+                    { _id: _id, user_id: account_id},
                     {
                         name: name,
                         size: size,
@@ -83,31 +85,31 @@ class ModelingService {
                 });
 
             if (!modeling) {
-                throw new Error('Unable to update modeling with thad id');
+                throw new Error('Unable to update modeling with that data. Maybe your account doesn`t have this information.');
             }
 
             return modeling;
-        } catch (error) {
-            throw new Error('Unable to change modeling');
+        } catch (error: any) {
+            throw new Error(error.message);
         }
     }
 
     /**
      * Attempt to find all sets
      */
-    public async get(): Promise<Modeling | Array<Modeling> | Modeling> {
+    public async get(account_id: Schema.Types.ObjectId): Promise<Modeling | Array<Modeling> | Modeling> {
         try {
-            const modeling = await this.modeling.find({}, null, {
+            const modeling = await this.modeling.find({user_id: account_id}, null, {
                 sort: { createdAt: -1 },
             });
 
             if (!modeling) {
-                throw new Error('Unable to find modeling');
+                throw new Error('Unable to find modeling in this account');
             }
 
             return modeling;
-        } catch (error) {
-            throw new Error('Unable to find modeling');
+        } catch (error: any) {
+            throw new Error(error.message);
         }
     }
 
@@ -115,9 +117,12 @@ class ModelingService {
      * Attempt to find modeling by id
      */
     public async find(
-        props: Object
+        props: Props,
+        account_id: Schema.Types.ObjectId
     ): Promise<Modeling | Array<Modeling> | Modeling> {
         try {
+            props.user_id = account_id;
+
             const modeling = await this.modeling.find(props).populate({
                 path: 'user_id',
                 populate: { path: '_id' },
@@ -128,8 +133,8 @@ class ModelingService {
             }
 
             return modeling;
-        } catch (error) {
-            throw new Error('Unable to find modeling');
+        } catch (error: any) {
+            throw new Error(error.message);
         }
     }
 }

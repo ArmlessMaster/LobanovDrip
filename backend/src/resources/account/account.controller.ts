@@ -5,6 +5,9 @@ import validationMiddleware from '@/middleware/validation.middleware';
 import validate from '@/resources/account/account.validation';
 import AccountService from '@/resources/account/account.service';
 import authenticated from '@/middleware/authenticated.middleware';
+import adminPermissionMiddleware from '@/middleware/admin.permission.middleware';
+import Props from '@/utils/types/props.type';
+import Account from '@/resources/account/account.interface';
 
 class AccountController implements Controller {
     public path = '/account';
@@ -45,6 +48,34 @@ class AccountController implements Controller {
         );
         this.router.delete(`${this.path}/delete`, authenticated, this.delete);
         this.router.get(`${this.path}`, authenticated, this.getAccount);
+
+        this.router.delete(
+            `${this.path}/admin/delete`,
+            validationMiddleware(validate.adminDelete),
+            authenticated,
+            adminPermissionMiddleware,
+            this.adminDelete
+        );
+        this.router.get(
+            `${this.path}/admin/get`,
+            authenticated,
+            adminPermissionMiddleware,
+            this.adminGet
+        );
+        this.router.get(
+            `${this.path}/admin/find`,
+            validationMiddleware(validate.adminFind),
+            authenticated,
+            adminPermissionMiddleware,
+            this.adminFind
+        );
+        this.router.put(
+            `${this.path}/admin/update/role`,
+            validationMiddleware(validate.adminUpdateRole),
+            authenticated,
+            adminPermissionMiddleware,
+            this.adminUpdateRole
+        );
     }
 
     private register = async (
@@ -134,7 +165,7 @@ class AccountController implements Controller {
                 patronymic,
                 region,
                 city,
-                novaposhta,
+                novaposhta
             );
 
             res.status(200).json({ account });
@@ -189,6 +220,70 @@ class AccountController implements Controller {
 
         res.status(200).send({ data: req.account });
     };
+
+    private adminDelete = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<Response | void> => {
+        try {
+            const { _id } = req.body;
+            const account = await this.AccountService.adminDelete(_id);
+
+            res.status(200).json({ account });
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
+        }
+    };
+
+    private adminGet = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<Response | void> => {
+        try {
+            const accounts = await this.AccountService.adminGet() as Array<Account>;
+
+            res.status(200).json({accounts});
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
+        }
+    };
+
+    private adminFind = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<Response | void> => {
+        try {
+            const props = req.body as Props;
+            const accounts = await this.AccountService.adminFind(props);
+
+            res.status(200).json({ accounts });
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
+        }
+    };
+
+    private adminUpdateRole = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<Response | void> => {
+        try {
+            const { _id, role } = req.body;
+
+            const account = await this.AccountService.adminUpdateRole(
+                _id,
+                role
+            );
+
+            res.status(200).json({ account });
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
+        }
+    };
+
 }
 
 export default AccountController;

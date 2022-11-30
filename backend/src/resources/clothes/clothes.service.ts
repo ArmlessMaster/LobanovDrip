@@ -66,22 +66,24 @@ class ClothesService {
                         name: randomName,
                     };
                     await uploadBytes(imageRef, file?.buffer, metatype)
-                        .then((snapshot: object) => {
-                            //console.log('uploaded!');
-                        })
-                        .catch((error: Error) => console.log(error.message));
-                    await getDownloadURL(ref(storage, randomName)).then(
-                        (url: string) => {
-                            console.log(file?.mimetype);
+                        .then((snapshot: object) => {})
+                        .catch((error: Error) => {
+                            throw new Error(error.message);
+                        });
+                    await getDownloadURL(ref(storage, randomName))
+                        .then((url: string) => {
                             if (file?.mimetype === 'image/gif') {
                                 gifUrls.push(url);
                             } else {
                                 imagesUrls.push(url);
                             }
-                        }
-                    );
+                        })
+                        .catch((error: Error) => {
+                            throw new Error(error.message);
+                        });
                 })
             );
+
             const gifUrl = gifUrls.join();
 
             const clothes = await this.clothes.create({
@@ -101,8 +103,8 @@ class ClothesService {
             });
 
             return clothes;
-        } catch (error) {
-            throw new Error('Unable to create clothes');
+        } catch (error: any) {
+            throw new Error(error.message);
         }
     }
 
@@ -128,30 +130,52 @@ class ClothesService {
         collection_id: Schema.Types.ObjectId
     ): Promise<Clothes | Error> {
         try {
-            await Promise.all(
-                images.map(async (file: Express.Multer.File) => {
-                    const randomName: string = '☂' + this.randGen() + '☁';
-                    const imageRef = ref(storage, randomName);
-                    const metatype = {
-                        contentType: file?.mimetype,
-                        name: randomName,
-                    };
-                    await uploadBytes(imageRef, file?.buffer, metatype)
-                        .then((snapshot: object) => {
-                            //console.log('uploaded!');
-                        })
-                        .catch((error: Error) => console.log(error.message));
-                    await getDownloadURL(ref(storage, randomName)).then(
-                        (url: string) => {
-                            if (file?.mimetype === 'image/gif') {
-                                gifUrl = url;
-                            } else {
-                                imagesUrls.push(url);
-                            }
-                        }
-                    );
-                })
-            );
+            const clothesTemp = await this.clothes.findById(_id).populate({
+                path: 'collection_id',
+                populate: { path: '_id' },
+            });
+
+            if (!clothesTemp) {
+                throw new Error('Unable to find clothes');
+            }
+
+            if (!imagesUrls) {
+                imagesUrls = clothesTemp.imagesUrls;
+            }
+
+            if (!gifUrl) {
+                gifUrl = clothesTemp.gifUrl;
+            }
+
+            if (images && images.length > 0) {
+                await Promise.all(
+                    images.map(async (file: Express.Multer.File) => {
+                        const randomName: string = '☂' + this.randGen() + '☁';
+                        const imageRef = ref(storage, randomName);
+                        const metatype = {
+                            contentType: file?.mimetype,
+                            name: randomName,
+                        };
+                        await uploadBytes(imageRef, file?.buffer, metatype)
+                            .then((snapshot: object) => {})
+                            .catch((error: Error) => {
+                                throw new Error(error.message);
+                            });
+                        await getDownloadURL(ref(storage, randomName))
+                            .then((url: string) => {
+                                if (file?.mimetype === 'image/gif') {
+                                    gifUrl = url;
+                                } else {
+                                    imagesUrls.push(url);
+                                }
+                            })
+                            .catch((error: Error) => {
+                                throw new Error(error.message);
+                            });
+                    })
+                );
+            }
+
             const clothes = await this.clothes
                 .findByIdAndUpdate(
                     _id,
@@ -178,29 +202,29 @@ class ClothesService {
                 });
 
             if (!clothes) {
-                throw new Error('Unable to update clothes with thad id');
+                throw new Error('Unable to update clothes with thad data');
             }
 
             return clothes;
-        } catch (error) {
-            throw new Error('Unable to change clothes');
+        } catch (error: any) {
+            throw new Error(error.message);
         }
     }
 
     /**
      * Attempt to delete clothes
      */
-
     public async delete(_id: Schema.Types.ObjectId): Promise<Clothes | Error> {
         try {
-            const clothes = await this.clothes.findByIdAndDelete(_id).populate({
+            const clothes = await this.clothes.findById(_id).populate({
                 path: 'collection_id',
                 populate: { path: '_id' },
             });
 
             if (!clothes) {
-                throw new Error('Unable to delete clothes with that id');
+                throw new Error('Unable to find clothes with that data');
             }
+
             if (clothes.imagesUrls && clothes.imagesUrls.length > 0) {
                 await Promise.all(
                     clothes.imagesUrls.map(async (image: string) => {
@@ -219,7 +243,7 @@ class ClothesService {
                             const deleteRef = ref(storage, deletePic);
                             const result = await deleteObject(deleteRef)
                                 .then(() => {
-                                    return 'deleted';
+                                    return true;
                                 })
                                 .catch((error: Error) => {
                                     throw new Error(error.message);
@@ -237,16 +261,27 @@ class ClothesService {
                 const deleteRef = ref(storage, deletePic);
                 const result = await deleteObject(deleteRef)
                     .then(() => {
-                        return 'deleted';
+                        return true;
                     })
                     .catch((error: Error) => {
                         throw new Error(error.message);
                     });
             }
 
-            return clothes;
-        } catch (error) {
-            throw new Error('Unable to delete clothes');
+            const removedClothing = await this.clothes
+                .findByIdAndDelete(_id)
+                .populate({
+                    path: 'collection_id',
+                    populate: { path: '_id' },
+                });
+
+            if (!removedClothing) {
+                throw new Error('Unable to delete clothes with that data');
+            }
+
+            return removedClothing;
+        } catch (error: any) {
+            throw new Error(error.message);
         }
     }
 
@@ -255,7 +290,7 @@ class ClothesService {
      */
 
     public async deleteImage(
-        _id: string,
+        _id: Schema.Types.ObjectId,
         url: string
     ): Promise<Clothes | Error> {
         try {
@@ -264,13 +299,18 @@ class ClothesService {
             const deleteRef = ref(storage, deletePic);
             const result = await deleteObject(deleteRef)
                 .then(() => {
-                    return 'deleted';
+                    return true;
                 })
                 .catch((error: Error) => {
                     throw new Error(error.message);
                 });
 
             let clothes = (await this.clothes.findById(_id)) as Clothes;
+
+            if (!clothes) {
+                throw new Error('Unable to find clothes with that data');
+            }
+
             if (clothes.imagesUrls.includes(url)) {
                 clothes = (await this.clothes.findByIdAndUpdate(
                     _id,
@@ -285,8 +325,8 @@ class ClothesService {
                 )) as Clothes;
             }
             return clothes;
-        } catch (error) {
-            throw new Error('Unable to find image');
+        } catch (error: any) {
+            throw new Error(error.message);
         }
     }
 
@@ -307,8 +347,8 @@ class ClothesService {
             }
 
             return clothes;
-        } catch (error) {
-            throw new Error('Unable to find clothes');
+        } catch (error: any) {
+            throw new Error(error.message);
         }
     }
 
@@ -330,13 +370,11 @@ class ClothesService {
                 });
 
             if (!clothes) {
-                throw new Error('Unable to find clothes');
+                throw new Error('Unable to find clothes with that data');
             }
 
-            //
-
             await Promise.all(
-                clothes.map((item: Clothes) => {
+                clothes.map(async (item: Clothes) => {
                     let boolean = false;
                     item.imagesUrls.map((item: string) => {
                         if (
@@ -351,16 +389,14 @@ class ClothesService {
                     });
                     if (boolean) {
                         const _id = item._id;
-                        this.delete(_id);
+                        await this.delete(_id);
                     }
                 })
             );
 
-            //
-
             return clothes;
-        } catch (error) {
-            throw new Error('Unable to find clothes');
+        } catch (error: any) {
+            throw new Error(error.message);
         }
     }
 
@@ -401,12 +437,14 @@ class ClothesService {
                 });
 
             if (!clothes) {
-                throw new Error('Unable to find clothes by sample');
+                throw new Error(
+                    'Unable to find clothes that match the criteria'
+                );
             }
 
             return clothes;
-        } catch (error) {
-            throw new Error('Unable to find clothes by sample');
+        } catch (error: any) {
+            throw new Error(error.message);
         }
     }
 
@@ -427,8 +465,8 @@ class ClothesService {
             }
 
             return clothes;
-        } catch (error) {
-            throw new Error('Unable to find clothes with sales');
+        } catch (error: any) {
+            throw new Error(error.message);
         }
     }
 
@@ -448,8 +486,8 @@ class ClothesService {
                 .reduce((prev, next) => prev + next);
 
             return !(total === 0);
-        } catch (error) {
-            throw new Error('Unable to find clothes with sales');
+        } catch (error: any) {
+            throw new Error(error.message);
         }
     }
 
@@ -470,9 +508,8 @@ class ClothesService {
                 )
                 .exec();
             if (!clothes) {
-                throw new Error('Unable to find clothes');
+                throw new Error('Unable to find and increment clothes');
             }
-            //
             const sizeCount = clothes.clothesCount.filter((item) => {
                 return item.size === size;
             }) as Array<ClothesCount>;
@@ -485,9 +522,8 @@ class ClothesService {
                     )
                     .exec();
             }
-            //
-        } catch (error) {
-            throw new Error('Unable to increment');
+        } catch (error: any) {
+            throw new Error(error.message);
         }
     }
 }

@@ -23,8 +23,8 @@ const create = Joi.object({
 const update = Joi.object({
     _id: Joi.string().hex().length(24).required(),
     name: Joi.string(),
-    imagesUrls: Joi.array().items(Joi.string()).required(),
-    gifUrl: Joi.string().required(),
+    imagesUrls: Joi.array().items(Joi.string()),
+    gifUrl: Joi.string(),
     images: Joi.array(),
     color: Joi.array().items(Joi.string()),
     type: Joi.string(),

@@ -90,4 +90,10 @@ const find = Joi.object({
     payment_type: Joi.string(),
 });
 
-export default { create, update, delete0, find };
+const adminfind = Joi.object({
+    _id: Joi.string().hex().length(24).required(),
+});
+
+
+
+export default { create, update, delete0, find, adminfind };

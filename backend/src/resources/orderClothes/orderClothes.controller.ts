@@ -5,6 +5,7 @@ import validationMiddleware from '@/middleware/validation.middleware';
 import validate from '@/resources/orderClothes/orderClothes.validation';
 import OrderClothesService from '@/resources/orderClothes/orderClothes.service';
 import authenticated from '@/middleware/authenticated.middleware';
+import adminPermissionMiddleware from '@/middleware/admin.permission.middleware';
 
 class OrderClothesController implements Controller {
     public path = '/order-clothes';
@@ -26,6 +27,7 @@ class OrderClothesController implements Controller {
             `${this.path}/update`,
             validationMiddleware(validate.update),
             authenticated,
+            adminPermissionMiddleware,
             this.update
         );
         this.router.delete(
@@ -34,9 +36,10 @@ class OrderClothesController implements Controller {
             authenticated,
             this.delete
         );
-        this.router.get(`${this.path}`, this.get);
+        this.router.get(`${this.path}`, authenticated, this.get);
         this.router.get(
             `${this.path}/find`,
+            authenticated,
             validationMiddleware(validate.find),
             this.find
         );
@@ -59,8 +62,8 @@ class OrderClothesController implements Controller {
             );
 
             res.status(201).json({ orderClothes });
-        } catch (error) {
-            next(new HttpException(400, 'Cannot create order clothes'));
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
         }
     };
 
@@ -72,11 +75,16 @@ class OrderClothesController implements Controller {
         try {
             const { _id } = req.body;
 
-            const orderClothes = await this.OrderClothesService.delete(_id);
+            const account_id = req.account._id;
+
+            const orderClothes = await this.OrderClothesService.delete(
+                _id,
+                account_id
+            );
 
             res.status(200).json({ orderClothes });
-        } catch (error) {
-            next(new HttpException(400, 'Cannot delete order clothes'));
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
         }
     };
 
@@ -88,18 +96,21 @@ class OrderClothesController implements Controller {
         try {
             const { _id, clothes_id, order_id, count, size, color } = req.body;
 
+            const account_id = req.account._id;
+
             const orderClothes = await this.OrderClothesService.update(
                 _id,
                 clothes_id,
                 order_id,
                 count,
                 size,
-                color
+                color,
+                account_id
             );
 
             res.status(200).json({ orderClothes });
-        } catch (error) {
-            next(new HttpException(400, 'Cannot update order clothes'));
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
         }
     };
 
@@ -109,11 +120,13 @@ class OrderClothesController implements Controller {
         next: NextFunction
     ): Promise<Response | void> => {
         try {
-            const orderClothes = await this.OrderClothesService.get();
+            const account_id = req.account._id;
+
+            const orderClothes = await this.OrderClothesService.get(account_id);
 
             res.status(200).json({ orderClothes });
-        } catch (error) {
-            next(new HttpException(400, 'Cannot found order clothes'));
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
         }
     };
 
@@ -123,13 +136,21 @@ class OrderClothesController implements Controller {
         next: NextFunction
     ): Promise<Response | void> => {
         try {
-            const props = req.body;
-
-            const orderClothes = await this.OrderClothesService.find(props);
+            const { _id, clothes_id, order_id, count, size, color } = req.body;
+            const account_id = req.account._id;
+            const orderClothes = await this.OrderClothesService.find(
+                _id,
+                clothes_id,
+                order_id,
+                count,
+                size,
+                color,
+                account_id
+            );
 
             res.status(200).json({ orderClothes });
-        } catch (error) {
-            next(new HttpException(400, 'Cannot get order clothes'));
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
         }
     };
 }

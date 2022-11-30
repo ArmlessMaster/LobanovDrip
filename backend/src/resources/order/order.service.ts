@@ -6,9 +6,14 @@ import OrderClothesService from '@/resources/orderClothes/orderClothes.service';
 import Clothes from '@/resources/clothes/clothes.interface';
 import OrderClothes from '@/resources/orderClothes/orderClothes.interface';
 import OrderClothesModel from '@/resources/orderClothes/orderClothes.model';
+import Props from '@/utils/types/props.type';
+import AccountModel from '@/resources/account/account.model';
+
+const stripe = require('stripe')(process.env.STRIPE_KEY);
 
 class OrderService {
     private order = OrderModel;
+    private account = AccountModel;
     private ClothesService = new ClothesService();
     private OrderClothesService = new OrderClothesService();
     private orderClothes = OrderClothesModel;
@@ -32,6 +37,15 @@ class OrderService {
         payment_type: string
     ): Promise<Order> {
         try {
+            const user_cart = await this.order.findOne({
+                user_id: user_id,
+                status: 'cart',
+            });
+
+            if (user_cart) {
+                throw new Error('Cart already exist');
+            }
+
             const order = await this.order.create({
                 user_id,
                 moderator_id,
@@ -41,6 +55,8 @@ class OrderService {
                 novaposhta,
                 phone,
                 name,
+                surname,
+                patronymic,
                 email,
                 invoice,
                 status_update,
@@ -48,8 +64,8 @@ class OrderService {
             });
 
             return order;
-        } catch (error) {
-            throw new Error('Unable to create order');
+        } catch (error: any) {
+            throw new Error(error.message);
         }
     }
 
@@ -70,12 +86,12 @@ class OrderService {
                 });
 
             if (!order) {
-                throw new Error('Unable to delete order with that id');
+                throw new Error('Unable to delete order with that data');
             }
 
             return order;
-        } catch (error) {
-            throw new Error('Unable to delete order');
+        } catch (error: any) {
+            throw new Error(error.message);
         }
     }
 
@@ -101,6 +117,26 @@ class OrderService {
         account_id: Schema.Types.ObjectId
     ): Promise<Order> {
         try {
+            const account = await this.account.findOne(account_id).exec();
+
+            const orderPerm = await this.order.findById(_id).exec();
+
+            if (!account) {
+                throw new Error('Check if you are signed in');
+            }
+
+            if (!orderPerm) {
+                throw new Error('Order does not exist');
+            }
+
+            if (account_id.toString() !== orderPerm.user_id.toString() && account.role !== 'Admin') {
+                throw new Error('You are not allowed to update this order');
+            }
+
+            if (account.role !== 'User') {
+                moderator_id = account._id;
+            }
+
             const order = await this.order
                 .findOneAndUpdate(
                     { _id: _id },
@@ -130,14 +166,22 @@ class OrderService {
                     path: 'moderator_id',
                     populate: { path: '_id' },
                 });
+
             if (!order) {
-                throw new Error('Unable to update order with thad id');
+                throw new Error('Unable to update order with that data');
             }
 
             if (status === 'processing') {
-                const clothes = (await this.OrderClothesService.find({
+                const clothes = (await this.OrderClothesService.search({
                     order_id: _id,
                 })) as Array<OrderClothes>;
+
+                if (!clothes) {
+                    throw new Error(
+                        'Unable to find order clothes with that order'
+                    );
+                }
+
                 const clothes_id = clothes.map((item) => [
                     item.clothes_id as Schema.Types.ObjectId,
                     item.size,
@@ -155,11 +199,18 @@ class OrderService {
                         );
                     })
                 );
-                const clothesInOrder = (await this.OrderClothesService.find({
+                const clothesInOrder = (await this.OrderClothesService.search({
                     order_id: _id,
                 })) as Array<OrderClothes>;
-                const clothesInOrderId = clothesInOrder.map((item) => [
-                    item.clothes_id as Schema.Types.ObjectId,
+
+                if (!clothes) {
+                    throw new Error(
+                        'Unable to find order clothes with that order'
+                    );
+                }
+
+                const clothesInOrderId = clothesInOrder.map((item: any) => [
+                    item.clothes_id._id as Schema.Types.ObjectId,
                 ]);
                 await Promise.all(
                     clothesInOrderId.map(async (item) => {
@@ -168,7 +219,7 @@ class OrderService {
                             (await this.ClothesService.find({
                                 _id: objectid,
                             })) as Array<Clothes>;
-                        await this.orderClothes.findOneAndUpdate(
+                        await this.orderClothes.updateMany(
                             { order_id: _id, clothes_id: objectid },
                             {
                                 clothesPrice: clothesInOrderObject[0].price,
@@ -181,9 +232,16 @@ class OrderService {
             }
 
             if (status === 'cancellation') {
-                const clothes = (await this.OrderClothesService.find({
+                const clothes = (await this.OrderClothesService.search({
                     order_id: _id,
                 })) as Array<OrderClothes>;
+
+                if (!clothes) {
+                    throw new Error(
+                        'Unable to find order clothes with that order'
+                    );
+                }
+
                 const clothes_id = clothes.map((item) => [
                     item.clothes_id as Schema.Types.ObjectId,
                     item.size,
@@ -204,35 +262,63 @@ class OrderService {
             }
 
             return order;
-        } catch (error) {
-            throw new Error('Unable to change order');
+        } catch (error: any) {
+            throw new Error(error.message);
         }
     }
 
     /**
      * Attempt to find all orders
      */
-    public async get(): Promise<Order | Array<Order> | Error> {
+    public async get(
+        account_id: Schema.Types.ObjectId
+    ): Promise<Order | Array<Order> | Error> {
         try {
-            const orders = await this.order.find({}, null, {
-                sort: { createdAt: -1 },
-            });
+            const account = await this.account.findOne(account_id).exec();
+
+            const orders = await this.order.find(
+                { user_id: account_id },
+                null,
+                {
+                    sort: { createdAt: -1 },
+                }
+            );
 
             if (!orders) {
                 throw new Error('Unable to find orders');
             }
 
             return orders;
-        } catch (error) {
-            throw new Error('Unable to find orders');
+        } catch (error: any) {
+            throw new Error(error.message);
         }
     }
 
     /**
      * Attempt to find order
      */
-    public async find(props: Object): Promise<Order | Array<Order> | Order> {
+    public async find(
+        props: Props,
+        account_id: Schema.Types.ObjectId
+    ): Promise<Order | Array<Order> | Error> {
         try {
+            
+            props.user_id = account_id;
+
+            const user_cart = await this.order.findOne({
+                user_id: props.user_id,
+                status: 'cart',
+            });
+
+            if (!user_cart) {
+                await this.order.create({
+                    user_id: props.user_id,
+                    status: 'cart'
+  
+                });
+            }
+
+
             const orders = await this.order
                 .find(props)
                 .populate({
@@ -245,14 +331,106 @@ class OrderService {
                 });
 
             if (!orders) {
-                throw new Error('Unable to find orders');
+                throw new Error('Unable to find orders with that data');
             }
 
             return orders;
-        } catch (error) {
-            throw new Error('Unable to find order');
+        } catch (error: any) {
+            throw new Error(error.message);
         }
     }
+
+    /**
+     * Attempt to find order
+     */
+    public async adminFind(
+        _id: Schema.Types.ObjectId
+    ): Promise<Order | Array<Order> | Error> {
+        try {
+            const orders = await this.order
+                .find({ _id: _id })
+                .populate({
+                    path: 'user_id',
+                    populate: { path: '_id' },
+                })
+                .populate({
+                    path: 'moderator_id',
+                    populate: { path: '_id' },
+                });
+
+            if (!orders) {
+                throw new Error('Unable to find orders with that data');
+            }
+
+            return orders;
+        } catch (error: any) {
+            throw new Error(error.message);
+        }
+    }
+    /**
+     * Attempt to find order
+     */
+    public async adminGet(
+        props: Props
+    ): Promise<Order | Array<Order> | Error> {
+        try {
+            const orders = await this.order
+                .find({ status: { $ne: 'cart' } })
+                .populate({
+                    path: 'user_id',
+                    populate: { path: '_id' },
+                })
+                .populate({
+                    path: 'moderator_id',
+                    populate: { path: '_id' },
+                });
+
+            if (!orders) {
+                throw new Error('Unable to find orders with that data');
+            }
+
+            return orders;
+        } catch (error: any) {
+            throw new Error(error.message);
+        }
+    }
+
+       /**
+     * Attempt to pay
+     */
+        public async pay(
+            cartItem: any
+        ): Promise<any | Error> {
+            try {
+                const line_items = cartItem.map((item: any) => {
+                    return {
+                        price_data: {
+                            currency: "uah",
+                            product_data:{
+                                name: item.name,
+                                images: [item.image],
+                                metadata: {
+                                    id: item.clothes_id,
+                                }
+                            },
+                            unit_amount: item.price * 100
+                        },
+                        quantity: 1,
+                    };
+                });
+                const params = {
+                    line_items,
+                    mode: 'payment',
+                    success_url: `${process.env.CLIENT_URL}/orders`,
+                    cancel_url: `${process.env.CLIENT_URL}/cart`,
+                }
+                const session = await stripe.checkout.sessions.create(params);
+    
+                return ({url: session.url, check: true});
+            } catch (error: any) {
+                throw new Error(error.message);
+            }
+        }
 }
 
 export default OrderService;

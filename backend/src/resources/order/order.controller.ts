@@ -5,6 +5,7 @@ import validationMiddleware from '@/middleware/validation.middleware';
 import validate from '@/resources/order/order.validation';
 import OrderService from '@/resources/order/order.service';
 import authenticated from '@/middleware/authenticated.middleware';
+import adminPermissionMiddleware from '@/middleware/admin.permission.middleware';
 
 class OrderController implements Controller {
     public path = '/order';
@@ -22,6 +23,11 @@ class OrderController implements Controller {
             authenticated,
             this.create
         );
+        this.router.post(
+            `${this.path}/create-checkout-session`, 
+            authenticated,
+            this.pay
+        );
         this.router.put(
             `${this.path}/update`,
             validationMiddleware(validate.update),
@@ -32,13 +38,28 @@ class OrderController implements Controller {
             `${this.path}/delete`,
             validationMiddleware(validate.delete0),
             authenticated,
+            adminPermissionMiddleware,
             this.delete
         );
-        this.router.get(`${this.path}`, this.get);
+        this.router.get(`${this.path}`, authenticated, this.get);
         this.router.get(
             `${this.path}/find`,
             validationMiddleware(validate.find),
+            authenticated,
             this.find
+        );
+        this.router.get(
+            `${this.path}/admin/get`,
+            authenticated,
+            adminPermissionMiddleware,
+            this.adminGet
+        );
+        this.router.get(
+            `${this.path}/admin/find`,
+            validationMiddleware(validate.adminfind),
+            authenticated,
+            adminPermissionMiddleware,
+            this.adminFind
         );
     }
 
@@ -83,8 +104,8 @@ class OrderController implements Controller {
             );
 
             res.status(201).json({ order });
-        } catch (error) {
-            next(new HttpException(400, 'Cannot create order'));
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
         }
     };
 
@@ -128,7 +149,7 @@ class OrderController implements Controller {
                 payment_type,
             } = req.body;
 
-            const accout_id = req.account._id;
+            const account_id = req.account._id;
 
             const order = await this.OrderService.update(
                 _id,
@@ -146,12 +167,12 @@ class OrderController implements Controller {
                 invoice,
                 status_update,
                 payment_type,
-                accout_id
+                account_id
             );
 
             res.status(200).json({ order });
-        } catch (error) {
-            next(new HttpException(400, 'Cannot change order'));
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
         }
     };
 
@@ -161,11 +182,13 @@ class OrderController implements Controller {
         next: NextFunction
     ): Promise<Response | void> => {
         try {
-            const orders = await this.OrderService.get();
+            const account_id = req.account._id;
+
+            const orders = await this.OrderService.get(account_id);
 
             res.status(200).json({ orders });
-        } catch (error) {
-            next(new HttpException(400, 'Cannot found orders'));
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
         }
     };
 
@@ -176,12 +199,61 @@ class OrderController implements Controller {
     ): Promise<Response | void> => {
         try {
             const props = req.body;
+            const account_id = req.account._id;
 
-            const orders = await this.OrderService.find(props);
+            const orders = await this.OrderService.find(props, account_id);
 
             res.status(200).json({ orders });
-        } catch (error) {
-            next(new HttpException(400, 'Cannot get orders'));
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
+        }
+    };
+
+    private adminGet = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<Response | void> => {
+        try {
+            const props = req.body;
+
+            const orders = await this.OrderService.adminGet(props);
+
+            res.status(200).json({ orders });
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
+        }
+    };
+
+    private adminFind = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<Response | void> => {
+        try {
+            const {_id} = req.body;
+
+            const orders = await this.OrderService.adminFind(_id);
+
+            res.status(200).json({ orders });
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
+        }
+    };
+
+    private pay = async (
+        req: Request, 
+        res: Response,
+        next: NextFunction
+    ) : Promise<Response | void> => {
+        try{
+            const {cartItem} = req.body;
+ 
+            const result = await this.OrderService.pay(cartItem);
+
+            res.send({url: result.url, check: result.check});
+        }catch(error: any){
+            next(new HttpException(400, error.message));
         }
     };
 }

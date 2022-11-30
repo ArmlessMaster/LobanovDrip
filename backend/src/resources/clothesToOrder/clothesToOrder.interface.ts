@@ -3,6 +3,7 @@ import { Schema } from 'mongoose';
 
 interface ClothesItem extends Document {
     clothes_id: Schema.Types.ObjectId;
+    orderClothes_id: Schema.Types.ObjectId;
     image: string;
     size: string;
     price: number;
@@ -11,6 +12,11 @@ interface ClothesItem extends Document {
     salePrice: number;
     count: number;
     color: string;
+    name: string;
+    clothes_name: string;
+    clothes_type: string;
+    clothes_count: number;
+    clothes_size: string;
 }
 
 interface OrderInfo extends Document {
@@ -23,6 +29,16 @@ interface OrderInfo extends Document {
 interface ClothesImage extends Document {
     clothes_id: Schema.Types.ObjectId;
     image: string;
+    clothes_name: string;
+    clothes_type: string;
+    clothes_count: number;
+    clothes_size: string;
+}
+
+interface UserInfo extends Document {
+    user_id: Schema.Types.ObjectId,
+    name: string,
+    email: string,
 }
 
 interface OrderItem extends Document {
@@ -32,6 +48,14 @@ interface OrderItem extends Document {
     images: Array<ClothesImage>;
     status: string;
     status_update: Date;
+    invoice: string;
+    user_info: UserInfo;
+    region: string;
+    city: string;
+    novaposhta: string;
+    phone: string;
+    name: string;
+    email: string;
 }
 
-export { ClothesItem, OrderInfo, OrderItem, ClothesImage };
+export { ClothesItem, OrderInfo, OrderItem, ClothesImage, UserInfo };

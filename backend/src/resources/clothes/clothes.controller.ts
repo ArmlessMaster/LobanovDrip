@@ -6,6 +6,8 @@ import validate from '@/resources/clothes/clothes.validation';
 import ClothesService from '@/resources/clothes/clothes.service';
 import authenticated from '@/middleware/authenticated.middleware';
 import Props from '@/utils/types/props.type';
+import adminPermissionMiddleware from '@/middleware/admin.permission.middleware';
+
 const multer = require('multer');
 const memoStorage = multer.memoryStorage();
 const upload = multer({ memoStorage });
@@ -25,6 +27,7 @@ class ClothesController implements Controller {
             upload.array('pic'),
             validationMiddleware(validate.create),
             authenticated,
+            adminPermissionMiddleware,
             this.create
         );
         this.router.put(
@@ -32,18 +35,21 @@ class ClothesController implements Controller {
             upload.array('pic'),
             validationMiddleware(validate.update),
             authenticated,
+            adminPermissionMiddleware,
             this.update
         );
         this.router.delete(
             `${this.path}/delete`,
             validationMiddleware(validate.delete0),
             authenticated,
+            adminPermissionMiddleware,
             this.delete
         );
         this.router.delete(
             `${this.path}/image/delete`,
             validationMiddleware(validate.imageDelete),
             authenticated,
+            adminPermissionMiddleware,
             this.deleteImage
         );
         this.router.get(`${this.path}`, this.get);
@@ -102,8 +108,8 @@ class ClothesController implements Controller {
             );
 
             res.status(201).json({ clothes });
-        } catch (error) {
-            next(new HttpException(400, 'Cannot create clothes'));
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
         }
     };
 
@@ -131,15 +137,11 @@ class ClothesController implements Controller {
                 collection_id,
             } = req.body;
 
-            const imagesUrls1: Array<string> = [];
-
-            const gifUrl1: string = '';
-
             const clothes = await this.ClothesService.update(
                 _id,
                 name,
-                imagesUrls ? imagesUrls : imagesUrls1,
-                gifUrl ? gifUrl : gifUrl1,
+                imagesUrls,
+                gifUrl,
                 images,
                 color,
                 type,
@@ -154,8 +156,8 @@ class ClothesController implements Controller {
             );
 
             res.status(200).json({ clothes });
-        } catch (error) {
-            next(new HttpException(400, 'Cannot update clothes'));
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
         }
     };
 
@@ -169,8 +171,8 @@ class ClothesController implements Controller {
             const clothes = await this.ClothesService.delete(_id);
 
             res.status(200).json({ clothes });
-        } catch (error) {
-            next(new HttpException(400, 'Cannot delete clothes'));
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
         }
     };
 
@@ -185,13 +187,8 @@ class ClothesController implements Controller {
             const clothes = await this.ClothesService.deleteImage(_id, url);
 
             res.status(200).json({ clothes });
-        } catch (error) {
-            next(
-                new HttpException(
-                    400,
-                    'Cannot delete image by url (Image not found)'
-                )
-            );
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
         }
     };
 
@@ -220,8 +217,8 @@ class ClothesController implements Controller {
             const clothes = await this.ClothesService.find(props);
 
             res.status(200).json({ clothes });
-        } catch (error) {
-            next(new HttpException(400, 'Cannot found clothes'));
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
         }
     };
 
@@ -241,8 +238,8 @@ class ClothesController implements Controller {
             );
 
             res.status(201).json({ clothes });
-        } catch (error) {
-            next(new HttpException(400, 'Cannot found filter clothes'));
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
         }
     };
 
@@ -255,8 +252,8 @@ class ClothesController implements Controller {
             const clothes = await this.ClothesService.findBySales();
 
             res.status(200).json({ clothes });
-        } catch (error) {
-            next(new HttpException(400, 'Cannot found clothes'));
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
         }
     };
 
@@ -271,13 +268,8 @@ class ClothesController implements Controller {
             const exist = await this.ClothesService.exist(_id);
 
             res.status(200).json({ exist });
-        } catch (error) {
-            next(
-                new HttpException(
-                    400,
-                    'Failed to check if the clothes are over'
-                )
-            );
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
         }
     };
 }

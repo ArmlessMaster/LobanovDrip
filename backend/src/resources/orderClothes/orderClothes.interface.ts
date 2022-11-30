@@ -11,4 +11,5 @@ export default interface OrderClothes extends Document {
     color: string;
     clothesPrice: number;
     clothesSale: number;
+
 }

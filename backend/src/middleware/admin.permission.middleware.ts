@@ -5,7 +5,7 @@ import Token from '@/utils/interfaces/token.interface';
 import HttpException from '@/utils/exceptions/http.exception';
 import jwt from 'jsonwebtoken';
 
-async function authenticatedMiddleware(
+async function adminPermissionMiddleware(
     req: Request,
     res: Response,
     next: NextFunction
@@ -29,16 +29,9 @@ async function authenticatedMiddleware(
 
         if (!account) {
             return next(new HttpException(401, 'Unauthorised'));
+        } else if (account.role !== 'Admin') {
+            return next(new HttpException(401, 'Access is denied'));
         }
-
-        if (account.password) {
-            account.password = 'exist';
-        }
-        if (account.passwordGoogle) {
-            account.passwordGoogle = 'exist';
-        }
-
-        req.account = account;
 
         return next();
     } catch (error) {
@@ -46,4 +39,4 @@ async function authenticatedMiddleware(
     }
 }
 
-export default authenticatedMiddleware;
+export default adminPermissionMiddleware;

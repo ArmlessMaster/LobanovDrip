@@ -55,19 +55,21 @@ class CollectionService {
                         name: randomName,
                     };
                     await uploadBytes(imageRef, file?.buffer, metatype)
-                        .then((snapshot: object) => {
-                            //console.log('uploaded!');
-                        })
-                        .catch((error: Error) => console.log(error.message));
-                    await getDownloadURL(ref(storage, randomName)).then(
-                        (url: string) => {
+                        .then((snapshot: object) => {})
+                        .catch((error: Error) => {
+                            throw new Error(error.message);
+                        });
+                    await getDownloadURL(ref(storage, randomName))
+                        .then((url: string) => {
                             if (file?.mimetype === 'image/gif') {
                                 gifUrls.push(url);
                             } else {
                                 imagesUrls.push(url);
                             }
-                        }
-                    );
+                        })
+                        .catch((error: Error) => {
+                            throw new Error(error.message);
+                        });
                 })
             );
 
@@ -81,8 +83,8 @@ class CollectionService {
             });
 
             return collection;
-        } catch (error) {
-            throw new Error('Unable to create collection');
+        } catch (error: any) {
+            throw new Error(error.message);
         }
     }
 
@@ -98,30 +100,49 @@ class CollectionService {
         description: string
     ): Promise<Collection | Error> {
         try {
-            await Promise.all(
-                images.map(async (file: Express.Multer.File) => {
-                    const randomName: string = '☂' + this.randGen() + '☁';
-                    const imageRef = ref(storage, randomName);
-                    const metatype = {
-                        contentType: file?.mimetype,
-                        name: randomName,
-                    };
-                    await uploadBytes(imageRef, file?.buffer, metatype)
-                        .then((snapshot: object) => {
-                            //console.log('uploaded!');
-                        })
-                        .catch((error: Error) => console.log(error.message));
-                    await getDownloadURL(ref(storage, randomName)).then(
-                        (url: string) => {
-                            if (file?.mimetype === 'image/gif') {
-                                gifUrl = url;
-                            } else {
-                                imagesUrls.push(url);
-                            }
-                        }
-                    );
-                })
-            );
+            const collectionTemp = await this.collection.findById(_id);
+
+            if (!collectionTemp) {
+                throw new Error('Unable to find collection');
+            }
+
+            if (!imagesUrls) {
+                imagesUrls = collectionTemp.imagesUrls;
+            }
+
+            if (!gifUrl) {
+                gifUrl = collectionTemp.gifUrl;
+            }
+        
+            if (images && images.length > 0) {
+                await Promise.all(
+                    images.map(async (file: Express.Multer.File) => {
+                        const randomName: string = '☂' + this.randGen() + '☁';
+                        const imageRef = ref(storage, randomName);
+                        const metatype = {
+                            contentType: file?.mimetype,
+                            name: randomName,
+                        };
+                        await uploadBytes(imageRef, file?.buffer, metatype)
+                            .then((snapshot: object) => {})
+                            .catch((error: Error) => {
+                                throw new Error(error.message);
+                            });
+                        await getDownloadURL(ref(storage, randomName))
+                            .then((url: string) => {
+                                if (file?.mimetype === 'image/gif') {
+                                    gifUrl = url;
+                                } else {
+                                    imagesUrls.push(url);
+                                }
+                            })
+                            .catch((error: Error) => {
+                                throw new Error(error.message);
+                            });
+                    })
+                );
+            }
+
 
             const collection = await this.collection.findByIdAndUpdate(
                 _id,
@@ -135,12 +156,12 @@ class CollectionService {
             );
 
             if (!collection) {
-                throw new Error('Unable to update collection with thad id');
+                throw new Error('Unable to update collection with that data');
             }
 
             return collection;
-        } catch (error) {
-            throw new Error('Unable to create collection');
+        } catch (error: any) {
+            throw new Error(error.message);
         }
     }
 
@@ -152,10 +173,10 @@ class CollectionService {
         _id: Schema.Types.ObjectId
     ): Promise<Collection | Error> {
         try {
-            const collection = await this.collection.findByIdAndDelete(_id);
+            const collection = await this.collection.findById(_id);
 
             if (!collection) {
-                throw new Error('Unable to delete clothes with that id');
+                throw new Error('Unable to find collection with that id');
             }
 
             if (collection.imagesUrls && collection.imagesUrls.length > 0) {
@@ -176,7 +197,7 @@ class CollectionService {
                             const deleteRef = ref(storage, deletePic);
                             const result = await deleteObject(deleteRef)
                                 .then(() => {
-                                    return 'deleted';
+                                    return true;
                                 })
                                 .catch((error: Error) => {
                                     throw new Error(error.message);
@@ -196,16 +217,22 @@ class CollectionService {
                 const deleteRef = ref(storage, deletePic);
                 const result = await deleteObject(deleteRef)
                     .then(() => {
-                        return 'deleted';
+                        return true;
                     })
                     .catch((error: Error) => {
                         throw new Error(error.message);
                     });
             }
 
-            return collection;
-        } catch (error) {
-            throw new Error('Unable to delete clothes');
+            const removedCollection = await this.collection.findByIdAndDelete(_id);
+
+            if (!removedCollection) {
+                throw new Error('Unable to delete collection with that data');
+            }
+
+            return removedCollection;
+        } catch (error: any) {
+            throw new Error(error.message);
         }
     }
 
@@ -223,7 +250,7 @@ class CollectionService {
             const deleteRef = ref(storage, deletePic);
             const result = await deleteObject(deleteRef)
                 .then(() => {
-                    return 'deleted';
+                    return true;
                 })
                 .catch((error: Error) => {
                     throw new Error(error.message);
@@ -231,6 +258,11 @@ class CollectionService {
             let collections = (await this.collection.findById(
                 _id
             )) as Collection;
+
+            if (!collections) {
+                throw new Error('Unable to find collection with that data');
+            }
+
             if (collections.imagesUrls.includes(url)) {
                 collections = (await this.collection.findByIdAndUpdate(
                     _id,
@@ -246,8 +278,8 @@ class CollectionService {
             }
 
             return collections;
-        } catch (error) {
-            throw new Error('Unable to find image');
+        } catch (error: any) {
+            throw new Error(error.message);
         }
     }
 
@@ -261,13 +293,10 @@ class CollectionService {
             });
 
             if (!collections) {
-                throw new Error('Unable to find clothes');
+                throw new Error('Unable to find collections');
             }
-
-            //
-
             await Promise.all(
-                collections.map((item: Collection) => {
+                collections.map(async (item: Collection) => {
                     let boolean = false;
                     item.imagesUrls.map((item: string) => {
                         if (
@@ -282,16 +311,13 @@ class CollectionService {
                     });
                     if (boolean) {
                         const _id = item._id;
-                        this.delete(_id);
+                        await this.delete(_id);
                     }
                 })
             );
-
-            //
-
             return collections;
-        } catch (error) {
-            throw new Error('Unable to find clothes');
+        } catch (error: any) {
+            throw new Error(error.message);
         }
     }
 
@@ -308,12 +334,12 @@ class CollectionService {
             });
 
             if (!collections) {
-                throw new Error(`Unable to find collections`);
+                throw new Error(`Unable to find collections with that props`);
             }
 
             return collections;
-        } catch (error) {
-            throw new Error(`Unable to find collections`);
+        } catch (error: any) {
+            throw new Error(error.message);
         }
     }
 }

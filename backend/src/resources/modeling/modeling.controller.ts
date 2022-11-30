@@ -34,9 +34,10 @@ class ModelingController implements Controller {
             authenticated,
             this.delete
         );
-        this.router.get(`${this.path}`, this.get);
+        this.router.get(`${this.path}`, authenticated, this.get);
         this.router.get(
             `${this.path}/find`,
+            authenticated,
             validationMiddleware(validate.find),
             this.find
         );
@@ -59,8 +60,8 @@ class ModelingController implements Controller {
             );
 
             res.status(201).json({ modeling });
-        } catch (error) {
-            next(new HttpException(400, 'Cannot create modeling'));
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
         }
     };
 
@@ -72,11 +73,13 @@ class ModelingController implements Controller {
         try {
             const { _id } = req.body;
 
-            const modeling = await this.ModelingService.delete(_id);
+            const account_id = req.account._id;
+
+            const modeling = await this.ModelingService.delete(_id, account_id);
 
             res.status(200).json({ modeling });
-        } catch (error) {
-            next(new HttpException(400, 'Cannot delete model'));
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
         }
     };
 
@@ -88,18 +91,21 @@ class ModelingController implements Controller {
         try {
             const { _id, name, size, color, user_id, images } = req.body;
 
+            const account_id = req.account._id;
+
             const collection = await this.ModelingService.update(
                 _id,
                 name,
                 size,
                 color,
                 user_id,
-                images
+                images,
+                account_id
             );
 
             res.status(200).json({ collection });
-        } catch (error) {
-            next(new HttpException(400, 'Cannot change model'));
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
         }
     };
 
@@ -109,11 +115,13 @@ class ModelingController implements Controller {
         next: NextFunction
     ): Promise<Response | void> => {
         try {
-            const modeling = await this.ModelingService.get();
+            const account_id = req.account._id;
+
+            const modeling = await this.ModelingService.get(account_id);
 
             res.status(200).json({ modeling });
-        } catch (error) {
-            next(new HttpException(400, 'Cannot found modeling'));
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
         }
     };
 
@@ -125,11 +133,13 @@ class ModelingController implements Controller {
         try {
             const props = req.body;
 
-            const modeling = await this.ModelingService.find(props);
+            const account_id = req.account._id;
+
+            const modeling = await this.ModelingService.find(props, account_id);
 
             res.status(200).json({ modeling });
-        } catch (error) {
-            next(new HttpException(400, 'Cannot get modeling'));
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
         }
     };
 }

@@ -2,7 +2,6 @@ import { Schema, model } from 'mongoose';
 import bcrypt from 'bcrypt';
 import Account from '@/resources/account/account.interface';
 import ModelingModel from '@/resources/modeling/modeling.model';
-import SetModel from '@/resources/set/set.model';
 import OrderModel from '@/resources/order/order.model';
 
 const AccountSchema = new Schema(
@@ -29,6 +28,7 @@ const AccountSchema = new Schema(
         role: {
             type: String,
             default: 'User',
+            enum: ['User', 'Admin'],
         },
         surname: {
             type: String,
@@ -93,7 +93,6 @@ AccountSchema.methods.isValidPasswordGoogle = async function (
 
 AccountSchema.post('findOneAndDelete', async function (result, next) {
     await ModelingModel.deleteMany({ account_id: result._id });
-    await SetModel.deleteMany({ account_id: result._id });
     await OrderModel.deleteMany({ account_id: result._id });
     next();
 });
