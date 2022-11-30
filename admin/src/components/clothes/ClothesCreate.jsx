@@ -66,7 +66,19 @@ const ClothesCreate = () => {
           </ReferenceInput>
           <ArrayInput validate={required()} source="clothesCount">
             <SimpleFormIterator inline>
-              <TextInput source="size" helperText={false} />
+            <SelectInput
+            source="size"
+            validate={required()}
+            choices={[
+              { id: "XS", name: "XS" },
+              { id: "S", name: "S" },
+              { id: "M", name: "M" },
+              { id: "L", name: "L" },
+              { id: "XL", name: "XL" },
+              { id: "XXL", name: "XXL" },
+              { id: "UN", name: "UN" },
+            ]}
+          />
               <NumberInput source="count" helperText={false} />
             </SimpleFormIterator>
           </ArrayInput>

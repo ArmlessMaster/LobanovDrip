@@ -2,7 +2,7 @@
 export const authProvider = {
   // called when the user attempts to log in
   login: ({ email, password }) => {
-    const request = new Request("http://localhost:5000/api/account/login", {
+    const request = new Request(`${process.env.REACT_APP_URL}api/account/login`, {
       method: "POST",
       body: JSON.stringify({ email, password }),
       headers: new Headers({ "Content-Type": "application/json" }),
@@ -16,7 +16,7 @@ export const authProvider = {
         return response.json();
       })
       .then(async ({ token }) => {
-        const request1 = new Request("http://localhost:5000/api/account", {
+        const request1 = new Request(`${process.env.REACT_APP_URL}api/account`, {
           method: "GET",
           body: null,
           headers: new Headers({
@@ -61,7 +61,7 @@ export const authProvider = {
     // const role = localStorage.getItem("permissions");
     // return role ? Promise.resolve(role) : Promise.reject();
     const token = localStorage.getItem("token");
-    const request = new Request("http://localhost:5000/api/account", {
+    const request = new Request(`${process.env.REACT_APP_URL}api/account`, {
       method: "GET",
       body: null,
       headers: new Headers({

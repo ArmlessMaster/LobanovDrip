@@ -5,7 +5,6 @@ import {
   TextField,
   EditButton,
   DeleteButton,
-
 } from "react-admin";
 import { usePermissions } from "react-admin";
 
