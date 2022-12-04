@@ -541,7 +541,7 @@ class ClothesToOrderService {
                         clothesImage.clothes_id = clothes._id;
                         clothesImage.image = clothes.imagesUrls[0];
                         orderItem.images.push(clothesImage);
-                    }
+                    } 
                     clothesItem.size = orderClothes[i][j].size;
                     if (orderItem.status === 'cart') {
                         clothesItem.price = clothes.price;
