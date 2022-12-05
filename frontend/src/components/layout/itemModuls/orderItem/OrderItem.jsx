@@ -20,7 +20,7 @@ const OrderItem = (props) => {
       <div className="OrderItem-clothes"> 
         {props.clothes.map(item => (
           <div className='item'>
-            <img src={item} alt="" />
+            <Link to={`/store/${item.clothes_type}/${item.clothes_id}`}><img src={item.image} alt="" /></Link>
           </div>
         ))}
       </div>

@@ -1,13 +1,16 @@
 .header{
   font-family: 'Roboto';
+  
   .header__menu-drop{
     font-weight: 700;
     font-size: 1.3vw;
     color: white;
+    z-index: 4;
     .header__menu-drop__item{
-      z-index: 2;
-      position: absolute;
-      background-color: #313131;
+      
+      z-index: 4;
+      position: fixed;
+      background-color: #1f1f1f;
       
       &::-webkit-scrollbar-thumb{
         background-color: #a09e9e5d;
@@ -18,8 +21,8 @@
       }
       .header__menu-drop__item-flex.grid{
         display: flex;
-        position: sticky;
-        margin-top: 2vw;
+        position: fixed;
+
         margin-left: 0.5vw;
         justify-content: left;
         flex-direction: column;
@@ -27,7 +30,7 @@
       .header__menu-accept{
         width: 100%;
         background-color: #232323;
-        position: absolute;
+        position: fixed;
         bottom: 0vw;
 
         justify-content: space-around;
@@ -50,14 +53,15 @@
         }
       }
       .header__menu-empty{
-
+        
         img{
           position: absolute;
-          top: 0;
-          left: 0;
+          width: 20vw;
+          top: calc(50% - #{20vw / 2});
+          left: calc(50% - #{20vw / 2});
         }
         p{
-          position: absolute;
+          position: fixed;
           font-size: 3vw;
           top: 80%;
           left: 10%;
@@ -68,9 +72,9 @@
       }
       .header__menu-drop__item-flex{
         width: 100%;
-        position: absolute;
+        position: fixed;
         display: flex;
-        bottom: 22%;
+        top: 10%;
         justify-content: space-around;
         div{
           svg{
@@ -84,13 +88,17 @@
         height: 100%;
         width: 100%;
         div{
-          position: absolute;
+          position: fixed;
           left: 15%;
           top: 50%;
         }
         div+div{
           left: 68.5%;
         }
+        .header__menu-drop__item-flex{
+          top: 30%
+        }
+
       }
       .header__menu-drop__item-account-wrapper{
         margin-top: 3vw;
@@ -117,17 +125,36 @@
     }
     .header__menu-drop__item.first{
       width: 17%;
-      height: 16vw;
+      height: 20vw;
       left: 30%;
+
       ul{
         padding-top: 13%;
+        p{
+          -webkit-text-stroke: 0.03vw #a0aaeb;
+          font-size: 1.6vw;
+          color: transparent;
+          padding-top: 3%;
+          padding-left: 1vw;
+          z-index: 5;
+          a{
+            -webkit-text-stroke: 0.03vw #a0aaeb;
+            color: transparent;
+            text-decoration: none;
+          }
+        }
+        p + p{
+          -webkit-text-stroke: 0.03vw rgb(211, 104, 104);
+
+        }
       }
       li{
         padding-top: 0.8vw;
         padding-left: 1vw;
-        list-style-type: none;
+
         
         a{
+          
           text-decoration: none;
           color: white
         }
@@ -140,7 +167,7 @@
       width: 100%;
       .decor__item{
         color: #5a5a5a;
-        position: absolute;
+        position: fixed;
         top: 2.7vw;
         right: 1vw;
       }
@@ -148,7 +175,7 @@
         z-index: 3;
         content: "";
         background-color: #3f3f3f;
-        position: absolute;
+        position: fixed;
         width: 0.1vw;
         height: 80%;
         top: 2.7vw;
@@ -159,6 +186,7 @@
       width: 25%;
       height: 16vw;
       left: 35%;
+      
     }
     .header__menu-drop__item.search{
       overflow-x: hidden;
@@ -169,7 +197,7 @@
     .header__menu-drop__item.account{
       overflow-x: hidden;
       width: 15%;
-      height: 23vw;
+      height: 15vw;
       right: 5%;
     }
     .header__menu-drop__item.card{
@@ -181,7 +209,7 @@
   }
 
   .header__wrapper{
-    position: absolute;
+    position: fixed;
     z-index: 3;
     width: 100%;
     height: 2.8vw;

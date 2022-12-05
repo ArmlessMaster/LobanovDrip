@@ -1,0 +1,59 @@
+.novaposhta-input{
+  font-family: "VCR OSD";
+  width: 20.260vw;
+  .description{
+    color: #494949;
+    font-family: "Roboto";
+    font-weight: 300;
+    font-size: 0.8vw;
+    line-height: 1vw;
+  }
+  .my-react-select-container{
+    *{background-color: #1F1F1F;}
+    background-color: #0D0D0D;
+    font-size: 1.667vw;
+    div{
+      margin-top: 0vw;
+    }
+    .css-6j8wv5-Input{
+      background-color: transparent;
+      color: white;
+    }
+    .css-1s2u09g-control{
+      background-color: #1F1F1F;
+      box-shadow: 0px 0.208vw 0.208vw rgba(0, 0, 0, 0.25);
+      border: none;
+
+      border-radius: 0;
+      input{
+        color: white;
+      }
+      min-height: 2.8vw;
+      height: 1vw;
+    }
+    .css-1s2u09g-control{
+      background-color: #1F1F1F;
+      border-radius: 0; 
+      border-width: 0;
+  
+    }
+    .css-1pahdxg-control{
+  
+      background-color: #1F1F1F;
+      border-radius: 0;
+      min-height: 2.8vw; 
+      border-width: 0;
+      box-shadow: 0 0 0 1px rgb(177, 50, 50);
+    }
+    .css-2613qy-menu{
+      min-height: 2.8vw;
+      background-color: #1F1F1F;
+      border-radius: 0; 
+      border-width: 0;
+  
+    }
+
+  }
+
+  
+}

@@ -57,6 +57,11 @@ const Store = () => {
     }
     
     const [mousePos, setMousePos] = useState({});
+    const [isMouseOver, setIsMouseOver] = useState("none");
+    const [gifMouse, setGifMouse] = useState(null);
+
+    
+    
 
     useEffect(() => {
       const handleMouseMove = (event) => {
@@ -73,10 +78,27 @@ const Store = () => {
       };
     }, []);
 
+    const mouseEnter = (gif) => {
+      setIsMouseOver("block");
+      setGifMouse(collection[0].gifUrl)
+    }
+  
+    const mouseLeave = () => {
+      setIsMouseOver("none");
+    }
+
+
+    
   return hasLoaded ? (
 
     <section className='Store'>
-      
+      <motion.div className="Gif"           
+           animate={{
+            x: mousePos.x,
+            y: mousePos.y,
+            display: isMouseOver}}>
+        <img src={gifMouse} alt="" />
+      </motion.div>
       <div className="store-decor">
         <div className="decor-jpn first">洋服屋</div>
         <div className="decor-graffity first">WHY U <p>mad?</p></div>
@@ -85,7 +107,7 @@ const Store = () => {
       </div>
       <div className="store__collection-carusel">
         <div className="store__collection-carusel_wrapper"> 
-          <Swiper spaceBetween={1} centeredSlides={true} loop={true} autoplay={{delay: 4000, disableOnInteraction: false, }} speed={1600} pagination={{clickable: true,}} navigation={true} modules={[Autoplay, Pagination, Navigation]}>
+          <Swiper spaceBetween={0}  centeredSlides={true} loop={true} autoplay={{delay: 4000, disableOnInteraction: false, }} speed={1600} pagination={{clickable: true,}} navigation={true} modules={[Autoplay, Pagination, Navigation]}>
             {collection.map((item, index) => {
               return(<SwiperSlide><div className="store__collection__img-resize-wrapper"><img className="store__collection-carusel_element" src={item.imagesUrls[1]}/><img className="store__collection-element-label" src={item.imagesUrls[0]}/></div></SwiperSlide>) 
             })}
@@ -98,7 +120,7 @@ const Store = () => {
         <Swiper  slidesPerView={3} spaceBetween={50}   speed={1600} pagination={{clickable: true,}} navigation={true}  grid={{rows: 1,}} modules={[Autoplay, Pagination, Navigation]}>
         
           {clothes.map((cloth, index) => {
-              return( <SwiperSlide><ItemModule class="high" link={`/store/${cloth.type}/${cloth._id}`} onMouseEnter={console.log("ababa")} text={cloth.name} price={cloth.price + "₴"}  key={cloth._id} img={cloth.imagesUrls[0]} sizes={sizeUpload(cloth.clothesCount)}/></SwiperSlide>) 
+              return( <SwiperSlide><ItemModule class="high" link={`/store/${cloth.type}/${cloth._id}`} onmouseenter={mouseEnter} onmouseleave={mouseLeave} text={cloth.name} price={cloth.price + "₴"}  key={cloth._id} img={cloth.imagesUrls[0]} sizes={sizeUpload(cloth.clothesCount)}/></SwiperSlide>) 
             })}
          </Swiper>
          </div>
@@ -112,9 +134,7 @@ const Store = () => {
           })}
           </div>
         </div>
-          {/* cloth.clothesCount.forEach(element => (element.count > 0 ? element.size : ""))*/}
       </div>
-      <CursorElement/>
     </section>
   ) : <Loader/>
 }

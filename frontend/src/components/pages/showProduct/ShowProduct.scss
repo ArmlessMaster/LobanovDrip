@@ -51,7 +51,12 @@ flex:1;
 grid-template-columns: repeat(1,1fr);
 display: grid; 
 }
-.small_img_group{
+
+#MainImg {
+  cursor: zoom-in;
+}
+
+.small_img_group {
   display: flex;
   justify-content: space-between;
   width: 18.635vw;
@@ -59,44 +64,43 @@ display: grid;
   margin-left: auto;
   margin-right: auto;
 }
-.small_img_col{
+
+.small_img_col {
   flex-basis: 25%;
   cursor: pointer;
 }
 
-.product-text-color{
-font-weight: 700;
-font-size: 1.250vw;
-line-height: 1.458vw;
-color: #000000;
+.product-text-color {
+  font-weight: 700;
+  font-size: 1.250vw;
+  line-height: 1.458vw;
+  color: black;
 }
 
-
-
-.color-groups{
+.color-groups {
   display: flex;
-  padding: 1rem 0; 
-  .color{
+  padding: 1rem 0;
+  grid-gap: 0.521vw;
+
+  .color {
     width: 2vw;
     height: 2vw;
     margin-bottom: 1.8vw;
     background: transparent;
-    div{
+
+    div {
       margin-left: auto;
       margin-right: auto;
       content: "3241";
       width: 1.5vw;
       height: 1.5vw;
       border: 1px solid rgb(196, 196, 196);
+      box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.2);
     }
-    
+
   }
 
-  .color:hover{
-    border: 2px solid rgb(240, 101, 101);
-  }
 }
-
 
 .size-picker{
 font-weight: 600;
@@ -111,33 +115,39 @@ line-height: 0.938vw;
   margin-bottom: 1vw;
   color: #000000;
 }
-.size-buttons > button{
-  width: 3.177vw;
-  height: 2.604vw;
-  border: 0.052vw solid black;
-  text-align: center;
-  color : black;
-  background:none;
-}
-.size-buttons{ 
+.size-buttons{
   display: grid;
   grid-template-columns: repeat(4, 0fr);
   grid-template-rows: repeat(2, 0fr);
   grid-gap: 1.042vw;
   margin-bottom: 1.5vw;
-}
+  .size-label{
+    label{
+      display: inline-block;
+      border: 0.052vw solid black;
+      padding: 17px;
+      width: 32px;
+      text-align: center;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
 
-.size-col1{
-  transition: 0.2s;
-  text-transform: uppercase;
+    .size-radio{
+      display: none;
+    }
+
+    input:checked+label {
+      background-color: rgb(24, 24, 24);
+      color: white;
+    }
+    input:disabled+label{
+      border: 0.052vw solid rgb(122, 122, 122);
+      color: rgb(122, 122, 122);
+    }
+
+  }
+
 }
-.size-buttons button:disabled,
-button[disabled]{
-  border: 0.052vw solid #C1B9B9;
-  color: #C1B9B9;
-}
-.size-buttons >:hover {border: 0.052vw solid black;}
-.size-buttons >:focus {background-color:black;color: white;}
 
 .lineal{
   display: flex;

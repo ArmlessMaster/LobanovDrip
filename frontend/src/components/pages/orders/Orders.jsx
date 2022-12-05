@@ -1,18 +1,11 @@
 import "./Orders.scss";
-import { React, useState, useContext } from "react";
-import { BackgroundVideo, RegistrationLabel, PaySvg, PaySvg1, PaySvg2, AttenSvg, test1 } from "../../../images";
-import { PixelBtn, PixelInput, AccountMenu, ChangeBtn, OrderItem} from "../../layout/index";
+import { React, useState, useContext, useCallback, useEffect } from "react";
+import { test1 } from "../../../images";
+import { AccountMenu, OrderItem} from "../../layout/index";
 import { motion } from "framer-motion";
 import { AuthContext } from "../../../context/AuthContext";
 import { useHttp } from "../../../hooks/http.hook";
-import { Link } from "react-router-dom";
-import { signInWithPopup } from "firebase/auth";
-import {
-  NotificationContainer,
-  NotificationManager,
-} from "react-notifications";
-import { auth_, provider } from "../../../Firebase";
-
+import { Loader } from "../../layout/index";
 
 
 const btnHidden = {
@@ -26,10 +19,29 @@ const btnHidden = {
 
 const Orders = () => {
   const clothes = [test1, test1, test1]
-  const [isOpen, setIsOpen] = useState(false);
-  const [isOpenSecond, setIsOpenSecond] = useState(false);
+  const { loading, request } = useHttp();
+  const [hasLoaded, setHasLoaded] = useState();
+  const auth = useContext(AuthContext);
+  const [orders, setOrders] = useState([]);
 
-  return (
+  const fetcOrders = useCallback(async () => {
+    try {
+      await request("/api/clothes-to-order/orders/info", "GET", null, null, {
+        Authorization: `Bearer ${auth.token}`,
+      }).then((res) => {
+        res.orders = res.orders.filter((item) => item.status !== 'cart');
+        setOrders(res.orders);
+      });
+      setHasLoaded(true);
+    } catch (e) {}
+  }, [request, auth]);
+
+  useEffect(() => {
+    fetcOrders();
+  }, [fetcOrders]);
+
+
+  return hasLoaded ?  (
     <section className="Orders">
         <div className="decor__wrapper">
             <div className="decor__graffity first">PAPICH</div>
@@ -50,16 +62,16 @@ const Orders = () => {
             MY ORDERS 
           </div>  
           <div>
-            <OrderItem clothes={clothes} label="№14031055" price="1234" data="1 oct. 2022 16:03:39" status="Issued"/>
-            <OrderItem clothes={clothes} label="№14031055" price="1234" data="1 oct. 2022 16:03:39" status="Expensive"/>
+          {orders.map((item) => {return (
             
-            <OrderItem clothes={clothes} label="№14031055" price="1234" data="1 oct. 2022 16:03:39" status="Forming"/>
+            <OrderItem clothes={item.images} label={item.order_number} price={item.total} data={item.status_update} status={item.status}/>
+          )})}
           </div>
         </div>
       </div>
      
     </section>
-  );
+  ) : <Loader></Loader>;
 };
 
 export default Orders;

@@ -4,6 +4,7 @@
   margin-bottom: 8vw;
   font-weight: 700;
   z-index: 3;
+  transition: 0.3s ease;
   .ItemModul__img-wrapper{
     height: 100%;
     overflow: hidden;
@@ -29,6 +30,13 @@
   .ItemModul-prices{
     font-size: 1.250vw;
   }
+  .closeBtn{
+    position: absolute;
+    right: 0;
+    button{
+      background-color: transparent;
+    }
+  }
 }
 
 .ItemModul.high{
@@ -44,7 +52,7 @@
 }
 .ItemModul.search{
   margin-bottom: 2vw;
-  width: 100%;
+  margin-left: 0.5vw;
   height: 5vw;
   display: flex;
   img{
@@ -52,7 +60,11 @@
     filter: drop-shadow(0.2vw 0.3vw 0.2vw rgba(0, 0, 0, 0.25));
   }
   div{
-    margin-top: 3%;
+    width: 21%;
+  }
+  div + div{
+    width: 70%;
+ 
     margin-left: .5vw;
     color: #b1b1b1;
   }
@@ -66,5 +78,91 @@
   .ItemModul-prices{
     font-size: 1.050vw;
     color: rgb(207, 207, 207);
+  }
+  .closeBtn{
+    position: absolute;
+
+    button{
+      background-color: transparent;
+      svg{
+        width: 1vw;
+      }
+    }
+  }
+}
+
+.ItemModul.cart{
+  position: relative;
+
+  margin-bottom: 3vw;
+  width: 65%;
+  height: 8vw;
+  display: flex;
+  img{
+    width: auto;
+    filter: drop-shadow(0.2vw 0.3vw 0.2vw rgba(0, 0, 0, 0.25));
+  }
+  div{
+    margin-top: 3%;
+    margin-left: .5vw;
+    color: #b1b1b1;
+  }
+  .ItemModul-name{
+    font-size: 1.8vw;
+
+  }
+  .ItemModul-sizes{
+    font-size: 1vw;
+  }
+  .ItemModul-prices{
+    font-size: 1.6vw;
+    color: rgb(207, 207, 207);
+  }
+  button{
+    background-color: transparent;
+    svg{
+      width: 1vw;
+    }
+  }
+}
+
+.ItemModul.discont{
+  margin-bottom: 1vw;
+  margin-left: 1vw;
+  height: 9vw;
+  display: flex;
+  margin-bottom: 1.4vw;
+  img{
+    width: auto;
+    filter: drop-shadow(0.2vw 0.3vw 0.2vw rgba(0, 0, 0, 0.25));
+  }
+  div{
+    width: 43%;
+    
+  }
+  div + div{
+    width: 60%;
+    color: #f3f3f3;
+  }
+  .ItemModul-name{
+    font-size: 1vw;
+
+  }
+  .ItemModul-sizes{
+    font-size: 0.681vw;
+  }
+  .ItemModul-prices{
+    font-size: 1.050vw;
+    color: rgb(207, 207, 207);
+  }
+  .closeBtn{
+    position: absolute;
+
+    button{
+      background-color: transparent;
+      svg{
+        width: 1vw;
+      }
+    }
   }
 }

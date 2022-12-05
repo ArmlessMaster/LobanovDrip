@@ -1,0 +1,50 @@
+
+*{
+  overflow: hidden;
+}
+
+.ChangeDesign{
+  background: url("../../../images/icons/backgroundSvg/Dot\ Grid.svg");
+  width: 100%;
+  height: 100vh;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  .design-panel{
+    position: absolute;
+    width: 100%;
+    display: flex;
+    bottom: 5%;
+    justify-content: center;
+    .design-panel-wrapper{
+      width: 300px;
+      background: #a7a7a7;
+      border-radius: 30px;
+      padding: 10px;
+      padding-left: 30px;
+      padding-right: 30px;
+
+      ul{
+        display: flex;
+        justify-content: space-between ;
+
+        li{
+          .icon{
+            font-size: 34px;
+            font-weight: 600;
+
+            display: flex;
+            justify-content:center;
+            line-height: 28px;
+          }
+          .text{
+            padding-top: 6px;
+          }
+        }
+      }
+
+    }
+  }
+}
+

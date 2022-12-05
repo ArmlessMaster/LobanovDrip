@@ -17,6 +17,4 @@ const RegisterSvg = (props) => {
   )
 }
 
-
-
 export default RegisterSvg;

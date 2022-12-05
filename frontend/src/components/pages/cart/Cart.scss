@@ -1,7 +1,7 @@
 
 
 .Cart{
-  overflow-x: hidden;
+
   font-family: 'VCR OSD Mono';
     .cart__wrapper{
       color: white;
@@ -9,23 +9,26 @@
         .cart-wrapper{
           font-family: "Roboto Condensed";
           margin-top: 5%;
-          margin-left: 4%;
-
+          .cart-items-list{
+            margin-left: 3.7%;
+          }
           .cart-label{
+            margin-left: 4%;
             span{
-
               margin-left: 0.3vw;
-              font-size: 1.5vw;
+              font-size: 2vw;
               background-color: #5A5A5A;
-              padding: 0.1vw;
-              padding-left: 0.2vw;
-              padding-right: 0.2vw;
+              color: #b4b4b4;
+              padding-left: 0.4vw;
+              padding-right: 0.4vw;
             }
             font-size: 2vw;
+
             font-weight: 900;
           }
           .cart-label-atten{
-            margin-top: 0.3vw;
+            margin-left: 4%;
+            margin-top: 0.6vw;
             font-family: "Roboto";
             color: #014DB5;
             font-size: 1.042vw;
@@ -33,26 +36,70 @@
           }
         }
       background-color: #0D0D0D;
-      height: 100%;
+      min-height: 100%;
       width: 100%;
       content: "";
-      position: fixed;
+      position: absolute;
 
     }
-   
+    .ChangeAccount-values{
+      position: fixed;
+      font-family: "Roboto";
+      margin-left: 3.7%;
+      top: 2vw;
+      left: 0;
+      z-index: 3;
+      
+      .ChangeAccount-label{
+        margin-top: 3vw;
+        font-size: 2vw;
+        font-weight: 700;
+      }
+
+      .ChangeAccount-inputs{
+        margin-top: 3vw;
+        .inputs-label{
+          font-family: 'VCR OSD Mono';
+          font-size: 2vw;
+        }
+        .change-btn{
+          margin-top: 0.5vw;
+        }
+        .inputs-grid{
+          font-family: 'VCR OSD Mono';
+          display: grid;
+          margin-left: auto;
+          margin-right: auto;
+          grid-template-columns: 33.3% 33.3% 33.3%;
+          div + div{
+            margin-right: 1vw;
+          }
+
+          .inputsBtn{
+            margin-top: 2vw;
+          }
+        }
+
+      }
+      .ChangeAccount-inputs + .ChangeAccount-inputs{
+        .inputs-grid{
+          grid-template-columns: 33.3% 33.3%;
+        }
+      }
+    }
     .order-wrapper{
-      z-index: 1;
+      z-index: 3;
       background-color: #161616;
       color: white;
       position: fixed;
-      top: 2.8vw;
+      top: 0;
       right: 0;
   
       width: 30%;
       height: 100%;
       .order-label{
           text-align: center;
-          margin-top: 2vw;
+          margin-top: 4.8vw;
           font-size: 2.5vw;
       }
       .order-info{
@@ -71,10 +118,18 @@
       }
       .order-btn{
         display: flex;
+        flex-direction: column;
         margin-top: 5vw;
+        a{
+          margin-left: auto;
+          margin-right: auto;
+        }
         button{
           margin-left: auto;
           margin-right: auto;
+        }
+        button + button{
+          margin-top: 1vw;
         }
       }
 

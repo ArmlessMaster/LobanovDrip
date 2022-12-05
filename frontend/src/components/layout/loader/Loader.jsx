@@ -1,14 +1,14 @@
 import React from "react";
 import './Loader.scss';
-
+import { LoaderWhite } from "../../../images";
 const Loader = () => {
     return (
-    <div style={{ display: 'flex', justifyContent: 'center', paddingTop: '2rem' }}>
-        <div class="spinner">
-            <span class="spinner-inner-1"></span>
-            <span class="spinner-inner-2"></span>
-            <span class="spinner-inner-3"></span>
-        </div>
+    <div className="Loader">
+        <div>
+            <video  loop autoPlay muted>
+                <source src={LoaderWhite} type="video/mp4"/>
+            </video>
+        </div>  
     </div>
     )
 }

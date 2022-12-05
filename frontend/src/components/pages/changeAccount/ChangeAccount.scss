@@ -45,8 +45,20 @@
           .inputsBtn{
             margin-top: 2vw;
           }
-        }
 
+        }
+        .novaposhta-input{
+          .description{
+            color: #494949;
+            font-family: "Roboto";
+            font-weight: 300;
+            font-size: 0.8vw;
+            line-height: 1vw;
+          }
+          div{
+            margin-top: 0;
+          }
+        }
       }
       .ChangeAccount-inputs + .ChangeAccount-inputs{
         .inputs-grid{

@@ -1,0 +1,7 @@
+.canvas-wrapper{
+  z-index: 3;
+  position: absolute;
+  canvas{
+    z-index: 3;
+  }
+}

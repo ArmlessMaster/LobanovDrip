@@ -88,7 +88,6 @@
 
     .swiper-pagination-bullet-active{
       --swiper-theme-color: rgb(211, 68, 68);
-      
     }
 
   .store-item-carusel{
@@ -142,6 +141,14 @@
         padding-right: 0.4vw;
         background-color: #E34D4D;;
       }
+    }
+  }
+  .Gif{
+    z-index: 3;
+    position: fixed;
+
+    img{
+      width: 15vw;
     }
   }
 }

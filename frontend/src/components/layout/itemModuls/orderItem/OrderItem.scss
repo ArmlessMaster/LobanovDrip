@@ -35,8 +35,9 @@
         color: #DED056;
       }
       
-      .OrderItem-status.Forming{
-        color:#DE5656;
+      .OrderItem-status.processing{
+        color:#56ded3;
+        text-transform: uppercase;
       }
     }
   }

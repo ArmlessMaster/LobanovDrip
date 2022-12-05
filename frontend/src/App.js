@@ -5,8 +5,9 @@ import { BrowserRouter } from "react-router-dom";
 import { Header } from "./components/layout/header/Header";
 import { useAuth } from "./hooks/auth.hook";
 import { AuthContext } from "./context/AuthContext";
+import { CartProvider } from "./context/cartContext";
 import {Loader} from "./components/layout"
-
+import {useState} from "react"
 
 const App = () => {
 
@@ -14,13 +15,13 @@ const App = () => {
   const isAuthenticated = !!token;
   const routes = useRoutes(isAuthenticated);
 
-
   if (!ready) {
     return <Loader />
   }
 
   return (
     <>
+    <CartProvider>
       <AuthContext.Provider
         value={{
           token,
@@ -30,10 +31,11 @@ const App = () => {
         }}
       >
         <BrowserRouter>
-          <Header />
+        <Header/>
           <div className="Main-Wrapper">{routes}</div>
         </BrowserRouter>
       </AuthContext.Provider>
+    </CartProvider>
     </>
   );
 }
