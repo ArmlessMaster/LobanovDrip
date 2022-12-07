@@ -121,6 +121,7 @@ class OrderService {
         account_id: Schema.Types.ObjectId
     ): Promise<Order> {
         try {
+            
             const account = await this.account.findOne(account_id).exec();
 
             const orderPerm = await this.order.findById(_id).exec();
@@ -208,7 +209,6 @@ class OrderService {
                 const clothesInOrder = (await this.OrderClothesService.search({
                     order_id: _id,
                 })) as Array<OrderClothes>;
-
                 await Promise.all(
                     clothesInOrder.map(async (item, index) => {
                         if (item.productModel === 'Modeling') {
@@ -276,7 +276,7 @@ class OrderService {
                 );
                 await this.order.create({ user_id: account_id });
             }
-
+            
             if (status === 'cancellation') {
                 const clothes = (await this.OrderClothesService.search({
                     order_id: _id,
@@ -325,6 +325,7 @@ class OrderService {
                     })
                 );
             }
+
             const order = await this.order
                 .findOneAndUpdate(
                     { _id: _id },

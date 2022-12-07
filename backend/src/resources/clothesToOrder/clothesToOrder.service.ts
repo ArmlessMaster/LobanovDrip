@@ -34,10 +34,10 @@ class ClothesToOrderService {
         }
     }
     private ordersSortFunction(a: any, b: any) {
-        if (a._id < b._id) {
+        if (a._id > b._id) {
             return -1;
         }
-        if (a._id > b._id) {
+        if (a._id < b._id) {
             return 1;
         }
         return 0;
@@ -247,6 +247,7 @@ class ClothesToOrderService {
             if (!orderClothes) {
                 throw new Error('Unable to find order clothes');
             }
+
             orderClothes.sort(this.orderClothesSortFunction);
             orders.sort(this.ordersSortFunction);
             orderClothes = orderClothes.filter((item) => item.length > 0);
@@ -342,6 +343,7 @@ class ClothesToOrderService {
                 orderItem.total = clothesItems
                     .map((item) => item.totalPrice)
                     .reduce((prev, next) => prev + next);
+                
                 orderItems.push(orderItem);
                 orderItem.images = clothesItems;
             }
@@ -663,6 +665,7 @@ class ClothesToOrderService {
                 orderItem.total = clothesItems
                     .map((item) => item.totalPrice)
                     .reduce((prev, next) => prev + next);
+                    
                 orderItems.push(orderItem);
                 orderItem.images = clothesItems;
             }
