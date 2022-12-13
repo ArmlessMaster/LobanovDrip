@@ -3,7 +3,7 @@ import {React, useState} from "react";
 import Select from "react-select";
 import MultiRangeSlider from "../multiRangeSlider/MultiRangeSlider";
 import { useHttp } from "../../../../hooks/http.hook";                     
-
+import { useTranslation } from 'react-i18next'
 
 const variantsInputs = {
   open: { opacity: 1, y: "-8vw" },
@@ -16,7 +16,7 @@ const Filter = (props) => {
   const [to_price, setTo_price] = useState(props.max);
   const [size, setSize] = useState(["XS", "S", "M", "L", "XL", "XXL"]);
 
-
+  const { t } = useTranslation();
 
   const sizeOptions = [
     { value: "XS", label: "XS" },
@@ -27,9 +27,9 @@ const Filter = (props) => {
     { value: "XXL", label: "XXL" },
   ];
   const sortOption = [
-    { value: "1", label: "Price Descending" },
-    { value: "2", label: "Price Ascending" },
-    { value: "3", label: "Newnees" },
+    { value: "1", label: t('price_descending') },
+    { value: "2", label: t('price_ascending') },
+    { value: "3", label: t('by_novelty') },
   ];
 
   const handleChangeColors = (options) => {
@@ -86,7 +86,7 @@ const Filter = (props) => {
         </div>
         <div className="filter-button">
 
-          <button onClick={getClothesFilter}> APPLY </button>
+          <button onClick={getClothesFilter}> {t('make_use')} </button>
         </div>
       </div>
       <div className="sort-wrapper">

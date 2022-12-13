@@ -1,0 +1,51 @@
+.LayerImageItem{
+  margin-top: 10px;
+  z-index: 5;
+  .LayerImageItem-wrapper{
+    display: flex;
+    position: relative;
+    background-color: rgb(56, 56, 56);
+    
+    border-radius: 7px;
+    .left-wrapper{
+      .img-wrapper{
+        width: 50px;
+        height: 50px;
+        img{
+          border-radius: 5px;
+          width: 100%;
+        }
+      }
+
+      display: flex;
+      .text-wrapper{
+        padding-top: 12px;
+        padding-left: 5px;
+        font-size: 11px;
+        font-weight: 400;
+        .big-text{
+          font-size: 15px;
+          font-weight: 700;
+        }
+      }
+    }
+    .layer-wrapper{
+      position: absolute;
+      right: 3%;
+      bottom: 5%;
+      font-family: "Roboto Condensed";
+      
+    }
+    .delete-btn{
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      right: 3%;
+      top: 5%;
+      img{
+        width: 100%;
+      }
+    }
+  
+  }
+}

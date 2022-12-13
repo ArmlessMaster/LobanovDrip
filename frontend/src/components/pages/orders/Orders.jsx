@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { AuthContext } from "../../../context/AuthContext";
 import { useHttp } from "../../../hooks/http.hook";
 import { Loader } from "../../layout/index";
-
+import { useTranslation } from 'react-i18next'
 
 const btnHidden = {
   // open: { opacity: 1,  transform: "scaleX(1)"},
@@ -40,6 +40,7 @@ const Orders = () => {
     fetcOrders();
   }, [fetcOrders]);
 
+  const { t } = useTranslation();
 
   return hasLoaded ?  (
     <section className="Orders">
@@ -59,7 +60,7 @@ const Orders = () => {
         </div>
         <div className="Orders-values">
           <div className="Orders-label">
-            MY ORDERS 
+            {t('my_orders')}
           </div>  
           <div>
           {orders.map((item) => {return (

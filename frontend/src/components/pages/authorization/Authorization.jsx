@@ -13,6 +13,7 @@ import {
 } from "react-notifications";
 import { auth_, provider } from "../../../Firebase";
 import { CartContext } from "../../../context/cartContext";
+import { useTranslation } from 'react-i18next'
 import "./test.scss";
 
 const variantsInputs = {
@@ -65,6 +66,7 @@ const Authorization = () => {
     surname: "",
   });
   
+  const { t } = useTranslation();
 
   const changeHandlerLogin = (event) => {
     setFormLogin({ ...formLogin, [event.target.name]: event.target.value });
@@ -163,11 +165,11 @@ const Authorization = () => {
           });
         });
       });
-      NotificationManager.success("Authorization success", "Glad to see you!");
+      NotificationManager.success(t('authorization_success'), t('glad_to_see_you'));
     } catch (e) {
       NotificationManager.error(
-        "Error Authorization",
-        "Wrong login or password!"
+        t('error_authorization'),
+        t('wrong_login')
       );
     }
   };
@@ -255,14 +257,14 @@ const Authorization = () => {
         });
       });
       NotificationManager.success(
-        "Authorization success",
-        "Welcome to the club, buddy!"
+        t('authorization_success'),
+        t('welcome_to_the_club')
       );
     } catch (e) {
       console.log("Unable to create account");
       NotificationManager.error(
-        "Error Registration",
-        "Сheck the entered data."
+        t('error_registration'),
+        t('check_data')
       );
     }
   };
@@ -349,18 +351,18 @@ const Authorization = () => {
           });
         });
         
-        NotificationManager.success("Authorization success", "Glad to see you!");
+        NotificationManager.success(t('authorization_success'), t('glad_to_see_you'));
       } catch(e) {
         NotificationManager.error(
-          "Google login error",
-          "Please try again later."
+          t('google_error'),
+          t('try_again')
         );
       }
     }).catch((error) => {
        console.log(error);
        NotificationManager.error(
-        "Google login error",
-        "Please try again later."
+        t('google_error'),
+        t('try_again')
       );
      });
   };
@@ -386,7 +388,7 @@ const Authorization = () => {
               variants={btnHidden}
               transition={{ duration: 0.1 }}
             >
-              FOR MEMBER
+              {t('for_participants')}
             </motion.div>
             <div className="login__wraper-btn">
               <form action="">
@@ -397,7 +399,7 @@ const Authorization = () => {
                     value={formLogin.email}
                     onChange={changeHandlerLogin}
                     type="text"
-                    placeholder="EMAIL"
+                    placeholder={t('email')}
                     disabled={isOpen}
                     animate={isOpen ? "open" : "closed"}
                     variants={btnHidden}
@@ -408,7 +410,7 @@ const Authorization = () => {
                     value={formLogin.password}
                     onChange={changeHandlerLogin}
                     type="text"
-                    placeholder="PASSWORD"
+                    placeholder={t('password')}
                     disabled={isOpen}
                     animate={isOpen ? "open" : "closed"}
                     variants={btnHidden}
@@ -420,11 +422,11 @@ const Authorization = () => {
                   variants={btnHidden}
                   transition={{ duration: 0.1 }}
                 >
-                  <Link>I forgot passwords</Link>
+                  <Link>{t('forgot_password')}</Link>
                 </motion.div>
                 <div className="input-btn-wrapper">
                   <PixelBtn
-                    text="ENTER"
+                    text={t('confirm')}
                     animate={isOpen ? "open" : "closed"}
                     variants={btnHidden}
                     disabled={loading}
@@ -435,7 +437,7 @@ const Authorization = () => {
                 <div className="input-btn-wrapper">
                   <PixelBtn
                     color="Blue"
-                    text="Login-in with Google"
+                    text={t('google_login')}
                     animate={isOpen ? "open" : "closed"}
                     variants={btnHidden}
                     disabled={isOpen}
@@ -454,7 +456,7 @@ const Authorization = () => {
             <PixelBtn
               onClick={() => setIsOpen((isOpen) => false)}
               color="Red"
-              text="BACK TO LOGIN"
+              text={t('back_to_login')}
             />
           </motion.div>
         </div>
@@ -483,11 +485,11 @@ const Authorization = () => {
             </motion.div>
           </div>
           <div className="registration">
-            <div className="registration-title">IS THIS YOUR FIRST VISIT</div>
+            <div className="registration-title">{t('first_visit')}</div>
             <div className="input-btn-wrapper">
               <PixelBtn
                 onClick={() => setIsOpen((isOpen) => true)}
-                text="CREATE AN ACCOUNT"
+                text={t('create_an_account')}
                 animate={isOpen ? "open" : "closed"}
                 variants={btnHidden}
                 color="Red"
@@ -505,7 +507,7 @@ const Authorization = () => {
                   value={formRegister.email}
                   onChange={changeHandlerRegister}
                   type="text"
-                  placeholder="EMAIL"
+                  placeholder={t('email')}
                 />
                 <PixelInput
                   id="password"
@@ -513,7 +515,7 @@ const Authorization = () => {
                   value={formRegister.password}
                   onChange={changeHandlerRegister}
                   type="text"
-                  placeholder="PASSWORD"
+                  placeholder={t('password')}
                 />
               </div>
               <div className="input-flex">
@@ -523,7 +525,7 @@ const Authorization = () => {
                   value={formRegisterName.name}
                   onChange={changeHandlerRegisterName}
                   type="text"
-                  placeholder="NAME"
+                  placeholder={t('name')}
                 />
                 <PixelInput
                   id="surname"
@@ -531,19 +533,19 @@ const Authorization = () => {
                   value={formRegisterName.surname}
                   onChange={changeHandlerRegisterName}
                   type="text"
-                  placeholder="SURNAME"
+                  placeholder={t('surname')}
                 />
               </div>
               <div className="input-flex">
-                <PixelBtn text="ENTER" onClick={registerHandler} color="Red"/>
+                <PixelBtn text={t('confirm')} onClick={registerHandler} color="Red"/>
               </div>
             </motion.div>
 
             <div className="registration__rules">
-              Read the <Link>Privacy Policy</Link>,{" "}
+            {t('read_the')}<Link> {t('privacy_policy')}</Link>,{" "}
               <Link>
-                Rules
-                <p>and Site Selection Guidelines</p>
+              {t('rules')}
+                <p>{t('and_ssg')}</p>
               </Link>
             </div>
           </div>

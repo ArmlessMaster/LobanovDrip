@@ -6,7 +6,6 @@ import { useHttp } from "../../../hooks/http.hook";
 import 'swiper/css';
 import { useParams } from 'react-router-dom'
 
-
 export const StoreByTypes = (props) => {
   const [max, setMax] = useState(null);
   const [hasLoaded, setHasLoaded] = useState();
@@ -74,7 +73,8 @@ export const StoreByTypes = (props) => {
       element.count > 0 ? (size += element.size + " ") : ""
     );
     return size;
-  }
+  } 
+
   const [hasLoadedClothes, setHasLoadedClothes] = useState(true);
   return hasLoaded && max ? (
     <section className="Store">

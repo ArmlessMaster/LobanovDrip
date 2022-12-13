@@ -13,3 +13,7 @@ export {default as OrderItem} from './itemModuls/orderItem/OrderItem'
 export {default as CartItem} from './itemModuls/cartItem/CartItem'
 export {default as NovaposhtaInput} from './inputs/novaposhtaInput/NovaposhtaInput'
 export {default as Canvas} from './canvas/Canvas'
+
+export {default as LayerImageItem} from './itemModuls/layerImageItem/LayerImageItem'
+export {default as LayerTextItem} from './itemModuls/layerTextItem/LayerTextItem'
+export {default as DesignInput} from './inputs/designInput/DesignInput'

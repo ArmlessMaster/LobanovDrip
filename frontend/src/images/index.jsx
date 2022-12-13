@@ -23,6 +23,19 @@ export { default as Music } from './music/2.mp3';
 export { default as TestAbaba } from './img/test2.png';
 export { default as dotSvg } from './icons/backgroundSvg/Dot Grid.svg';
 
+export { default as TTSvg } from './icons/tiktokSvg/tiktok.svg';
+export { default as InstSvg } from './icons/instagramSvg/instagram.svg';
+export { default as YTSvg } from './icons/youTubeSvg/youtube.svg';
+export { default as TelegSvg } from './icons/telegramSvg/telegram.svg';
 
 export { default as SaveSvg } from './icons/saveSvg/SaveSvg';
 export { default as ImageSvg } from './icons/imageSvg/ImageSvg';
+
+export { default as MastercardSvg } from './icons/mastercardSvg/Mastercard.svg';
+export { default as VisaSvg } from './icons/visaSvg/visa.svg';
+
+export { default as testD } from './img/test4.png';
+
+export { default as AlignSvgCenter } from './icons/alignSvg/alignCenter.svg';
+export { default as AlignSvgLeft } from './icons/alignSvg/alignLeft.svg';
+export { default as AlignSvgRight} from './icons/alignSvg/alignRight.svg';

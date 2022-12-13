@@ -12,14 +12,15 @@ import {
   NotificationManager,
 } from "react-notifications";
 import { auth_, provider } from "../../../Firebase";
-
+import { useTranslation } from 'react-i18next'
 
 const ChangePassword = () => {
 
   const auth = useContext(AuthContext);
   const [hasLoaded, setHasLoaded] = useState(false);
   const { loading, request } = useHttp();
-
+  
+  
   const [changePassword, setChangePassword] = useState({
     password: "",
     new_password: "",
@@ -45,28 +46,34 @@ const ChangePassword = () => {
       [event.target.name]: event.target.value,
     });
   };
-
+  const { t } = useTranslation();
   const ReqPassword = async () => {
     try {
       await request("api/account/update/password", "PUT", {password : changePassword.password, new_password : changePassword.new_password}, null, {Authorization: `Bearer ${auth.token}`});
-      NotificationManager.success("Authorization success", "Glad to see you!");
+      NotificationManager.success(
+      t('change_password_success'),
+      "!"
+      );
     } catch (e) {
       console.log("Unable to login account");
       NotificationManager.error(
-        "Error Authorization",
-        "Wrong login or password!"
+        t('change_password_error'),
+        "!"
       );
     }
   };
   const ReqNewPassword = async () => {
     try {
       await request("api/account/update", "PUT", {password : createPassword.password}, null, {Authorization: `Bearer ${auth.token}`});
-      NotificationManager.success("Authorization success", "Glad to see you!");
+      NotificationManager.success(
+      t('create_password_success'),
+      "!"
+      );
     } catch (e) {
       console.log("Unable to login account");
       NotificationManager.error(
-        "Error Authorization",
-        "Wrong login or password!"
+        t('create_password_error'),
+        "!"
       );
     }
   };
@@ -109,7 +116,7 @@ const ChangePassword = () => {
             </motion.div>
           </div>
           <div className="registration">
-            <div className="registration-title">CHANGE ACCOUNT PASSWORD</div>
+            <div className="registration-title">{t('change_account_password')}</div>
             <div className="input-btn-wrapper">
             </div>
             {  account?.password != null ? (<div className="input__menu">
@@ -120,7 +127,7 @@ const ChangePassword = () => {
                   value={changePassword.password}
                   onChange={changeHandlerPassword}
                   type="password"
-                  placeholder="OLD PASSWORD"
+                  placeholder={t('password')}
                 />
               </div>
               <div className="input-flex">
@@ -130,7 +137,7 @@ const ChangePassword = () => {
                   value={changePassword.new_password}
                   onChange={changeHandlerPassword}
                   type="password"
-                  placeholder="NEW PASSWORD"
+                  placeholder={t('new_password')}
                 />
               </div>
               <div className="input-flex">
@@ -140,7 +147,7 @@ const ChangePassword = () => {
                   value={changePassword.new_password_repeat}
                   onChange={changeHandlerPassword}
                   type="password"
-                  placeholder="REPEAT NEW PASSWORD"
+                  placeholder={t('password_repeat')}
                 />
               </div>
               <div className="input-flex">
@@ -155,7 +162,7 @@ const ChangePassword = () => {
                   value={createPassword.password}
                   onChange={changeCreatePassword}
                   type="password"
-                  placeholder="NEW PASSWORD"
+                  placeholder={t('new_password')}
                 />
               </div>
               <div className="input-flex">
@@ -165,11 +172,11 @@ const ChangePassword = () => {
                   value={createPassword.password_repeat}
                   onChange={changeCreatePassword}
                   type="password"
-                  placeholder="REPEAT NEW PASSWORD"
+                  placeholder={t('password_repeat')}
                 />
               </div>
               <div className="input-flex">
-                <PixelBtn text="ENTER" onClick={ReqNewPassword} color="Red" />
+                <PixelBtn text={t('confirm')} onClick={ReqNewPassword} color="Red" />
               </div>
             </div>)
           }

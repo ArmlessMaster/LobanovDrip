@@ -1,5 +1,4 @@
 import "./ShowProduct.scss";
-import "./data.scss";
 import { React, useCallback, useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import "slick-carousel/slick/slick.css";
@@ -9,8 +8,7 @@ import { useHttp } from "../../../hooks/http.hook";
 import { Loader } from "../../layout";
 import { AuthContext } from "../../../context/AuthContext";
 import { CartContext } from "../../../context/cartContext";
-import Modal from "./ClothesView";
-import "./ClothesView.css"
+import { useTranslation } from 'react-i18next'
 
 const COLOR_BTNS = document.querySelectorAll(".color");
 COLOR_BTNS.forEach((color) => {
@@ -327,6 +325,8 @@ const ShowProduct = () => {
 
   const [selectedImg = clothItem?.imagesUrls[0], setSelectedImg] = useState()
 
+  const { t } = useTranslation();
+
   return hasLoaded ? (
     <section className='Product'>
       <div className="ShowProduct">
@@ -351,14 +351,6 @@ const ShowProduct = () => {
             </div>
           </div>
           <div>
-            {clickedImg && (
-              <Modal
-                clickedImg={clickedImg}
-                handelRotationRight={handelRotationRight}
-                setClickedImg={setClickedImg}
-                handelRotationLeft={handelRotationLeft}
-              />
-            )}
           </div>
         </section>
 
@@ -370,7 +362,7 @@ const ShowProduct = () => {
             </div>
           </section>
           <section className="product-color-wrapper">
-            <div className="product-text-color">Color:</div>
+            <div className="product-text-color">{t('color')}:</div>
             <div className="color-groups">
               {clothItem?.color.map((color, index) => {
                 return (
@@ -382,7 +374,7 @@ const ShowProduct = () => {
             </div>
           </section>
           <section className="size-picker">
-            <div className="product-text-size">Size:</div>
+            <div className="product-text-size">{t('size')}:</div>
             <div className="size-buttons">
               {clothItem?.clothesCount.map((size, index) => {
                 return (
@@ -408,14 +400,14 @@ const ShowProduct = () => {
           <section className="check-size">
             <button className="lineal">
               <div href="" class="lineal-img" alt=""></div>
-              Check your size
+              {t('check_size')}
             </button>
           </section>
           <button className="redbtn" onClick={cartHandler}>
-            <span>Add to cart</span>
+            <span>{t('add_to_cart')}</span>
           </button>
           <div className="material-group">
-            <div className="material-title"> Material:</div>
+            <div className="material-title">{t('material')}:</div>
             <div className="material-info">
               {clothItem?.material.split("-").map((vovaAboba, index) => {
                 return <p>-{vovaAboba}</p>;
@@ -424,7 +416,7 @@ const ShowProduct = () => {
           </div>
 
           <div className="care">
-            <div className="care-text">Care:</div>
+            <div className="care-text">{t('care')}:</div>
             <div className="careinfo-text">
               {clothItem?.care.split("-").map((vovaAboba, index) => {
                 return <p>-{vovaAboba}</p>;
@@ -436,7 +428,7 @@ const ShowProduct = () => {
 
       <div class="similar-text">
         {" "}
-        COMPLETE YOUR LOOK
+        {t('complete_look')}
         <div class="rectangl-undertext"></div>
       </div>
 

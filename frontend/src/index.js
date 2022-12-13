@@ -4,6 +4,7 @@ import './reset.css';
 import './normalize.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import './i18n.js'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

@@ -6,6 +6,7 @@ import { motion } from "framer-motion"
 import { Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination, Navigation } from "swiper";
+import { useTranslation } from 'react-i18next'
 
 const useAudio = url => {
   const [audio] = useState(new Audio(url));
@@ -29,16 +30,10 @@ const useAudio = url => {
   return [playing, toggle];
 };
 
-
-
-
 const bgAnimation = {
   open: { y: "250%" },
   closed: { y: "-200%" },
 };
-
-
-
 
 const Main = () => {
 
@@ -58,8 +53,7 @@ const Main = () => {
 
   const [playing, toggle] = useAudio(Music);
 
-
-
+   const { t } = useTranslation(); 
 
   return (
     <section className="Full">
@@ -134,14 +128,15 @@ const Main = () => {
           <div className="main-menu">
             {/* <button id='press' onClick={handlePlayVideo}  class="testing">{playing ? "PAUSE" : "PLAY"}</button> */}
 
-            <GlichBtn  onClick={handlePlayVideo}  text="Music"/>
-            <GlichBtn text="Create"/>
-            <GlichBtn text="Shop"/>
+            <GlichBtn  onClick={handlePlayVideo}  
+            text={t("music")}
+            />
+            <GlichBtn text={t("create")}/>
+            <GlichBtn text={t("shop")}/>
           </div>
-
         </div>
         <div className="discont-wrapper">
-            <p className="discont-label">NEW DISCOUNTS</p>
+            <p className="discont-label">{t('discounts')}</p>
             <div className="closeBtn">
               <button onClick={handlePlayAudio}><CloseSvg/></button>
             </div>

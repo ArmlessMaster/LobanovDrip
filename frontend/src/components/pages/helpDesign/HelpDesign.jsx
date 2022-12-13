@@ -2,10 +2,9 @@ import "./HelpDesign.scss";
 import { React, useState } from "react";
 import {Canvas, PixelBtn} from "../../layout/index";
 import {testDVideo} from "../../../images";
-
 import { Loader } from "../../layout/index";
-
 import {motion} from "framer-motion";
+import { useTranslation } from 'react-i18next'
 
 const btnHidden = {
   open: { bottom: "15%"  },
@@ -16,6 +15,7 @@ const HelpDesign = () => {
   const [hasLoaded, setHasLoaded] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
 
+  const { t } = useTranslation();
 
   return hasLoaded ? (
     <section className="HelpDesign">
@@ -40,10 +40,10 @@ const HelpDesign = () => {
       </div>
       <div className="helpDesign-wrapper">
         <div className="helpDesign-logo">BUHALO DESIGN</div>
-        <div className="helpDesign-label">Design your <span>clothes</span> on our 
-        <p><span>Buhalo</span> Design platform</p></div>
+        <div className="helpDesign-label">{t('design_your')} <span>{t('style')}</span> {t('on_our')} 
+        <p><span>Buhalo</span> {t('buhalo_design')}</p></div>
         <div className="helpDesign-btn">
-          <PixelBtn color="Black" text="Create!"/>
+          <PixelBtn color="Black" text={t('create_design')}/>
         </div>
         <motion.div className="videoWrapper"
          onClick={() => setIsOpen((isOpen) => !isOpen)}

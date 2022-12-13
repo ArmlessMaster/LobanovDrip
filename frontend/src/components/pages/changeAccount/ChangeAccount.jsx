@@ -13,6 +13,9 @@ import { Loader } from "../../layout/index";
 import Select from "react-select";
 import Async from 'react-select/async';
 import makeAnimated from "react-select/animated";
+import { useTranslation } from 'react-i18next'
+
+
 const btnHidden = {
   // open: { opacity: 1,  transform: "scaleX(1)"},
   // closed: { opacity: 0, transform: "scaleX(0)" },
@@ -131,7 +134,7 @@ const Cart = () => {
     } catch (e) {}
   });
 
-  //
+  const { t } = useTranslation();
 
   return hasLoaded ? (
     <section className="ChangeAccount">
@@ -140,60 +143,60 @@ const Cart = () => {
           <AccountMenu hov="MyAccountHover" />
         </div>
         <div className="ChangeAccount-values">
-          <div className="ChangeAccount-label">MY ACCOUNT</div>
+          <div className="ChangeAccount-label">{t('my_account')}</div>
           <div className="ChangeAccount-inputs">
-            <div className="inputs-label">PERSONAL INFO</div>
+            <div className="inputs-label">{t('personal_info')}</div>
             <div className="change-btn">
               <ChangeBtn
                 onClick={() => setIsOpen((isOpen) => !isOpen)}
-                text={"TAP TO CHANGE"}
+                text={t('tap_to_change')}
               />
             </div>
             <div className="inputs-grid">
               <PixelInput
                 disabled={!isOpen}
                 name="name"
-                placeholder="NAME"
-                description="NAME"
+                placeholder={t('name')}
+                description={t('name')}
                 onChange={changeHandlerAccount}
                 value={account.name}
               />
               <PixelInput
                 disabled={!isOpen}
                 name="surname"
-                placeholder="SURNAME"
-                description="SURNAME"
+                placeholder={t('surname')}
+                description={t('surname')}
                 onChange={changeHandlerAccount}
                 value={account.surname}
               />
               <PixelInput
                 disabled={!isOpen}
                 name="patronymic"
-                placeholder="PATRONYMIC"
-                description="PATRONYMIC"
+                placeholder={t('patronymic')}
+                description={t('patronymic')}
                 onChange={changeHandlerAccount}
                 value={account.patronymic}
               />
               <PixelInput
                 disabled={!isOpen}
                 name="phone"
-                placeholder="PHONE"
-                description="PHONE"
+                placeholder={t('phone')}
+                description={t('phone')}
                 onChange={changeHandlerAccount}
                 value={account.phone}
               />
               <PixelInput
                 disabled={!isOpen}
                 name="email"
-                placeholder="EMAIL"
+                placeholder={t('email')}
                 onChange={changeHandlerAccount}
-                description="EMAIL"
+                description={t('email')}
                 value={account.email}
               />
 
               <div className="inputsBtn">
                 <PixelBtn
-                  text="Save Changes"
+                  text={t('save_changes')}
                   color="BigRed"
                   animate={isOpen ? "open" : "closed"}
                   variants={btnHidden}
@@ -204,23 +207,23 @@ const Cart = () => {
             </div>
           </div>
           <div className="ChangeAccount-inputs">
-            <div className="inputs-label">PERSONAL INFO</div>
+            <div className="inputs-label">{t('personal_info')}</div>
             <div className="change-btn">
               <ChangeBtn
                 onClick={() => setIsOpenSecond((isOpenSecond) => !isOpenSecond)}
-                text={"TAP TO CHANGE"}
+                text={t('tap_to_change')}
               />
             </div>
             <div className="inputs-grid">
               <PixelInput
                 disabled={true}
                 name="region"
-                placeholder="REGION"
-                description="REGION"
+                placeholder={t('region')}
+                description={t('region')}
                 onChange={changeHandlerAccount}
                 value={account.region}
               />
-              <NovaposhtaInput  description="СITY/REGION" 
+              <NovaposhtaInput  description={t('city_region')}
                                 name="city"
                                 defaultValue={account.city}
                                 value={{Description: account.city, Ref:account.city}}
@@ -230,7 +233,7 @@ const Cart = () => {
                                 getOptionValue={(option) => option.Ref}
                                 onChange={handleChangeCity}
                                 menuPosition="fixed"/>
-              <NovaposhtaInput  description="DEPARTMEMT" 
+              <NovaposhtaInput  description={t('department')} 
                                 name="novaposhta"
                                 defaultValue={account.novaposhta}
                                 value={{Description: account.novaposhta, Ref: account.novaposhta}}
@@ -244,7 +247,7 @@ const Cart = () => {
 
               <div className="inputsBtn">
                 <PixelBtn
-                  text="Save Changes"
+                  text={t('save_changes')}
                   color="BigRed"
                   animate={isOpenSecond ? "open" : "closed"}
                   variants={btnHidden}

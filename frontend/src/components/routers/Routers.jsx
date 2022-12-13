@@ -10,15 +10,15 @@ export const useRoutes = isAuthenticated =>{
     <Routes>
       <Route path='/main' exact element={<Main/>} />
       <Route path='/auth' exact element={<Authorization/>} />
+      <Route path='/store' exact element={<Store/>} />
+      <Route path='/store/:type' exact element={<StoreByTypes/>} />
       <Route path='/cart' exact element={<Cart/>} />
       <Route path='/password' exact element={<ChangePassword/>} />
       <Route path='/orders' exact element={<Orders/>} />
       <Route path='/account' exact element={<ChangeAccount/>} />
-      <Route path='/store' exact element={<Store/>} />
-      <Route path='/store/:type' exact element={<StoreByTypes/>} />
       <Route path='/additem' exact element={<AddItem/>} />
-      <Route path='/design' exact element={<HelpDesign/>} />
       <Route path='/test' exact element={<ChangeDesign/>} />
+      <Route path='/design' exact element={<HelpDesign/>} />
       <Route path='/store/:type/:id' exact element={<ShowProduct />} />
       <Route path="/*" element={<Navigate replace to="/main" />} />
     </Routes>

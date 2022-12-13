@@ -8,6 +8,7 @@ import { CartContext } from "../../../context/cartContext";
 import makeAnimated from "react-select/animated";
 import Async from 'react-select/async';
 import { NavLink } from "react-router-dom";
+import { useTranslation } from 'react-i18next'
 
 const bgAnimation = {
   open: { width: "30%" },
@@ -274,6 +275,8 @@ const Cart = () => {
     }
   };
 
+  const { t } = useTranslation();
+
   return hasLoaded ? (
     <section className="Cart">
       <motion.div
@@ -285,10 +288,10 @@ const Cart = () => {
          variants={animToRight}
          transition={{ duration: 0.8 }}>
           <div className="cart-label">
-            CART <span>{!isLocalStorage && cart?.clothes?.length > 0 ? cart?.clothes?.length + " ITEMS" : isLocalStorage && JSON.parse(localStorage.getItem("cart") || "[]").length > 0 ? cart?.length + " ITEMS" :"0 ITEMS" }</span>
+          {t('cart')} <span>{!isLocalStorage && cart?.clothes?.length > 0 ? cart?.clothes?.length + " " + t('things') : isLocalStorage && JSON.parse(localStorage.getItem("cart") || "[]").length > 0 ? cart?.length + " " + t('things') : "0 " + t('things') }</span>
           </div>
           <div className="cart-label-atten">
-             Do not offer bathing. Adding goods to cats is not for bookings
+            {t('offer_delay')}
           </div>
           <div className="cart-items-list">
           {!isLocalStorage && cart?.clothes?.length > 0 ? cart.clothes.map((cart, index) => {
@@ -303,51 +306,51 @@ const Cart = () => {
         animate={isOpen}
          variants={animToRight2}
          transition={{ duration: 0.8 }}>
-          <div className="ChangeAccount-label">USER INFO</div>
+          <div className="ChangeAccount-label">{t('user_info')}</div>
           <div className="ChangeAccount-inputs">
-            <div className="inputs-label">PERSONAL INFO</div>
+            <div className="inputs-label">{t('personal_info')}</div>
             <div className="change-btn">
               <ChangeBtn
                 onClick={() => setIsOpenThird((isOpenThird) => !isOpenThird)}
-                text={"TAP TO CHANGE"}/>
+                text={t('tap_to_change')}/>
             </div>
             <div className="inputs-grid">
               <PixelInput
                 disabled={!isOpen}
                 name="name"
-                placeholder="NAME"
-                description="NAME"
+                placeholder={t('name')}
+                description={t('name')}
                 onChange={changeHandlerAccount}
                 value={account.name}
               />
               <PixelInput
                 disabled={!isOpen}
                 name="surname"
-                placeholder="SURNAME"
-                description="SURNAME"
+                placeholder={t('surname')}
+                description={t('surname')}
                 onChange={changeHandlerAccount}
                 value={account.surname}
               />
               <PixelInput
                 disabled={!isOpen}
                 name="patronymic"
-                placeholder="PATRONYMIC"
-                description="PATRONYMIC"
+                placeholder={t('patronymic')}
+                description={t('patronymic')}
                 onChange={changeHandlerAccount}
                 value={account.patronymic}
               />
               <PixelInput
                 disabled={!isOpen}
                 name="phone"
-                placeholder="PHONE"
-                description="PHONE"
+                placeholder={t('phone')}
+                description={t('phone')}
                 onChange={changeHandlerAccount}
                 value={account.phone}
               />
 
               <div className="inputsBtn">
                 <PixelBtn
-                  text="Save Changes"
+                  text={t('save_changes')}
                   color="BigRed"
                   animate={isOpenThird ? "open" : "closed"}
                   variants={btnHidden}
@@ -358,23 +361,23 @@ const Cart = () => {
             </div>
           </div>
           <div className="ChangeAccount-inputs">
-            <div className="inputs-label">PERSONAL INFO</div>
+            <div className="inputs-label">{t('personal_info')}</div>
             <div className="change-btn">
               <ChangeBtn
                 onClick={() => setIsOpenSecond((isOpenSecond) => !isOpenSecond)}
-                text={"TAP TO CHANGE"}
+                text={t('tap_to_change')}
               />
             </div>
             <div className="inputs-grid">
               <PixelInput
                 disabled={true}
                 name="region"
-                placeholder="REGION"
-                description="REGION"
+                placeholder={t('region')}
+                description={t('region')}
                 onChange={changeHandlerAccount}
                 value={account.region}/>
               <NovaposhtaInput
-                description="СITY/REGION" 
+                description={t('city_region')}
                 name="city"
                 defaultValue={account.city}
                 value={{Description: account.city, Ref:account.city}}
@@ -385,7 +388,7 @@ const Cart = () => {
                 onChange={handleChangeCity}
                 menuPosition="fixed"/>
               <NovaposhtaInput
-                description="DEPARTMEMT" 
+                description={t('department')} 
                 name="novaposhta"
                 defaultValue={account.novaposhta}
                 value={{Description: account.novaposhta, Ref: account.novaposhta}}
@@ -399,7 +402,7 @@ const Cart = () => {
 
               <div className="inputsBtn">
                 <PixelBtn
-                  text="Save Changes"
+                  text={t('save_changes')}
                   color="BigRed"
                   animate={isOpenSecond ? "open" : "closed"}
                   variants={btnHidden}
@@ -415,24 +418,24 @@ const Cart = () => {
           animate={isOpen}
           variants={bgAnimation}>
             <div className="order-label">
-              ORDER INFO
+            {t('order_info')}
             </div>
             <div className="order-info">
-              <div className="order-info__little">In view of VAT</div>
-              <div className="order-info__big">CLOTHES PRICE: <span>{!isLocalStorage && cart?.total > 0 ? cart?.total +"₴" : isLocalStorage && JSON.parse(localStorage.getItem("cart") || "[]").length > 0 ? totalSum(JSON.parse(localStorage.getItem("cart") || "[]")) + "₴" : "0₴"}</span></div>
+              <div className="order-info__little">{t('view_vat')}</div>
+              <div className="order-info__big">{t('clothes_price')}: <span>{!isLocalStorage && cart?.total > 0 ? cart?.total +"₴" : isLocalStorage && JSON.parse(localStorage.getItem("cart") || "[]").length > 0 ? totalSum(JSON.parse(localStorage.getItem("cart") || "[]")) + "₴" : "0₴"}</span></div>
             </div>
             <div className="order-btn">
               {auth.token !== null ? 
               <PixelBtn
                 onClick={() => setIsOpen((isOpen) => "process")}
-                text="MAKE AN ORDER"
+                text={t('make_an_order')}
                 color="BigRed"
                 animate={isOpen}
                 variants={btnHidden}/> 
                 : 
               <NavLink to="/auth">
                 <PixelBtn
-                text="MAKE AN ORDER"
+                text={t('make_an_order')}
                 color="BigRed"
                 animate={isOpen}
                 variants={btnHidden}/>
@@ -440,13 +443,13 @@ const Cart = () => {
               }
               <PixelBtn
                 onClick={paymenMehod}
-                text="PAY"
+                text={t('pay')}
                 color="BigRed"
                 animate={isOpen}
                 variants={btnHidden2}/>
               <PixelBtn
                 onClick={() => setIsOpen((isOpen) => "open")}
-                text="BACK"
+                text={t('back')}
                 color="Blue"
                 animate={isOpen}
                 variants={btnHidden2}/>
@@ -454,25 +457,16 @@ const Cart = () => {
 
             </div>
             <div className="order-payment">
-              <p>PAYMENT METHODS:</p>
+              <p>{t('payment_methods')}:</p>
             </div>
             <div className="order-static__info">
-              <p>When choosing a delivery method at the point of choice, payment can only be made online on the site. 
-                If online payment is not far away, it is possible that it is due to the fact that you have paid for the 
-                cordon (trading international payments), in which case you need to go back to your bank.</p>
+              <p>{t('delivery_method')}</p>
               <ul>
-                <li>365 days for a return</li>
-                <li>Free shipping to 950 UAH</li>
+                <li>{t('365_days')}</li>
+                <li>{t('free_shipping')}</li>
               </ul>
-              <p>We appreciate your respect: as the amount of unmanaged orders, as created in the online stores of the LPP brand, 
-                we will change the equivalent of 150 euros (delivery costs) - the amount of the parcel, if you remove it, will 
-                be deposited in the additional vartost of the tax.</p>
+              <p>{t('tax')}</p>
             </div>
-              {/* <PixelBtn
-                onClick={() => setIsOpen((isOpen) => true)}
-                text="CREATE AN ACCOUNT"
-                animate={isOpen ? "open" : "closed"}
-                variants={btnHidden} /> */}
         </motion.div>
       </div>
     </section>

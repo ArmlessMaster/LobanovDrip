@@ -1,11 +1,10 @@
 import "./Store.scss";
 import {React, useCallback, useState, useEffect} from "react";
-import { ItemModule, CursorElement, Loader } from "../../layout";
+import { ItemModule, CursorElement, Loader, Footer } from "../../layout";
 import { useHttp } from "../../../hooks/http.hook";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination, Navigation } from "swiper";
 import { motion } from "framer-motion"
-
 
 import "swiper/css";
 import "swiper/css/pagination";
@@ -86,8 +85,6 @@ const Store = () => {
     const mouseLeave = () => {
       setIsMouseOver("none");
     }
-
-
     
   return hasLoaded ? (
 
