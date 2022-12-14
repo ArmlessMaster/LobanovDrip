@@ -12,7 +12,9 @@ const AccountList = (props) => {
   const { permissions } = usePermissions();
 
   return permissions === "Admin" ? (
-    <List queryOptions={{ refetchInterval: 5000 }} {...props}  pagination={false}>
+    <List 
+    // queryOptions={{ refetchInterval: 5000 }}
+     {...props}  pagination={false}>
       <Datagrid bulkActionButtons={false}>
         <TextField sortable={false} source="id" />
         <TextField sortable={false} source="email" />

@@ -13,6 +13,7 @@ const AccountEdit = (props) => {
             validate={required()}
             choices={[
               { id: "Admin", name: "Admin" },
+              { id: "Moderator", name: "Moderator" },
               { id: "User", name: "User" },
             ]}
           />

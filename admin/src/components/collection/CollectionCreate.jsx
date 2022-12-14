@@ -8,9 +8,11 @@ import {
   ImageInput,
   ImageField,
 } from "react-admin";
+import { usePermissions } from "react-admin";
 
 const CollectionCreate = () => {
-  return (
+  const { permissions } = usePermissions();
+  return permissions === "Admin" || permissions === "Moderator" ? (
     <Create >
       <TabbedForm>
         <FormTab label="collection create" sx={{ maxWidth: "40em" }}>
@@ -22,7 +24,7 @@ const CollectionCreate = () => {
         </FormTab>
       </TabbedForm>
     </Create>
-  );
+  ): <div>No access</div>;
 };
 
 export default CollectionCreate;

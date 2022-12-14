@@ -27,7 +27,7 @@ export const authProvider = {
         const response = await fetch(request1);
         const json = await response.json();
         const role = json.data.role;
-        if (role !== "Admin") {
+        if (role !== "Admin" && role !== "Moderator") {
           throw new Error("No access");
         } else {
           localStorage.setItem("permissions", role);
@@ -76,12 +76,14 @@ export const authProvider = {
         }
         const json = await response.json();
         const role = json.data.role;
-        if (role !== "Admin") {
+    
+        if (role !== "Admin" && role !== "Moderator") {
           localStorage.removeItem("token");
           localStorage.removeItem("permissions");
           throw new Error("No access");
         } 
         else {
+          localStorage.setItem("permissions", json.data.role);
           return role ? Promise.resolve(role) : Promise.reject();
         }
       }).catch(() => {

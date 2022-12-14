@@ -15,9 +15,11 @@ import {
   SelectInput,
   ReferenceInput,
 } from "react-admin";
+import { usePermissions } from "react-admin";
 
 const ClothesCreate = () => {
-  return (
+  const { permissions } = usePermissions();
+  return permissions === "Admin" || permissions === "Moderator" ? (
     <Create>
       <TabbedForm>
         <FormTab label="clothes create" sx={{ maxWidth: "40em" }}>
@@ -91,10 +93,18 @@ const ClothesCreate = () => {
           >
             <ImageField source="src" title="title" />
           </ImageInput>
+          <SelectInput
+            source="isModeling"
+            validate={required()}
+            choices={[
+              { id: true, name: true },
+              { id: false, name: false },
+            ]}
+          />
         </FormTab>
       </TabbedForm>
     </Create>
-  );
+  ) :<div>No access</div>;
 };
 
 export default ClothesCreate;

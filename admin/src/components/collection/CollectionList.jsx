@@ -19,8 +19,10 @@ import {
 const CollectionList = (props) => {
   const { permissions } = usePermissions();
 
-  return permissions === "Admin" ? (
-    <List queryOptions={{ refetchInterval: 5000 }} {...props} pagination={false}>
+  return permissions === "Admin" || permissions === "Moderator" ? (
+    <List 
+    // queryOptions={{ refetchInterval: 5000 }}
+     {...props} pagination={false}>
       <Datagrid bulkActionButtons={false}>
         <TextField sortable={false} source="id" />
         <TextField sortable={false} source="name" />

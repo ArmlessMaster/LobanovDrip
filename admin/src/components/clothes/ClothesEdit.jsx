@@ -18,7 +18,7 @@ import GifUrlEditField from "../tagsField/GifUrlEditField";
 
 const ClothesEdit = (props) => {
   const { permissions } = usePermissions();
-  return permissions === "Admin" ? (
+  return permissions === "Admin" || permissions === "Moderator" ? (
     <Edit {...props} undoable="false" mutationMode="pessimistic">
       <SimpleForm>
         <TextInput fullWidth disabled source="id" />
@@ -58,13 +58,7 @@ const ClothesEdit = (props) => {
         <TextInput fullWidth source="care" />
         <TextInput fullWidth source="sex" />
         <TextInput fullWidth disabled source="collection_id._id" />
-          <ReferenceInput
-            label="collection"
-            source="collection_id._id"
-            reference="collection"
-          >
-            <SelectInput optionText="name" />
-          </ReferenceInput>
+
 
         <ArrayInput source="clothesCount">
           <SimpleFormIterator inline>

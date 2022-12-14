@@ -15,6 +15,7 @@ import GroupIcon from '@mui/icons-material/Group';
 import FilterFramesIcon from '@mui/icons-material/FilterFrames';
 import CheckroomIcon from '@mui/icons-material/Checkroom';
 
+
 const theme = {
   ...defaultTheme,
   palette: {
@@ -24,16 +25,31 @@ const theme = {
 const App = () => {
   return (
     <Admin
-      theme={theme}
+    theme={theme}
       dataProvider={dataProvider}
       authProvider={authProvider}
-      // dashboard={Dashboard}
+      dashboard={Dashboard}
       loginPage={LoginAdmin}
     >
-      <Resource icon={GroupIcon} name="account" {...accounts} />
-      <Resource icon={CheckroomIcon} name="clothes" {...clothes} />
-      <Resource icon={FilterFramesIcon} name="collection" {...collection} />
-      <Resource icon={ShoppingBasketIcon} name="order" {...order} />
+      {(permissions) => (
+        <>
+          {permissions === "Moderator"? (
+            <>
+              <Resource icon={CheckroomIcon} name="clothes" {...clothes} />
+              <Resource icon={FilterFramesIcon} name="collection" {...collection} />
+              <Resource icon={ShoppingBasketIcon} name="order" {...order} />
+            </>
+          ) : null}
+          {permissions === "Admin"  ? (
+            <>
+              <Resource icon={GroupIcon} name="account" {...accounts} />
+              <Resource icon={CheckroomIcon} name="clothes" {...clothes} />
+              <Resource icon={FilterFramesIcon} name="collection" {...collection} />
+              <Resource icon={ShoppingBasketIcon} name="order" {...order} />
+            </>
+          ) : null}
+        </>
+      )}
     </Admin>
   );
 };

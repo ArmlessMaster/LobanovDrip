@@ -3,7 +3,7 @@ import { Edit, SimpleForm, TextInput, SelectInput, required } from "react-admin"
 import { usePermissions } from "react-admin";
 const OrderEdit = (props) => {
   const { permissions } = usePermissions();
-  return permissions === "Admin" ? (
+  return permissions === "Admin" || permissions === "Moderator" ? (
     <Edit {...props} undoable="false" mutationMode="pessimistic">
       <SimpleForm>
         <TextInput fullWidth disabled source="id" />

@@ -1,8 +1,12 @@
+import { authProvider } from "../authProvider/authProvider";
+
 const apiUrl = process.env.REACT_APP_URL;
-const token = localStorage.getItem("token");
+
 
 export const dataProvider = {
   getList: (resource, params) => {
+    const token = localStorage.getItem("token");
+    authProvider.getPermissions();
     let query = `/admin/get`;
     const key =
       resource[resource.length - 1] !== "s" ? resource + "s" : resource;
@@ -60,6 +64,7 @@ export const dataProvider = {
   },
 
   getOne: async (resource, params) => {
+    const token = localStorage.getItem("token");
     let query = "";
     const key =
       resource[resource.length - 1] !== "s" ? resource + "s" : resource;
@@ -96,6 +101,7 @@ export const dataProvider = {
   },
 
   update: async (resource, params) => {
+    const token = localStorage.getItem("token");
     let headers = {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
@@ -176,6 +182,7 @@ export const dataProvider = {
   },
 
   create: (resource, params) => {
+    const token = localStorage.getItem("token");
     let headers = {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
@@ -185,6 +192,9 @@ export const dataProvider = {
     const key = resource;
     if (resource === "clothes") {
       query = "/create";
+      if (!params.data.collection_id._id) {
+        params.data.collection_id._id = undefined
+      }
       body = {
           name: params.data.name,
           images: params.data.images,
@@ -198,6 +208,7 @@ export const dataProvider = {
           clothesCount: params.data.clothesCount,
           sex: params.data.sex,
           collection_id: params.data.collection_id._id,
+          isModeling: params.data.isModeling
       };
     } else if (resource === "collection") {
       query = "/create";
@@ -244,6 +255,7 @@ export const dataProvider = {
   },
 
   delete: async (resource, params) => {
+    const token = localStorage.getItem("token");
     let query = "/admin/delete";
     const key = resource;
     if (resource === "account") {

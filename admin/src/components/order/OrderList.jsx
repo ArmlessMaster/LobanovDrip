@@ -14,8 +14,10 @@ import { usePermissions } from "react-admin";
 const OrderList = (props) => {
   const { permissions } = usePermissions();
 
-  return permissions === "Admin" ? (
-    <List queryOptions={{ refetchInterval: 5000 }} {...props} pagination={false}>
+  return permissions === "Admin" || permissions === "Moderator" ? (
+    <List 
+    // queryOptions={{ refetchInterval: 5000 }}
+     {...props} pagination={false}>
       <Datagrid bulkActionButtons={false}>
         <TextField sortable={false} source="id" />
         <TextField sortable={false} source="status" />
@@ -42,6 +44,7 @@ const OrderList = (props) => {
             <TextField source="clothes_type" />
             <TextField source="clothes_count" />
             <TextField source="clothes_size" />
+            <TextField  source="isModeling" />
           </Datagrid>
         </ArrayField>
         <TextField sortable={false} source="total" />

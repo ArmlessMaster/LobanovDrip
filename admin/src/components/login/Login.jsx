@@ -13,11 +13,7 @@ const LoginAdmin = (props) => {
     e.preventDefault();
     login({ email, password }).catch(() => notify("Invalid email or password"));
   };
-  // paper,div
-  //card, div
-  //formcontrol,div,formlabel,inputbase
-  //p,formhelpertext
-  //buttonclass,buttonbase -> span, touchripple
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
