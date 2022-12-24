@@ -1,0 +1,27 @@
+
+//
+.SavedDesign{
+
+  video{
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+  }
+
+  .savedDesign-wrapper{
+    padding-top: 13vw;
+    font-weight: bolder;
+    font-family: "Roboto Condensed";
+    .swiper-pagination-bullet-active{
+      --swiper-theme-color: rgb(211, 68, 68);
+    }
+    .swiper-pagination-bullet{
+      --swiper-pagination-bullet-inactive-color: rgb(204, 204, 204);
+    }
+  }
+}

@@ -1,14 +1,13 @@
 import "./ShowProduct.scss";
 import { React, useCallback, useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import Slider from "react-slick";
+import { Swiper, SwiperSlide } from "swiper/react";
 import { useHttp } from "../../../hooks/http.hook";
-import { Loader } from "../../layout";
+import { Loader, ItemModule } from "../../layout";
 import { AuthContext } from "../../../context/AuthContext";
 import { CartContext } from "../../../context/cartContext";
 import { useTranslation } from 'react-i18next'
+import { Autoplay, Pagination, Navigation } from "swiper";
 
 const COLOR_BTNS = document.querySelectorAll(".color");
 COLOR_BTNS.forEach((color) => {
@@ -19,7 +18,6 @@ COLOR_BTNS.forEach((color) => {
         colorNameClass.indexOf("-") + 1,
         colorNameClass.length
       );
-      console.log(colorName);
       resetActiveBtns();
       color.classList.add("active-color");
       setNewColor(colorName);
@@ -40,6 +38,11 @@ function setNewColor(color) {
   ).src = `../../../images/lobanovdrip/hoodie_${color}.jpg`;
 }
 
+function sizeUpload(sizeArr){
+  var size = "";
+  sizeArr.forEach((element) => (element.count > 0 ? size += element.size + " " : ""));
+  return size;
+}
 const ShowProduct = () => {
   var settings = {
     dots: false,
@@ -158,6 +161,7 @@ const ShowProduct = () => {
     count: 1,
     size: "UN",
     color: "",
+    productModel: "Clothes"
   });
 
   const handleChangeSize = (event) => {
@@ -433,22 +437,25 @@ const ShowProduct = () => {
       </div>
 
       <div className="App">
-        <Slider {...settings} slidesToShow={4}>
+        <Swiper slidesPerView={4} spaceBetween={50}   speed={1600} pagination={{clickable: true,}} navigation={true}  grid={{rows: 1,}} modules={[Autoplay, Pagination, Navigation]} {...settings}>
           {clothCollection.map((item) =>
             item.type !== "Case" && item.type !== "Briefcase" ? (
-              <div className="card">
-                <div className="card-top">
-                  <img src={item.imagesUrls[0]} alt={item.name} />
-                  <p className="title">{item.name}</p>
-                </div>
-                <div className="card-bottom">
-                  <p className="sizes">{item.sizes}</p>
-                  <p className="prices">{item.price + "₴"}</p>
-                </div>
-              </div>
+              <SwiperSlide >
+                {/* <div className="card">
+                  <div className="card-top">
+                    <img src={item.imagesUrls[0]} alt={item.name} />
+                    <p className="title">{item.name}</p>
+                  </div>
+                  <div className="card-bottom">
+                    <p className="sizes">{item.sizes}</p>
+                    <p className="prices">{item.price + "₴"}</p>
+                  </div>
+                </div> */}
+                <ItemModule class="little" text={item.name} price={item.price + "₴"} link={`/store/${item.type}/${item._id}`} key={item._id} img={item.imagesUrls[0]} sizes={sizeUpload(item.clothesCount)}/>
+              </SwiperSlide>
             ) : null
           )}
-        </Slider>
+        </Swiper>
       </div>
       <div class="decor-wrapper">
         <div class="decor-graffity1"> 洋服屋</div>

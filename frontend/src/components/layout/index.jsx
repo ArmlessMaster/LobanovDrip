@@ -4,6 +4,7 @@ export { default as GlichBtn } from './buttons/glichBtn/GlichBtn';
 export {default as PixelInput} from './inputs/pixelInput/PixelInput'
 export {default as Uploader} from './inputs/uploader/Uploader'
 export {default as ItemModule} from './itemModuls/storeItem/ItemModuls'
+export {default as DesignItem} from './itemModuls/designItem/DesignItem'
 export {default as CursorElement} from './cursorElement/CursorElement'
 export {default as Filter} from './inputs/filter/Filter'
 export {default as Loader} from './loader/Loader'

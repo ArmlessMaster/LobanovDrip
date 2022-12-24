@@ -1,55 +1,57 @@
-
 @import "../../../global.scss";
 
 
 
-.Product{
+.Product {
   overflow-x: hidden;
-  overflow-y:hidden;
-  
-  justify-content:center;
+  overflow-y: hidden;
+
+  justify-content: center;
   align-items: center;
   text-align: center;
   font-family: 'Roboto';
   font-style: normal;
-  overflow:hidden;
+  overflow: hidden;
 }
-.ShowProduct{
-  overflow:hidden;
-  display: inline; 
+
+.ShowProduct {
+  overflow: hidden;
+  display: inline;
   padding-top: 8vw;
   display: flex;
-  justify-content:center;
+  justify-content: center;
   align-items: right;
   text-align: left;
   margin-left: 30%;
   font-family: 'Roboto';
   font-style: normal;
-  
+
 }
-.product-info .product-text{
+
+.product-info .product-text {
   font-weight: 600;
   font-size: 1.875vw;
   line-height: 2.292vw;
   margin-bottom: 1vw;
-color: #000000;
+  color: #000000;
 }
-.product-info .product-price{
-font-weight: 800;
-font-size: 1.875vw;
-line-height: 2.188vw;
-margin-bottom: 3.2vw;
+
+.product-info .product-price {
+  font-weight: 800;
+  font-size: 1.875vw;
+  line-height: 2.188vw;
+  margin-bottom: 3.2vw;
 }
 
 
-.single_img{
- position: absolute;
+.single_img {
+  position: absolute;
   width: 31.042vw;
-left: 7.656vw;
-top: 8.177vw;
-flex:1;
-grid-template-columns: repeat(1,1fr);
-display: grid; 
+  left: 7.656vw;
+  top: 8.177vw;
+  flex: 1;
+  grid-template-columns: repeat(1, 1fr);
+  display: grid;
 }
 
 #MainImg {
@@ -102,27 +104,29 @@ display: grid;
 
 }
 
-.size-picker{
-font-weight: 600;
-font-size: 0.781vw;
-line-height: 0.938vw;
+.size-picker {
+  font-weight: 600;
+  font-size: 0.781vw;
+  line-height: 0.938vw;
 }
 
-.product-text-size{
+.product-text-size {
   font-weight: 700;
   font-size: 1.250vw;
   line-height: 1.458vw;
   margin-bottom: 1vw;
   color: #000000;
 }
-.size-buttons{
+
+.size-buttons {
   display: grid;
   grid-template-columns: repeat(4, 0fr);
   grid-template-rows: repeat(2, 0fr);
   grid-gap: 1.042vw;
   margin-bottom: 1.5vw;
-  .size-label{
-    label{
+
+  .size-label {
+    label {
       display: inline-block;
       border: 0.052vw solid black;
       padding: 17px;
@@ -132,7 +136,7 @@ line-height: 0.938vw;
       transition: 0.3s ease;
     }
 
-    .size-radio{
+    .size-radio {
       display: none;
     }
 
@@ -140,7 +144,8 @@ line-height: 0.938vw;
       background-color: rgb(24, 24, 24);
       color: white;
     }
-    input:disabled+label{
+
+    input:disabled+label {
       border: 0.052vw solid rgb(122, 122, 122);
       color: rgb(122, 122, 122);
     }
@@ -149,7 +154,7 @@ line-height: 0.938vw;
 
 }
 
-.lineal{
+.lineal {
   display: flex;
   font-weight: 400;
   font-size: 0.729vw;
@@ -157,18 +162,18 @@ line-height: 0.938vw;
   background: none;
   outline: none;
   align-items: center;
-  grid-gap:0.260vw;
+  grid-gap: 0.260vw;
   margin-bottom: 1.5vw;
 }
 
-.lineal-img{
+.lineal-img {
   background: url("../../../images//icons/linealSvg/LinealSvg.svg");
   width: 1.094vw;
   height: 1.094vw;
 }
 
 
-.redbtn{
+.redbtn {
   width: 17.292vw;
   height: 2.708vw;
   color: #FFFFFF;
@@ -181,7 +186,7 @@ line-height: 0.938vw;
   justify-content: center;
 }
 
-.redbtn:hover{
+.redbtn:hover {
   background: #971919;
   cursor: pointer;
   outline: none;
@@ -192,7 +197,8 @@ line-height: 0.938vw;
   cursor: pointer;
   outline: none;
 }
-.decor-wrapper{
+
+.decor-wrapper {
   z-index: -1;
   white-space: nowrap;
   width: 100%;
@@ -200,20 +206,22 @@ line-height: 0.938vw;
   top: 0;
   font-weight: 400;
   font-family: 'RuthlessWreckinOne';
-    font-style: normal;
-  .decor-graffity1{
+  font-style: normal;
+
+  .decor-graffity1 {
     position: absolute;
     left: 78.125vw;
     top: 0.017vw;
     z-index: -1;
     font-family: 'Roboto';
     font-weight: 800;
-font-size: 10.417vw;
-line-height: 12.188vw;
-color: #D9D9D9;
-transform: rotate(9.66deg);
+    font-size: 10.417vw;
+    line-height: 12.188vw;
+    color: #D9D9D9;
+    transform: rotate(9.66deg);
   }
-  .decor-graffity2{
+
+  .decor-graffity2 {
     position: absolute;
     left: 88.125vw;
     top: 35vw;
@@ -224,8 +232,9 @@ transform: rotate(9.66deg);
     color: #BD2121;
     transform: rotate(-45.96deg);
   }
-  .decor-graffity3{
-    white-space:initial;
+
+  .decor-graffity3 {
+    white-space: initial;
     left: -22vw;
     top: 43vw;
     position: absolute;
@@ -236,68 +245,89 @@ transform: rotate(9.66deg);
     color: #5C5C5C;
     transform: rotate(20.33deg);
   }
-  .decor-graffity4{
+
+  .decor-graffity4 {
     position: absolute;
-      left: -1vw;
-      font-size: 4.167vw;
-      line-height: 4.167vw;
-      letter-spacing: 0.095em;
-      color: #D9D9D9;
-      transform: rotate(10.63deg);
+    left: -1vw;
+    font-size: 4.167vw;
+    line-height: 4.167vw;
+    letter-spacing: 0.095em;
+    color: #D9D9D9;
+    transform: rotate(10.63deg);
   }
-  .decor-graffity5{
+
+  .decor-graffity5 {
     position: absolute;
-      left: 83vw;
-      top: 80vw;
-      font-weight: 800;
-      font-size: 10.417vw;
-      line-height: 12.188vw;
-      color: #444242;
-      font-family: 'Roboto';
+    left: 83vw;
+    top: 80vw;
+    font-weight: 800;
+    font-size: 10.417vw;
+    line-height: 12.188vw;
+    color: #444242;
+    font-family: 'Roboto';
     transform: rotate(9.66deg);
   }
 }
 
-.material-group{
-margin-top: 2vw;
-width: 6.667vw;
-height: 1.979vw;
-font-size: 0.833vw;
-line-height: 0.990vw;
-color: #000000;
-.material-title{
-  font-weight: 700;
+.material-group {
+  margin-top: 2vw;
+  width: 6.667vw;
+  height: 1.979vw;
+  font-size: 0.833vw;
+  line-height: 0.990vw;
+  color: #000000;
+
+  .material-title {
+    font-weight: 700;
   }
-  .material-info{
+
+  .material-info {
     font-weight: 400;
-    }
+  }
 }
 
-.care{
+.care {
   margin-top: 1.7vw;
   font-size: 0.833vw;
   line-height: 0.990vw;
-.careinfo-text{
-  font-weight: 400;
-  color: #000000;
+
+  .careinfo-text {
+    font-weight: 400;
+    color: #000000;
   }
-  .care-text{
+
+  .care-text {
     font-weight: 700;
   }
 }
 
-  .similar-text{
-margin-top: 5vw;
-font-weight: 700;
-font-size: 2.500vw;
-line-height: 2.917vw;
-color: #000000;
+.similar-text {
+  margin-top: 5vw;
+  font-weight: 700;
+  font-size: 2.500vw;
+  line-height: 2.917vw;
+  color: #000000;
+}
+
+.rectangl-undertext {
+  position: absolute;
+  width: 14.063vw;
+  margin-left: 50%;
+  height: 0.729vw;
+  z-index: -1;
+  background: #E34D4D;
+}
+
+.App {
+  margin-left: 3vw;
+  margin-top: 3vw;
+
+  .card {
+    .card-top {
+
+      img {
+        width: 20vw;
+      }
+    }
   }
-  .rectangl-undertext{   
-    position: absolute;
-width: 14.063vw;
-margin-left: 50%;
-height: 0.729vw;
-z-index: -1;
-background: #E34D4D;
-  }
+}

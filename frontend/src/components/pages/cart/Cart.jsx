@@ -245,7 +245,7 @@ const Cart = () => {
       )
       .then((response) => {
         const order_id = cart.order_id
-        if(response.check === true){
+        if(response.check === true && response.url){
           request("/api/order/update", "PUT",
           {
             _id: order_id,
@@ -264,10 +264,9 @@ const Cart = () => {
           {
             Authorization: `Bearer ${auth.token}`,
           }
-        );
-        }
-        if (response.url) {
+        ).then(()=>{
           window.location.href = response.url;
+        });
         }
       })
     } catch (e) {

@@ -18,7 +18,7 @@ const btnHidden = {
       canvas.width = window.innerWidth * 2;
       canvas.height = window.innerHeight * 2;
       canvas.style.width = `${window.innerWidth}px`;
-      canvas.style.height = `${window.innerHeight}px`;
+      canvas.style.height = `${window.innerHeight}px/2`;
 
       const context = canvas.getContext("2d");
       context.scale(2, 2);

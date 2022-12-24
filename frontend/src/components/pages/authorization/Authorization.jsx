@@ -5,7 +5,7 @@ import { PixelBtn, PixelInput } from "../../layout/index";
 import { motion } from "framer-motion";
 import { AuthContext } from "../../../context/AuthContext";
 import { useHttp } from "../../../hooks/http.hook";
-import { Link } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { signInWithPopup } from "firebase/auth";
 import {
   NotificationContainer,
@@ -44,7 +44,7 @@ const decorAnimation = {
 const Authorization = () => {
   
   const [isOpen, setIsOpen] = useState(false);
-
+  const history = useNavigate();
   const auth = useContext(AuthContext);
 
   const { loading, request } = useHttp();
@@ -85,87 +85,45 @@ const Authorization = () => {
       [event.target.name]: event.target.value,
     });
   };
-  const cart = useContext(CartContext);
+
   const loginHandler = async () => {
     try {
       await request("/api/account/login", "POST", {
         ...formLogin,
-      }).then(async (res) => {
+      }).then(async (res)=>{
         const tok = res.token;
         auth.login(res.token);
-        await request("/api/account", "GET", null, null, {
-          Authorization: `Bearer ${res.token}`,
-        }).then(async (res) => {
-          await request(
-            `/api/order/find?status=cart&user_id=${res.data._id}`,
-            "GET",
-            null,
-            null,
-            { Authorization: `Bearer ${tok}` }
-
-          ).then(async (res) => {
+        await request("/api/account", "GET", null, null,  { Authorization: `Bearer ${res.token}` }).then((res) => {
+          request(`/api/order/find?status=cart&user_id=${res.data._id}`, "GET", null, null,  { Authorization: `Bearer ${tok}`}).then((res) => {       
             const items = (() => {
               const fieldValue = localStorage.getItem("cart");
-              return fieldValue === null ? [] : JSON.parse(fieldValue);
-            })();
-            if (items.length > 0 && tok !== null) {
-              await Promise.all(
-                JSON.parse(localStorage.getItem("cart")).map(
-                  async (item, index) => {
-                    item.order_id = res.orders[0]._id;
-                    await request(
-                      "/api/order-clothes/create",
-                      "POST",
-                      {
-                        clothes_id: item.clothes_id._id,
-                        order_id: item.order_id,
-                        count: item.count,
-                        size: item.size,
-                        color: item.color,
-                      },
-                      null,
-                      { Authorization: `Bearer ${tok}` }
-                    );
-                  }
-                )
-              ).then(async () => {
-                const tokenResult = await request("/api/account/login", "POST", {
-                  ...formLogin,
-                })
-                const accountResult = await request(
-                  "/api/account",
-                  "GET",
-                  null,
-                  null,
-                  {
-                    Authorization: `Bearer ${tokenResult.token}`,
-                  }
-                );
-                const orderResult = await request(
-                  `/api/order/find?status=cart&user_id=${accountResult.data._id}`,
-                  "GET",
-                  null,
-                  null,
-                  { Authorization: `Bearer ${tokenResult.token}` }
-                );
-                const orderInfoResult = await request(
-                  `/api/clothes-to-order/order/info?order_id=${orderResult.orders[0]._id}`,
-                  "GET",
-                  null,
-                  null,
-                  { Authorization: `Bearer ${tokenResult.token}` }
-                );
-                const orderInfo = orderInfoResult.order;
-                cart.setCartHeader(orderInfo);
-              });
-              cart.setIsLocalStorage(false);
-              cart.setIsEmptyCart(true);
+              return fieldValue === null
+              ? []
+              : JSON.parse(fieldValue);
+              })();
+              console.log(items)
+              console.log(tok)
+              if(items.length > 0 && tok !== null){
+                const cart = JSON.parse(localStorage.getItem("cart"));
+                const cartArray = [];
+                for(let i = 0; i < JSON.parse(localStorage.getItem("cart")).length; i++){
+                  cartArray[i] = {...cart[i], "order_id": res.orders[0]._id, "clothes_id": cart[i].clothes_id._id};
+                  console.log(cartArray[i])
+                  request("/api/order-clothes/create", "POST", {...cartArray[i]}, null,  { Authorization: `Bearer ${tok}` });
+                }
+              localStorage.setItem("cart",JSON.stringify(cartArray));
               localStorage.removeItem("cart");
+              cart.setIsLocalStorage(false);
+              cart.setIsEmptyCart(true);   
             }
           });
         });
       });
       NotificationManager.success(t('authorization_success'), t('glad_to_see_you'));
+      setTimeout(()=>{
+        history('/store')
+        window.location.reload()
+      }, 1000)
     } catch (e) {
       NotificationManager.error(
         t('error_authorization'),
@@ -180,86 +138,40 @@ const Authorization = () => {
       formRegister.surname = formRegisterName.surname;
       await request("/api/account/register", "POST", {
         ...formRegister,
-      }).then(async (res) => {
+      }).then(async (res)=>{
         const tok = res.token;
         auth.login(res.token);
-        await request("/api/account", "GET", null, null, {
-          Authorization: `Bearer ${res.token}`,
-        }).then(async (res) => {
-          await request(
-            `/api/order/find?status=cart&user_id=${res.data._id}`,
-            "GET",
-            null,
-            null,
-            { Authorization: `Bearer ${tok}` }
-          ).then(async (res) => {
+        await request("/api/account", "GET", null, null,  { Authorization: `Bearer ${res.token}` }).then((res) => {
+          request(`/api/order/find?status=cart&user_id=${res.data._id}`, "GET", null, null,  { Authorization: `Bearer ${tok}`}).then((res) => {
             const items = (() => {
               const fieldValue = localStorage.getItem("cart");
-              return fieldValue === null ? [] : JSON.parse(fieldValue);
-            })();
-            if (items.length > 0 && tok !== null) {
-              await Promise.all(
-                JSON.parse(localStorage.getItem("cart")).map(
-                  async (item, index) => {
-                    item.order_id = res.orders[0]._id;
-                    await request(
-                      "/api/order-clothes/create",
-                      "POST",
-                      {
-                        clothes_id: item.clothes_id._id,
-                        order_id: item.order_id,
-                        count: item.count,
-                        size: item.size,
-                        color: item.color,
-                      },
-                      null,
-                      { Authorization: `Bearer ${tok}` }
-                    );
-                  }
-                )
-              ).then(async () => {
-                const tokenResult = await request("/api/account/login", "POST", {
-                  ...formRegister,
-                })
-                const accountResult = await request(
-                  "/api/account",
-                  "GET",
-                  null,
-                  null,
-                  {
-                    Authorization: `Bearer ${tokenResult.token}`,
-                  }
-                );
-                const orderResult = await request(
-                  `/api/order/find?status=cart&user_id=${accountResult.data._id}`,
-                  "GET",
-                  null,
-                  null,
-                  {
-                    Authorization: `Bearer ${tokenResult.token}`,
-                  }
-                );
-                const orderInfoResult = await request(
-                  `/api/clothes-to-order/order/info?order_id=${orderResult.orders[0]._id}`,
-                  "GET",
-                  null,
-                  null,
-                  { Authorization: `Bearer ${tokenResult.token}` }
-                );
-                const orderInfo = orderInfoResult.order;
-                cart.setCartHeader(orderInfo);
-              });
-              cart.setIsLocalStorage(false);
-              cart.setIsEmptyCart(true);
-              localStorage.removeItem("cart");
-            }
+              return fieldValue === null
+              ? []
+              : JSON.parse(fieldValue);
+              })();
+              if(items.length > 0 && tok !== null){
+                const cart = JSON.parse(localStorage.getItem("cart"));
+                const cartArray = [];
+                for(let i = 0; i < JSON.parse(localStorage.getItem("cart")).length; i++){
+                  cartArray[i] = {...cart[i], "order_id": res.orders[0]._id, "clothes_id": cart[i].clothes_id._id};
+                  request("/api/order-clothes/create", "POST", {...cartArray[i]}, null,  { Authorization: `Bearer ${tok}` });
+                }
+                localStorage.setItem("cart",JSON.stringify(cartArray));
+                localStorage.removeItem("cart");
+                cart.setIsLocalStorage(false);
+                cart.setIsEmptyCart(true);
+              }
           });
         });
-      });
+      })
       NotificationManager.success(
         t('authorization_success'),
         t('welcome_to_the_club')
       );
+      setTimeout(()=>{
+        history('/store')
+        window.location.reload()
+      }, 1000)
     } catch (e) {
       console.log("Unable to create account");
       NotificationManager.error(
@@ -273,85 +185,38 @@ const Authorization = () => {
   const GoogleloginHandler = async () => {
     signInWithPopup(auth_, provider).then(async (result) => {
       try {
-        await request("/api/account/google/login", "POST", {email: result.user.email, passwordGoogle: result.user.uid, name: result.user.displayName})
-        .then(async (res) => {
+        await request("/api/account/google/login", "POST", {email: result.user.email, passwordGoogle: result.user.uid, name: result.user.displayName}).then(async (res)=>{
           const tok = res.token;
           auth.login(res.token);
-          await request("/api/account", "GET", null, null, {
-            Authorization: `Bearer ${res.token}`,
-          }).then(async (res) => {
-            await request(
-              `/api/order/find?status=cart&user_id=${res.data._id}`,
-              "GET",
-              null,
-              null,
-              {
-                Authorization: `Bearer ${tok}`,
-              }
-            ).then(async (res) => {
+          await request("/api/account", "GET", null, null,  { Authorization: `Bearer ${res.token}` }).then((res) => {
+            request(`/api/order/find?status=cart&user_id=${res.data._id}`, "GET", null, null,  { Authorization: `Bearer ${tok}`}).then((res) => {
               const items = (() => {
                 const fieldValue = localStorage.getItem("cart");
-                return fieldValue === null ? [] : JSON.parse(fieldValue);
-              })();
-              if (items.length > 0 && tok !== null) {
-                await Promise.all(
-                  JSON.parse(localStorage.getItem("cart")).map(
-                    async (item, index) => {
-                      item.order_id = res.orders[0]._id;
-                      await request(
-                        "/api/order-clothes/create",
-                        "POST",
-                        {
-                          clothes_id: item.clothes_id._id,
-                          order_id: item.order_id,
-                          count: item.count,
-                          size: item.size,
-                          color: item.color,
-                        },
-                        null,
-                        { Authorization: `Bearer ${tok}` }
-                      );
-                    }
-                  )
-                ).then(async () => {
-                  const tokenResult = await request("/api/account/google/login", "POST", {email: result.user.email, passwordGoogle: result.user.uid, name: result.user.displayName})
-                  const accountResult = await request(
-                    "/api/account",
-                    "GET",
-                    null,
-                    null,
-                    {
-                      Authorization: `Bearer ${tokenResult.token}`,
-                    }
-                  );
-                  const orderResult = await request(
-                    `/api/order/find?status=cart&user_id=${accountResult.data._id}`,
-                    "GET",
-                    null,
-                    null,
-                    {
-                      Authorization: `Bearer ${tokenResult.token}`,
-                    }
-                  );
-                  const orderInfoResult = await request(
-                    `/api/clothes-to-order/order/info?order_id=${orderResult.orders[0]._id}`,
-                    "GET",
-                    null,
-                    null,
-                    { Authorization: `Bearer ${tokenResult.token}` }
-                  );
-                  const orderInfo = orderInfoResult.order;
-                  cart.setCartHeader(orderInfo);
-                });
-                cart.setIsLocalStorage(false);
-                cart.setIsEmptyCart(true);
-                localStorage.removeItem("cart");
-              }
+                return fieldValue === null
+                ? []
+                : JSON.parse(fieldValue);
+                })();
+                if(items.length > 0 && tok !== null){
+                  const cart = JSON.parse(localStorage.getItem("cart"));
+                  const cartArray = [];
+                  for(let i = 0; i < JSON.parse(localStorage.getItem("cart")).length; i++){
+                    cartArray[i] = {...cart[i], "order_id": res.orders[0]._id, "clothes_id": cart[i].clothes_id._id};
+                    request("/api/order-clothes/create", "POST", {...cartArray[i]}, null,  { Authorization: `Bearer ${tok}` });
+                  }
+                  localStorage.setItem("cart",JSON.stringify(cartArray));
+                  localStorage.removeItem("cart");
+                  cart.setIsLocalStorage(false);
+                  cart.setIsEmptyCart(true);
+                }
             });
           });
-        });
+        })
         
         NotificationManager.success(t('authorization_success'), t('glad_to_see_you'));
+        setTimeout(()=>{
+          history('/store')
+          window.location.reload()
+        }, 1000)
       } catch(e) {
         NotificationManager.error(
           t('google_error'),

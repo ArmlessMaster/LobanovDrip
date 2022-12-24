@@ -9,6 +9,7 @@ export { default as PaySvg2 } from './icons/paySvg/PaySvg2';
 export { default as TshirtSvg } from './icons/tshirtSvg/TshirtSvg';
 export { default as AttenSvg } from './icons/attenSvg/AttenSvg';
 export { default as CloseSvg } from './icons/closeSvg/CloseSvg';
+export { default as CloseSvgGrey } from './icons/closeSvgGrey/CloseSvg';
 export { default as hoodieV } from './lobanovdrip/hoodie_Eva1.gif';
 export { default as hoodieV2 } from './lobanovdrip/hoodie_Eva2.gif';
 export { default as hoodieV4 } from './lobanovdrip/hoodie_Eva3.gif';

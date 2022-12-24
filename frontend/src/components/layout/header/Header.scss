@@ -127,7 +127,7 @@
       width: 17%;
       height: 20vw;
       left: 30%;
-
+      top: -30%;
       ul{
         padding-top: 13%;
         p{
@@ -158,6 +158,7 @@
           text-decoration: none;
           color: white
         }
+        
       }
     }
     .decor{
@@ -186,25 +187,28 @@
       width: 25%;
       height: 16vw;
       left: 35%;
-      
+      top: -25%;
     }
     .header__menu-drop__item.search{
       overflow-x: hidden;
       width: 25%;
       height: 23vw;
       right: 10%;
+      top: -35%;
     }
     .header__menu-drop__item.account{
       overflow-x: hidden;
       width: 15%;
       height: 15vw;
       right: 5%;
+      top: -22%;
     }
     .header__menu-drop__item.card{
       overflow-x: hidden;
       width: 25%;
       height: 25vw;
       right: 3%;
+      top: -37%;
     }
   }
 
@@ -227,11 +231,30 @@
       font-size: 1.875vw;
       font-weight: 700;
     }
+    .language-select{
+      background-color: transparent;
+      color: rgb(202, 202, 202);
+      border: transparent;
+      font-size: .742vw;
+      font-weight: 700;
+      text-transform: uppercase;
+      line-height: 6vw;
+      outline: none;
+      
+      option{
+        
+        border: transparent;
+        font-weight: 700;
+        font-size: 0.742vw;
+        background-color: rgb(44, 44, 44);
+      }
+    }
+
     .header__menu{
       justify-content: center;
       display: flex;
       font-size: 1.042vw;
-      flex: 5;
+      flex: 10;
 
       li + li{
         margin-left: 4vw;
@@ -270,7 +293,7 @@
       flex: 1;
     }
     .header__search{
-      
+      flex: 2;
       form{
         
         input{
@@ -304,21 +327,7 @@
         }
         position: relative;
       }
-      .account-btn::after{
-        content: "Account";
-        color: white;
-        position: absolute;
-        top: 0.5vw;
-        font-size: 0.4vw;
-      }
-      .cart-btn::after{
-        content: "Cart";
-        color: white;
-        position: absolute;
-        top: 0.5vw;
-        right: 25%;
-        font-size: 0.4vw;
-      }
+
     }
   }
 }
